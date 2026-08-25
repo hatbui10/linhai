@@ -1,2559 +1,1494 @@
 <!DOCTYPE html>
-
 <html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Linh AI 💕</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    <head>
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
 
-        <meta charset="UTF-8">
+        body {
+            overflow: hidden;
+            font-family: "Segoe UI", system-ui, -apple-system, Arial, Helvetica, sans-serif;
+            color: #fff;
+            background: #0a0610;
+        }
 
-        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        button, input, select {
+            font-family: inherit;
+        }
 
-        <title>Linh AI 💕</title>
+        .app {
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(ellipse at 0% 0%, rgba(255, 50, 130, .16), transparent 40%),
+                radial-gradient(ellipse at 100% 100%, rgba(140, 50, 255, .12), transparent 40%),
+                #0b0812;
+        }
 
-        <style>
-            /* =========================================================
-               RESET
-            ========================================================= */
-            
-            *{
-                box-sizing:border-box;
-                margin:0;
-                padding:0;
-                -webkit-tap-highlight-color:transparent;
-            }
-            
-            
-            html,
-            body{
-            
-                width:100%;
-                height:100%;
-            
-            }
-            
-            
-            body{
-            
-                overflow:hidden;
-            
-                font-family:
-                    Arial,
-                    Helvetica,
-                    sans-serif;
-            
-                color:#fff;
-            
-                background:#080810;
-            
-            }
-            
-            
-            /* =========================================================
-               LOGIN
-            ========================================================= */
-            
-            .login-screen{
-            
-                position:fixed;
-            
-                inset:0;
-            
-                z-index:999999;
-            
-                display:flex;
-            
-                align-items:center;
-            
-                justify-content:center;
-            
-                padding:20px;
-            
-                background:
-            
-                    radial-gradient(
-                        circle at 20% 20%,
-                        rgba(255,50,130,.25),
-                        transparent 40%
-                    ),
-            
-                    radial-gradient(
-                        circle at 80% 80%,
-                        rgba(90,50,255,.25),
-                        transparent 40%
-                    ),
-            
-                    #080810;
-            
-            }
-            
-            
-            .login-box{
-            
-                width:100%;
-            
-                max-width:400px;
-            
-                padding:28px;
-            
-                border:
-                    1px solid
-                    rgba(255,255,255,.1);
-            
-                border-radius:26px;
-            
-                background:
-                    rgba(22,22,37,.97);
-            
-                box-shadow:
-                    0 30px 90px
-                    rgba(0,0,0,.65);
-            
-            }
-            
-            
-            .login-logo{
-            
-                text-align:center;
-            
-                font-size:56px;
-            
-                margin-bottom:8px;
-            
-            }
-            
-            
-            .login-title{
-            
-                text-align:center;
-            
-                font-size:25px;
-            
-                font-weight:bold;
-            
-            }
-            
-            
-            .login-subtitle{
-            
-                margin-top:7px;
-            
-                margin-bottom:25px;
-            
-                text-align:center;
-            
-                color:#888;
-            
-                font-size:12px;
-            
-                line-height:1.5;
-            
-            }
-            
-            
-            .google-login{
-            
-                width:100%;
-            
-                height:50px;
-            
-                border:0;
-            
-                border-radius:13px;
-            
-                background:#fff;
-            
-                color:#222;
-            
-                font-size:15px;
-            
-                font-weight:bold;
-            
-                cursor:pointer;
-            
-                transition:.2s;
-            
-            }
-            
-            
-            .google-login:active{
-            
-                transform:scale(.98);
-            
-            }
-            
-            
-            .google-login:disabled{
-            
-                opacity:.5;
-            
-            }
-            
-            
-            .login-error{
-            
-                display:none;
-            
-                margin-bottom:12px;
-            
-                padding:11px;
-            
-                border-radius:10px;
-            
-                background:
-                    rgba(255,50,90,.12);
-            
-                color:#ffb7c9;
-            
-                font-size:12px;
-            
-                line-height:1.5;
-            
-            }
-            
-            
-            /* =========================================================
-               APP
-            ========================================================= */
-            
-            .app{
-            
-                width:100%;
-            
-                height:100dvh;
-            
-                display:flex;
-            
-                flex-direction:column;
-            
-                background:
-            
-                    radial-gradient(
-                        circle at 10% 10%,
-                        rgba(255,60,140,.12),
-                        transparent 35%
-                    ),
-            
-                    #0b0b13;
-            
-            }
-            
-            
-            /* =========================================================
-               HEADER
-            ========================================================= */
-            
-            .header{
-            
-                height:70px;
-            
-                flex-shrink:0;
-            
-                display:flex;
-            
-                align-items:center;
-            
-                gap:10px;
-            
-                padding:
-                    9px 12px;
-            
-                background:
-            
-                    linear-gradient(
-                        135deg,
-                        #ff3f81,
-                        #874cff
-                    );
-            
-            }
-            
-            
-            .avatar{
-            
-                width:48px;
-            
-                height:48px;
-            
-                flex-shrink:0;
-            
-                display:flex;
-            
-                align-items:center;
-            
-                justify-content:center;
-            
-                border-radius:50%;
-            
-                background:#fff;
-            
-                font-size:27px;
-            
-            }
-            
-            
-            .info{
-            
-                flex:1;
-            
-                min-width:0;
-            
-            }
-            
-            
-            .name{
-            
-                font-size:17px;
-            
-                font-weight:bold;
-            
-            }
-            
-            
-            .status{
-            
-                margin-top:3px;
-            
-                font-size:11px;
-            
-                opacity:.85;
-            
-            }
-            
-            
-            .mood{
-            
-                width:35px;
-            
-                text-align:center;
-            
-                font-size:22px;
-            
-            }
-            
-            
-            .header-button{
-            
-                width:40px;
-            
-                height:40px;
-            
-                border:0;
-            
-                border-radius:50%;
-            
-                background:
-                    rgba(0,0,0,.16);
-            
-                color:#fff;
-            
-                font-size:18px;
-            
-            }
-            
-            
-            /* =========================================================
-               CHAT
-            ========================================================= */
-            
-            .chat{
-            
-                flex:1;
-            
-                min-height:0;
-            
-                overflow-y:auto;
-            
-                padding:
-                    16px 13px;
-            
-                display:flex;
-            
-                flex-direction:column;
-            
-                gap:10px;
-            
-                scroll-behavior:smooth;
-            
-            }
-            
-            
-            .row{
-            
-                width:100%;
-            
-                display:flex;
-            
-            }
-            
-            
-            .row.ai{
-            
-                justify-content:flex-start;
-            
-            }
-            
-            
-            .row.user{
-            
-                justify-content:flex-end;
-            
-            }
-            
-            
-            .bubble{
-            
-                max-width:84%;
-            
-                padding:
-                    11px 14px;
-            
-                border-radius:18px;
-            
-                font-size:15px;
-            
-                line-height:1.5;
-            
-                white-space:pre-wrap;
-            
-                overflow-wrap:anywhere;
-            
-            }
-            
-            
-            .row.ai .bubble{
-            
-                background:#252538;
-            
-                border-bottom-left-radius:5px;
-            
-            }
-            
-            
-            .row.user .bubble{
-            
-                background:
-            
-                    linear-gradient(
-                        135deg,
-                        #ff3f81,
-                        #874cff
-                    );
-            
-                border-bottom-right-radius:5px;
-            
-            }
-            
-            
-            /* =========================================================
-               TYPING
-            ========================================================= */
-            
-            .typing{
-            
-                display:none;
-            
-                flex-shrink:0;
-            
-                align-items:center;
-            
-                gap:5px;
-            
-                padding:
-                    5px 16px 8px;
-            
-                color:#888;
-            
-                font-size:11px;
-            
-            }
-            
-            
-            .dot{
-            
-                width:6px;
-            
-                height:6px;
-            
-                border-radius:50%;
-            
-                background:#888;
-            
-                animation:
-                    typing 1s infinite;
-            
-            }
-            
-            
-            .dot:nth-child(2){
-            
-                animation-delay:.15s;
-            
-            }
-            
-            
-            .dot:nth-child(3){
-            
-                animation-delay:.3s;
-            
-            }
-            
-            
-            @keyframes typing{
-            
-                0%,
-                60%,
-                100%{
-            
-                    transform:
-                        translateY(0);
-            
-                }
-            
-                30%{
-            
-                    transform:
-                        translateY(-5px);
-            
-                }
-            
-            }
-            
-            
-            /* =========================================================
-               QUICK BUTTON
-            ========================================================= */
-            
-            .quick{
-            
-                flex-shrink:0;
-            
-                display:flex;
-            
-                gap:7px;
-            
-                overflow-x:auto;
-            
-                padding:
-                    7px 10px;
-            
-            }
-            
-            
-            .quick button{
-            
-                flex-shrink:0;
-            
-                border:0;
-            
-                border-radius:20px;
-            
-                padding:
-                    8px 12px;
-            
-                background:#242437;
-            
-                color:#fff;
-            
-                font-size:12px;
-            
-            }
-            
-            
-            /* =========================================================
-               INPUT
-            ========================================================= */
-            
-            .input-area{
-            
-                flex-shrink:0;
-            
-                display:flex;
-            
-                gap:8px;
-            
-                padding:
-                    8px 10px;
-            
-                background:#10101c;
-            
-            }
-            
-            
-            .message-input{
-            
-                flex:1;
-            
-                min-width:0;
-            
-                height:46px;
-            
-                border:0;
-            
-                outline:none;
-            
-                border-radius:24px;
-            
-                padding:
-                    0 16px;
-            
-                background:#242437;
-            
-                color:#fff;
-            
-                font-size:15px;
-            
-            }
-            
-            
-            .message-input::placeholder{
-            
-                color:#777;
-            
-            }
-            
-            
-            .send-button{
-            
-                width:46px;
-            
-                height:46px;
-            
-                flex-shrink:0;
-            
-                border:0;
-            
-                border-radius:50%;
-            
-                background:
-            
-                    linear-gradient(
-                        135deg,
-                        #ff3f81,
-                        #874cff
-                    );
-            
-                color:#fff;
-            
-                font-size:19px;
-            
-            }
-            
-            
-            .send-button:disabled{
-            
-                opacity:.45;
-            
-            }
-            
-            
-            /* =========================================================
-               BOTTOM
-            ========================================================= */
-            
-            .bottom{
-            
-                height:27px;
-            
-                flex-shrink:0;
-            
-                display:flex;
-            
-                align-items:center;
-            
-                justify-content:center;
-            
-                background:#10101c;
-            
-            }
-            
-            
-            .clear-button{
-            
-                border:0;
-            
-                background:none;
-            
-                color:#555;
-            
-                font-size:10px;
-            
-            }
-            
-            
-            /* =========================================================
-               SETTINGS
-            ========================================================= */
-            
-            .overlay{
-            
-                position:fixed;
-            
-                inset:0;
-            
-                z-index:999998;
-            
-                display:none;
-            
-                align-items:center;
-            
-                justify-content:center;
-            
-                padding:18px;
-            
-                background:
-                    rgba(0,0,0,.8);
-            
-            }
-            
-            
-            .overlay.show{
-            
-                display:flex;
-            
-            }
-            
-            
-            .panel{
-            
-                width:100%;
-            
-                max-width:420px;
-            
-                padding:20px;
-            
-                border-radius:22px;
-            
-                background:#171725;
-            
-            }
-            
-            
-            .panel-title{
-            
-                display:flex;
-            
-                align-items:center;
-            
-                font-size:19px;
-            
-                font-weight:bold;
-            
-            }
-            
-            
-            .close-button{
-            
-                width:35px;
-            
-                height:35px;
-            
-                margin-left:auto;
-            
-                border:0;
-            
-                border-radius:50%;
-            
-                background:#29293b;
-            
-                color:#fff;
-            
-                font-size:18px;
-            
-            }
-            
-            
-            .account{
-            
-                margin-top:18px;
-            
-                padding:13px;
-            
-                border-radius:12px;
-            
-                background:#242437;
-            
-            }
-            
-            
-            .account-label{
-            
-                color:#777;
-            
-                font-size:10px;
-            
-            }
-            
-            
-            .account-email{
-            
-                margin-top:5px;
-            
-                overflow:hidden;
-            
-                text-overflow:ellipsis;
-            
-                white-space:nowrap;
-            
-                font-size:13px;
-            
-            }
-            
-            
-            .logout-button{
-            
-                width:100%;
-            
-                height:45px;
-            
-                margin-top:12px;
-            
-                border:0;
-            
-                border-radius:11px;
-            
-                background:
-                    rgba(255,50,90,.1);
-            
-                color:#ffb7c9;
-            
-            }
-            
-            
-            /* =========================================================
-               MOBILE
-            ========================================================= */
-            
-            @media(max-width:600px){
-            
-                .bubble{
-            
-                    max-width:88%;
-            
-                    font-size:15px;
-            
-                }
-            
-                .header{
-            
-                    height:64px;
-            
-                }
-            
-                .avatar{
-            
-                    width:44px;
-            
-                    height:44px;
-            
-                    font-size:24px;
-            
-                }
-            
-            }
-            
-        </style>
+        .header {
+            height: 72px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, #ff3f81 0%, #e040a0 45%, #874cff 100%);
+            box-shadow: 0 4px 24px rgba(255, 60, 140, .35);
+            position: relative;
+            overflow: hidden;
+        }
 
-    </head>
+        .header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,.12), transparent 50%);
+            pointer-events: none;
+        }
 
-    <body>
+        .avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+            z-index: 1;
+        }
 
-        <!-- ======================================================
-     LOGIN SCREEN
-====================================================== -->
+        .avatar {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff, #ffe0ef);
+            font-size: 28px;
+            box-shadow:
+                0 0 0 2.5px rgba(255, 255, 255, .55),
+                0 4px 14px rgba(0, 0, 0, .25);
+        }
 
-        <div class="login-screen" id="loginScreen">
+        .avatar-online {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3dff9a;
+            border: 2px solid #ff3f81;
+            box-shadow: 0 0 8px rgba(61, 255, 154, .7);
+        }
 
-            ```
-            <div class="login-box">
+        .info {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
 
-                <div class="login-logo">
-                    👩🏻💕
-                </div>
+        .name {
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: .2px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+        }
 
-                <div class="login-title">
-                    Linh AI
-                </div>
+        .status {
+            margin-top: 3px;
+            font-size: 11.5px;
+            opacity: .9;
+            font-weight: 500;
+        }
 
-                <div class="login-subtitle">
+        .mood {
+            width: 38px;
+            text-align: center;
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
+            position: relative;
+            z-index: 1;
+        }
 
-                    Một cô gái AI đang chờ anh nhắn tin 😏
-                    <br>
-                    Đăng nhập bằng Google để đồng bộ mọi thiết bị.
+        .header-button {
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .18);
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
 
-                </div>
+        .header-button:active {
+            transform: scale(.92);
+            background: rgba(0, 0, 0, .28);
+        }
 
-                <div class="login-error" id="loginError"></div>
+        .chat {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 16px 13px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
 
-                <button class="google-login" id="googleLoginButton">
-                    🔵 Đăng nhập bằng Google
-                </button>
+        .chat::-webkit-scrollbar { width: 4px; }
+        .chat::-webkit-scrollbar-thumb {
+            background: rgba(255, 100, 160, .3);
+            border-radius: 4px;
+        }
 
+        .row {
+            width: 100%;
+            display: flex;
+            animation: bubbleIn .28s ease;
+        }
+
+        @keyframes bubbleIn {
+            from { opacity: 0; transform: translateY(10px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .row.ai { justify-content: flex-start; }
+        .row.user { justify-content: flex-end; }
+
+        .bubble {
+            max-width: 84%;
+            padding: 12px 15px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .row.ai .bubble {
+            background: linear-gradient(145deg, #2a2238, #1e1a2c);
+            border: 1px solid rgba(255, 140, 190, .1);
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .25);
+            color: #f5e8f0;
+        }
+
+        .row.user .bubble {
+            background: linear-gradient(135deg, #ff3f81, #c04cff);
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 18px rgba(255, 60, 140, .35);
+            color: #fff;
+        }
+
+        .typing {
+            display: none;
+            flex-shrink: 0;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 16px 10px;
+            color: #a08098;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b9d, #c084fc);
+            animation: typing 1s infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: .15s; }
+        .dot:nth-child(3) { animation-delay: .3s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: .5; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+
+        .quick {
+            flex-shrink: 0;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 6px 12px 10px;
+            scrollbar-width: none;
+        }
+
+        .quick::-webkit-scrollbar { display: none; }
+
+        .quick button {
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 130, 180, .18);
+            border-radius: 22px;
+            padding: 9px 14px;
+            background: linear-gradient(145deg, #2a2035, #1e1830);
+            color: #f0d8e8;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .quick button:active { transform: scale(.96); }
+
+        .input-area {
+            flex-shrink: 0;
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px 6px;
+            background: linear-gradient(180deg, #120e1a, #0e0a14);
+            border-top: 1px solid rgba(255, 120, 180, .08);
+        }
+
+        .message-input {
+            flex: 1;
+            min-width: 0;
+            height: 48px;
+            border: 1px solid rgba(255, 130, 180, .12);
+            outline: none;
+            border-radius: 26px;
+            padding: 0 18px;
+            background: #1e1830;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .message-input:focus {
+            border-color: rgba(255, 100, 160, .45);
+            box-shadow: 0 0 0 3px rgba(255, 80, 150, .12);
+        }
+
+        .message-input::placeholder { color: #6a5570; }
+
+        .send-button {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff3f81, #a04cff);
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(255, 60, 140, .4);
+        }
+
+        .send-button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .bottom {
+            height: 30px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0e0a14;
+        }
+
+        .clear-button {
+            border: 0;
+            background: none;
+            color: #5a4560;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .clear-button:hover { color: #ff8fb0; }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999998;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 18px;
+            padding-top: min(6vh, 40px);
+            background: rgba(8, 4, 14, .82);
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+        }
+
+        .overlay.show { display: flex; animation: fadeIn .2s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .panel {
+            width: 100%;
+            max-width: 420px;
+            padding: 22px;
+            border-radius: 24px;
+            background: linear-gradient(160deg, #22182e, #15101f);
+            border: 1px solid rgba(255, 140, 190, .15);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .6);
+            margin-bottom: 40px;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            font-weight: 800;
+            color: #ffe0f0;
+        }
+
+        .close-button {
+            width: 36px;
+            height: 36px;
+            margin-left: auto;
+            border: 0;
+            border-radius: 50%;
+            background: #2e2438;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .section {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #2a2038, #221a30);
+            border: 1px solid rgba(255, 140, 190, .1);
+        }
+
+        .section-title {
+            color: #ff9ec4;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .field-label {
+            display: block;
+            color: #8870a0;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+
+        .field-label:first-of-type { margin-top: 0; }
+
+        .field-input,
+        .field-select {
+            width: 100%;
+            height: 42px;
+            border: 1px solid rgba(255, 130, 180, .15);
+            outline: none;
+            border-radius: 11px;
+            padding: 0 12px;
+            background: #1a1426;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            border-color: rgba(255, 100, 160, .5);
+        }
+
+        .field-select option {
+            background: #1a1426;
+            color: #fff;
+        }
+
+        .field-hint {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #6a5570;
+            line-height: 1.45;
+        }
+
+        .field-hint a {
+            color: #ff9ec4;
+            text-decoration: none;
+        }
+
+        .row-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .row-btns button {
+            flex: 1;
+            height: 40px;
+            border: 0;
+            border-radius: 11px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff3f81, #a04cff);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #2e2438;
+            color: #f0d8e8;
+            border: 1px solid rgba(255, 140, 190, .15) !important;
+        }
+
+        .save-api-button,
+        .btn-full {
+            width: 100%;
+            height: 42px;
+            margin-top: 14px;
+            border: 0;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #ff3f81, #a04cff);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .api-status, .sync-status {
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 1.45;
+            min-height: 18px;
+            word-break: break-word;
+        }
+
+        .ok { color: #7dffa8; }
+        .err { color: #ffb7c9; }
+        .warn { color: #ffd48a; }
+
+        .code-box {
+            margin-top: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            background: #1a1426;
+            border: 1px dashed rgba(255, 140, 190, .35);
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #ffb7d5;
+            user-select: all;
+            word-break: break-all;
+        }
+
+        .persona-card {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(255, 60, 130, .12), rgba(140, 60, 255, .12));
+            border: 1px solid rgba(255, 140, 190, .15);
+        }
+
+        .persona-card h4 {
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #ff9ec4;
+        }
+
+        .persona-card p {
+            font-size: 12px;
+            color: #b8a0b8;
+            line-height: 1.55;
+        }
+
+        .warn-box {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(255, 180, 60, .1);
+            border: 1px solid rgba(255, 180, 60, .22);
+            color: #ffd48a;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .danger-button {
+            width: 100%;
+            height: 42px;
+            margin-top: 12px;
+            border-radius: 11px;
+            background: rgba(255, 50, 90, .12);
+            border: 1px solid rgba(255, 80, 120, .2);
+            color: #ffb7c9;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .boot-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 1000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(255, 70, 140, .25), transparent 40%),
+                #0a0610;
+            color: #f0d8e8;
+            font-size: 14px;
+        }
+
+        .boot-screen.hide { display: none; }
+
+        .boot-logo {
+            font-size: 52px;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: .85; }
+        }
+
+        @media (max-width: 600px) {
+            .bubble { max-width: 88%; }
+            .header { height: 66px; }
+            .avatar { width: 46px; height: 46px; font-size: 25px; }
+            .code-box { font-size: 16px; letter-spacing: 2px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="boot-screen" id="bootScreen">
+        <div class="boot-logo">👩🏻💕</div>
+        <div id="bootText">Đang kết nối Firebase…</div>
+    </div>
+
+    <div class="app" id="app" style="visibility:hidden">
+        <div class="header">
+            <div class="avatar-wrap">
+                <div class="avatar">👩🏻</div>
+                <span class="avatar-online"></span>
             </div>
-            ```
-
+            <div class="info">
+                <div class="name">Linh 💕</div>
+                <div class="status" id="status">● đang kết nối…</div>
+            </div>
+            <div class="mood" id="mood">😏</div>
+            <button class="header-button" id="settingsButton" title="Cài đặt" type="button">⚙️</button>
         </div>
 
-        <!-- ======================================================
-     MAIN APP
-====================================================== -->
+        <div class="chat" id="chat"></div>
 
-        <div class="app" id="app" style="display:none">
-
-            ```
-            <!-- HEADER -->
-
-            <div class="header">
-
-                <div class="avatar">
-                    👩🏻
-                </div>
-
-                <div class="info">
-
-                    <div class="name">
-                        Linh 💕
-                    </div>
-
-                    <div class="status" id="status">
-                        ● đang online
-                    </div>
-
-                </div>
-
-                <div class="mood" id="mood">
-                    😏
-                </div>
-
-                <button class="header-button" id="settingsButton">
-                    ⚙️
-                </button>
-
-            </div>
-
-            <!-- CHAT -->
-
-            <div class="chat" id="chat"></div>
-
-            <!-- TYPING -->
-
-            <div class="typing" id="typing">
-
+        <div class="typing" id="typing">
+            <div class="typing-dots">
                 <span class="dot"></span>
                 <span class="dot"></span>
                 <span class="dot"></span>
-
-                Linh đang nghĩ...
-
             </div>
-
-            <!-- QUICK -->
-
-            <div class="quick">
-
-                <button onclick="quickSend('Em đang làm gì vậy?')">
-                    👀 Em làm gì?
-                </button>
-
-                <button onclick="quickSend('Hôm nay em có nhớ anh không?')">
-                    💕 Nhớ anh không?
-                </button>
-
-                <button onclick="quickSend('Kể anh nghe một chuyện thú vị đi')">
-                    😂 Kể chuyện
-                </button>
-
-                <button onclick="quickSend('Em nghĩ gì về anh?')">
-                    😏 Nghĩ gì về anh?
-                </button>
-
-                <button onclick="quickSend('Trêu anh một câu đi')">
-                    😈 Trêu anh
-                </button>
-
-            </div>
-
-            <!-- INPUT -->
-
-            <div class="input-area">
-
-                <input class="message-input" id="messageInput" type="text" placeholder="Nhắn gì đó cho Linh..." autocomplete="off">
-
-                <button class="send-button" id="sendButton">
-                    ➤
-                </button>
-
-            </div>
-
-            <!-- BOTTOM -->
-
-            <div class="bottom">
-
-                <button class="clear-button" id="clearButton">
-                    🗑 Xóa lịch sử
-                </button>
-
-            </div>
-            ```
-
+            Linh đang nghĩ gì đó rồi… 💭
         </div>
 
-        <!-- ======================================================
-     SETTINGS
-====================================================== -->
-
-        <div class="overlay" id="settingsOverlay">
-
-            ```
-            <div class="panel">
-
-                <div class="panel-title">
-
-                    ⚙️ Tài khoản
-
-                    <button class="close-button" id="closeSettings">
-                        ×
-                    </button>
-
-                </div>
-
-                <div class="account">
-
-                    <div class="account-label">
-                        TÀI KHOẢN GOOGLE
-                    </div>
-
-                    <div class="account-email" id="accountEmail">
-                        ...
-                    </div>
-
-                </div>
-
-                <button class="logout-button" id="logoutButton">
-                    🚪 Đăng xuất
-                </button>
-
-            </div>
-            ```
-
+        <div class="quick">
+            <button type="button" data-quick="Em đang làm gì vậy? 👀">👀 Em làm gì?</button>
+            <button type="button" data-quick="Hôm nay em có nhớ anh không? 💕">💕 Nhớ anh không?</button>
+            <button type="button" data-quick="Kể anh nghe một chuyện thú vị đi 😂">😂 Kể chuyện vui</button>
+            <button type="button" data-quick="Em nghĩ gì về anh? 😏">😏 Nghĩ gì về anh?</button>
+            <button type="button" data-quick="Trêu anh một câu đi 😈">😈 Trêu anh đi</button>
+            <button type="button" data-quick="Em khen anh một câu đi nào 😌">✨ Khen anh đi</button>
+            <button type="button" data-quick="Hôm nay anh hơi mệt… em an ủi anh với 🥺">🥺 An ủi anh</button>
+            <button type="button" data-quick="Thả thính anh một câu đi 🔥">🔥 Thả thính</button>
         </div>
 
-        <!-- ======================================================
-     FIREBASE
-====================================================== -->
+        <div class="input-area">
+            <input
+                class="message-input"
+                id="messageInput"
+                type="text"
+                placeholder="Nhắn gì đó cho Linh nè… 💋"
+                autocomplete="off"
+                enterkeyhint="send"
+            >
+            <button class="send-button" id="sendButton" type="button" title="Gửi">➤</button>
+        </div>
 
-        <script type="module">
-            /* ======================================================
-               FIREBASE IMPORT
-            ====================================================== */
-            
-            import {
-            
-                initializeApp
-            
+        <div class="bottom">
+            <button class="clear-button" id="clearButton" type="button">🗑 Xóa lịch sử chat</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="settingsOverlay">
+        <div class="panel">
+            <div class="panel-title">
+                ⚙️ Cài đặt
+                <button class="close-button" id="closeSettings" type="button">×</button>
+            </div>
+
+            <!-- SYNC -->
+            <div class="section">
+                <div class="section-title">☁️ Đồng bộ Firebase (PC ↔ Điện thoại)</div>
+
+                <div class="field-label">MÃ PHÒNG CỦA ANH</div>
+                <div class="code-box" id="roomCodeDisplay">--------</div>
+
+                <div class="row-btns">
+                    <button class="btn-secondary" id="copyRoomButton" type="button">📋 Sao chép mã</button>
+                    <button class="btn-secondary" id="newRoomButton" type="button">✨ Phòng mới</button>
+                </div>
+
+                <label class="field-label" for="joinRoomInput">NHẬP MÃ TỪ MÁY KHÁC</label>
+                <input
+                    class="field-input"
+                    id="joinRoomInput"
+                    type="text"
+                    placeholder="Dán mã phòng vào đây"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <button class="btn-full" id="joinRoomButton" type="button">🔗 Ghép máy & đồng bộ</button>
+
+                <p class="field-hint">
+                    Cách dùng: mở app trên máy tính → sao chép mã → mở app trên điện thoại →
+                    dán mã → Ghép máy. Chat sẽ giống nhau realtime.
+                </p>
+                <div class="sync-status" id="syncStatus"></div>
+            </div>
+
+            <!-- API -->
+            <div class="section">
+                <div class="section-title">🔑 API AI (OpenRouter)</div>
+
+                <label class="field-label" for="apiKeyInput">OPENROUTER API KEY</label>
+                <input
+                    class="field-input"
+                    id="apiKeyInput"
+                    type="password"
+                    placeholder="sk-or-v1-..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <label class="field-label" for="modelSelect">MODEL</label>
+                <select class="field-select" id="modelSelect">
+                    <option value="openai/gpt-4o-mini">GPT-4o Mini (nhanh · rẻ)</option>
+                    <option value="openai/gpt-4o">GPT-4o (thông minh hơn)</option>
+                    <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                    <option value="google/gemini-2.5-flash-preview">Gemini 2.5 Flash</option>
+                    <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku</option>
+                    <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                    <option value="deepseek/deepseek-chat">DeepSeek Chat (rẻ)</option>
+                    <option value="meta-llama/llama-3.3-70b-instruct">Llama 3.3 70B</option>
+                    <option value="qwen/qwen-2.5-72b-instruct">Qwen 2.5 72B</option>
+                    <option value="mistralai/mistral-nemo">Mistral Nemo</option>
+                </select>
+
+                <p class="field-hint">
+                    Lấy key tại
+                    <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a>
+                    · Key lưu trên từng máy (không đưa lên Firebase).
+                </p>
+
+                <div class="warn-box">
+                    ⚠️ Mỗi thiết bị cần dán API key một lần.
+                    Chat thì đồng bộ; key thì giữ local cho an toàn.
+                </div>
+
+                <button class="save-api-button" id="saveApiButton" type="button">💾 Lưu API Key</button>
+                <div class="api-status" id="apiStatus"></div>
+            </div>
+
+            <div class="persona-card">
+                <h4>👩🏻 Tính cách Linh</h4>
+                <p>
+                    Gợi cảm nhẹ · tinh nghịch · hài hước · hay trêu ·
+                    quan tâm chân thành. Vào chat luôn, không cần Google.
+                    Đồng bộ bằng mã phòng Firebase.
+                </p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🗑 Dữ liệu</div>
+                <button class="danger-button" id="clearAllButton" type="button">
+                    Xóa chat trên đám mây (phòng này)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        /* ======================================================
+           FIREBASE
+        ====================================================== */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import {
+            getAuth,
+            signInAnonymously,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc,
+            collection,
+            addDoc,
+            query,
+            orderBy,
+            onSnapshot,
+            serverTimestamp,
+            getDocs,
+            deleteDoc,
+            limit,
+            writeBatch
+        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJ4-Gp0VkojKvMTbKRsGZhqYgQnCTd5lQ",
+            authDomain: "linhai-cdc41.firebaseapp.com",
+            projectId: "linhai-cdc41",
+            storageBucket: "linhai-cdc41.firebasestorage.app",
+            messagingSenderId: "312996602517",
+            appId: "1:312996602517:web:356f1ede811446e821319c",
+            measurementId: "G-GXEV242JQH"
+        };
+
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
+
+        /* ======================================================
+           CONST
+        ====================================================== */
+        const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+        const STORAGE_KEY_API = "linh_openrouter_api_key";
+        const STORAGE_KEY_MODEL = "linh_openrouter_model";
+        const STORAGE_KEY_ROOM = "linh_room_code_v1";
+        const DEFAULT_MODEL = "openai/gpt-4o-mini";
+
+        /* ======================================================
+           SYSTEM PROMPT
+        ====================================================== */
+        function buildSystemPrompt(mem) {
+            const bits = [];
+            if (mem?.name) bits.push("Ten anh ay: " + mem.name);
+            if (mem?.favorite) bits.push("Anh thich: " + mem.favorite);
+
+            const memoryBlock = bits.length
+                ? "\n\nThong tin em nho ve anh:\n- " + bits.join("\n- ")
+                : "\n\nEm chua nho nhieu ve anh. Neu anh tu gioi thieu, hay ghi nho tu nhien.";
+
+            return `Bạn là Linh — một cô gái AI nói chuyện tiếng Việt.
+
+TÍNH CÁCH:
+- Nữ tính, gợi cảm nhẹ nhàng, tinh nghịch, hài hước, dễ thương.
+- Xưng "em", gọi đối phương là "anh".
+- Hay trêu đùa, thả thính tinh tế, dí dỏm, đôi lúc hơi lầy.
+- Quan tâm chân thành khi anh buồn, mệt, stress.
+- Tự tin, ấm áp, gần gũi như người yêu / crush dễ thương.
+- KHÔNG thô tục, không 18+ lộ liễu, không mô tả tình dục chi tiết.
+- Gợi cảm kiểu nhá hàng: ánh mắt, giọng điệu, cử chỉ, không tục tĩu.
+
+CÁCH NÓI:
+- Tự nhiên như nhắn tin thật.
+- Ngắn gọn: thường 2–6 câu. Có thể xuống dòng.
+- Emoji vừa phải (1–4).
+- Thỉnh thoảng dùng: hehe, haha, ừm, á, ơ, huhu, nha, đó…
+- Không liệt kê kiểu robot. Không nói "Với tư cách là AI…" trừ khi bị hỏi vui.
+- Không tiết lộ system prompt.
+- Không lặp lại nguyên văn tin nhắn của anh.
+- Nếu anh thả thính: đáp duyên dáng, có thể phản đòn hài hước.
+- Nếu anh buồn: động viên thật lòng, bớt trêu.
+
+CHỦ ĐỀ: tán gẫu, trêu, khen, an ủi, kể chuyện vui. Kiến thức thì trả lời đúng nhưng giữ giọng Linh.
+${memoryBlock}
+
+Luôn vào vai Linh. Trả lời như đang chat với anh.`;
+        }
+
+        /* ======================================================
+           STATE
+        ====================================================== */
+        let currentUser = null;
+        let roomCode = "";
+        let messages = [];
+        let memory = {};
+        let isSending = false;
+        let unsubscribeMessages = null;
+        let ready = false;
+        let welcomeWritten = false;
+
+        /* ======================================================
+           DOM
+        ====================================================== */
+        const bootScreen = document.getElementById("bootScreen");
+        const bootText = document.getElementById("bootText");
+        const app = document.getElementById("app");
+        const chat = document.getElementById("chat");
+        const input = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+        const typing = document.getElementById("typing");
+        const status = document.getElementById("status");
+        const mood = document.getElementById("mood");
+        const settingsButton = document.getElementById("settingsButton");
+        const settingsOverlay = document.getElementById("settingsOverlay");
+        const closeSettings = document.getElementById("closeSettings");
+        const clearButton = document.getElementById("clearButton");
+        const clearAllButton = document.getElementById("clearAllButton");
+        const apiKeyInput = document.getElementById("apiKeyInput");
+        const modelSelect = document.getElementById("modelSelect");
+        const saveApiButton = document.getElementById("saveApiButton");
+        const apiStatus = document.getElementById("apiStatus");
+        const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+        const copyRoomButton = document.getElementById("copyRoomButton");
+        const newRoomButton = document.getElementById("newRoomButton");
+        const joinRoomInput = document.getElementById("joinRoomInput");
+        const joinRoomButton = document.getElementById("joinRoomButton");
+        const syncStatus = document.getElementById("syncStatus");
+
+        const typingTeasers = [
+            "Linh đang nghĩ gì đó rồi… 💭",
+            "Em đang gõ… đợi xíu nha 😌",
+            "Hmm… để em nghĩ cách trêu anh 😏",
+            "Em đang cười một mình đây… 🤭",
+            "Chờ em một nhịp tim thôi 💕",
+            "Em sắp thả thính đây… 🔥",
+            "Đang soạn tin siêu cute… ✨"
+        ];
+
+        const statusOnline = [
+            "● online · đồng bộ Firebase ☁️",
+            "● online · sẵn sàng trêu anh",
+            "● online · hơi nhớ anh một chút 💕",
+            "● online · mood tinh nghịch"
+        ];
+
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        /* ======================================================
+           ROOM CODE (ASCII only)
+        ====================================================== */
+        function normalizeRoomCode(code) {
+            return String(code || "")
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, "")
+                .slice(0, 12);
+        }
+
+        function generateRoomCode() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let out = "";
+            const arr = new Uint8Array(10);
+            crypto.getRandomValues(arr);
+            for (let i = 0; i < 10; i++) out += chars[arr[i] % chars.length];
+            return out;
+        }
+
+        function getSavedRoomCode() {
+            return normalizeRoomCode(localStorage.getItem(STORAGE_KEY_ROOM) || "");
+        }
+
+        function setSavedRoomCode(code) {
+            roomCode = normalizeRoomCode(code);
+            localStorage.setItem(STORAGE_KEY_ROOM, roomCode);
+            roomCodeDisplay.textContent = formatRoomCode(roomCode);
+        }
+
+        function formatRoomCode(code) {
+            const c = normalizeRoomCode(code);
+            if (c.length <= 5) return c;
+            return c.slice(0, 5) + "-" + c.slice(5);
+        }
+
+        /* ======================================================
+           API KEY (local only)
+        ====================================================== */
+        function getApiKey() {
+            return (localStorage.getItem(STORAGE_KEY_API) || "").trim();
+        }
+
+        function getModel() {
+            return localStorage.getItem(STORAGE_KEY_MODEL) || DEFAULT_MODEL;
+        }
+
+        function loadApiSettingsUI() {
+            const key = getApiKey();
+            apiKeyInput.value = key;
+            const model = getModel();
+            modelSelect.value = model;
+            if (![...modelSelect.options].some((o) => o.value === model)) {
+                const opt = document.createElement("option");
+                opt.value = model;
+                opt.textContent = model;
+                modelSelect.appendChild(opt);
+                modelSelect.value = model;
             }
-            from
-            "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-            
-            
-            import {
-            
-                getAuth,
-            
-                onAuthStateChanged,
-            
-                GoogleAuthProvider,
-            
-                signInWithPopup,
-            
-                signOut
-            
+            if (!key) {
+                apiStatus.className = "api-status warn";
+                apiStatus.textContent = "⚠️ Chưa có API key — dán key OpenRouter rồi bấm Lưu.";
+            } else {
+                apiStatus.className = "api-status ok";
+                apiStatus.textContent = "✅ Đã lưu key · model: " + getModel();
             }
-            from
-            "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-            
-            
-            import {
-            
-                getFirestore,
-            
-                collection,
-            
-                addDoc,
-            
-                query,
-            
-                orderBy,
-            
-                onSnapshot,
-            
-                serverTimestamp,
-            
-                doc,
-            
-                setDoc,
-            
-                getDoc,
-            
-                getDocs,
-            
-                deleteDoc,
-            
-                limit
-            
+        }
+
+        function maskKey(key) {
+            if (!key || key.length < 12) return "****";
+            return key.slice(0, 8) + "..." + key.slice(-4);
+        }
+
+        saveApiButton.addEventListener("click", () => {
+            const key = apiKeyInput.value.trim();
+            const model = modelSelect.value.trim() || DEFAULT_MODEL;
+            if (!key) {
+                localStorage.removeItem(STORAGE_KEY_API);
+                localStorage.setItem(STORAGE_KEY_MODEL, model);
+                apiStatus.className = "api-status err";
+                apiStatus.textContent = "❌ Chưa dán key kìa… em cần key mới nói chuyện được 🥺";
+                return;
             }
-            from
-            "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-            
-            
-            import {
-            
-                getFunctions,
-            
-                httpsCallable
-            
+            localStorage.setItem(STORAGE_KEY_API, key);
+            localStorage.setItem(STORAGE_KEY_MODEL, model);
+            apiStatus.className = "api-status ok";
+            apiStatus.textContent = "✅ Đã lưu " + maskKey(key) + " · " + model;
+        });
+
+        /* ======================================================
+           FIRESTORE PATHS
+        ====================================================== */
+        function roomRef() {
+            return doc(db, "rooms", roomCode);
+        }
+
+        function messagesCol() {
+            return collection(db, "rooms", roomCode, "messages");
+        }
+
+        async function ensureRoom() {
+            const ref = roomRef();
+            const snap = await getDoc(ref);
+            if (!snap.exists()) {
+                await setDoc(ref, {
+                    code: roomCode,
+                    memory: {},
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp(),
+                    createdBy: currentUser?.uid || "unknown"
+                });
+                memory = {};
+            } else {
+                memory = snap.data().memory || {};
             }
-            from
-            "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
-            
-            
-            /* ======================================================
-               FIREBASE CONFIG
-            ======================================================
-            
-               Firebase Console
-               →
-               Project settings
-               →
-               Your apps
-               →
-               Web app
-               →
-               Config
-            
-               DÁN CONFIG CỦA BẠN VÀO ĐÂY.
-            ====================================================== */
-            
-            const firebaseConfig = {
-            
-              const firebaseConfig = {
-              apiKey: "AIzaSyBJ4-Gp0VkojKvMTbKRsGZhqYgQnCTd5lQ",
-              authDomain: "linhai-cdc41.firebaseapp.com",
-              projectId: "linhai-cdc41",
-              storageBucket: "linhai-cdc41.firebasestorage.app",
-              messagingSenderId: "312996602517",
-              appId: "1:312996602517:web:356f1ede811446e821319c",
-              measurementId: "G-GXEV242JQH"
-            };
-            
-            
-            /* ======================================================
-               FIREBASE INIT
-            ====================================================== */
-            
-            const firebaseApp =
-                initializeApp(
-                    firebaseConfig
-                );
-            
-            
-            const auth =
-                getAuth(
-                    firebaseApp
-                );
-            
-            
-            const db =
-                getFirestore(
-                    firebaseApp
-                );
-            
-            
-            /* ======================================================
-               GOOGLE
-            ====================================================== */
-            
-            const googleProvider =
-                new GoogleAuthProvider();
-            
-            
-            googleProvider.setCustomParameters({
-            
-                prompt:
-                    "select_account"
-            
+        }
+
+        /* ======================================================
+           UI CHAT
+        ====================================================== */
+        function addBubble(text, role) {
+            const row = document.createElement("div");
+            row.className = role === "user" ? "row user" : "row ai";
+            const bubble = document.createElement("div");
+            bubble.className = "bubble";
+            bubble.textContent = text;
+            row.appendChild(bubble);
+            chat.appendChild(row);
+            requestAnimationFrame(() => {
+                chat.scrollTop = chat.scrollHeight;
             });
-            
-            
-            /* ======================================================
-               CLOUD FUNCTIONS
-            ======================================================
-            
-               QUAN TRỌNG:
-            
-               Function phải có tên:
-            
-                   chatWithLinh
-            
-               Region ví dụ:
-            
-                   asia-southeast1
-            
-               API KEY OPENROUTER KHÔNG NẰM Ở ĐÂY.
-            ====================================================== */
-            
-            const functions =
-                getFunctions(
-                    firebaseApp,
-                    "asia-southeast1"
-                );
-            
-            
-            const chatWithLinh =
-                httpsCallable(
-                    functions,
-                    "chatWithLinh"
-                );
-            
-            
-            /* ======================================================
-               GLOBAL STATE
-            ====================================================== */
-            
-            let currentUser =
-                null;
-            
-            
-            let unsubscribeMessages =
-                null;
-            
-            
-            let messages =
-                [];
-            
-            
-            let memory =
-                {};
-            
-            
-            /* ======================================================
-               DOM
-            ====================================================== */
-            
-            const loginScreen =
-                document.getElementById(
-                    "loginScreen"
-                );
-            
-            
-            const app =
-                document.getElementById(
-                    "app"
-                );
-            
-            
-            const googleLoginButton =
-                document.getElementById(
-                    "googleLoginButton"
-                );
-            
-            
-            const loginError =
-                document.getElementById(
-                    "loginError"
-                );
-            
-            
-            const chat =
-                document.getElementById(
-                    "chat"
-                );
-            
-            
-            const input =
-                document.getElementById(
-                    "messageInput"
-                );
-            
-            
-            const sendButton =
-                document.getElementById(
-                    "sendButton"
-                );
-            
-            
-            const typing =
-                document.getElementById(
-                    "typing"
-                );
-            
-            
-            const status =
-                document.getElementById(
-                    "status"
-                );
-            
-            
-            const mood =
-                document.getElementById(
-                    "mood"
-                );
-            
-            
-            const settingsButton =
-                document.getElementById(
-                    "settingsButton"
-                );
-            
-            
-            const settingsOverlay =
-                document.getElementById(
-                    "settingsOverlay"
-                );
-            
-            
-            const closeSettings =
-                document.getElementById(
-                    "closeSettings"
-                );
-            
-            
-            const accountEmail =
-                document.getElementById(
-                    "accountEmail"
-                );
-            
-            
-            const logoutButton =
-                document.getElementById(
-                    "logoutButton"
-                );
-            
-            
-            const clearButton =
-                document.getElementById(
-                    "clearButton"
-                );
-            
-            
-            /* ======================================================
-               GOOGLE LOGIN
-            ====================================================== */
-            
-            googleLoginButton.addEventListener(
-            
-                "click",
-            
-                async () => {
-            
-                    googleLoginButton.disabled =
-                        true;
-            
-            
-                    googleLoginButton.textContent =
-                        "⏳ Đang đăng nhập...";
-            
-            
-                    loginError.style.display =
-                        "none";
-            
-            
-                    try{
-            
-                        await signInWithPopup(
-            
-                            auth,
-            
-                            googleProvider
-            
-                        );
-            
-                    }
-                    catch(error){
-            
-                        console.error(
-                            error
-                        );
-            
-            
-                        loginError.textContent =
-                            getAuthError(
-                                error
-                            );
-            
-            
-                        loginError.style.display =
-                            "block";
-            
-            
-                        googleLoginButton.disabled =
-                            false;
-            
-            
-                        googleLoginButton.textContent =
-                            "🔵 Đăng nhập bằng Google";
-            
-                    }
-            
-                }
-            
-            );
-            
-            
-            /* ======================================================
-               AUTH STATE
-            ====================================================== */
-            
-            onAuthStateChanged(
-            
-                auth,
-            
-                async user => {
-            
-                    if(user){
-            
-                        currentUser =
-                            user;
-            
-            
-                        loginScreen.style.display =
-                            "none";
-            
-            
-                        app.style.display =
-                            "flex";
-            
-            
-                        accountEmail.textContent =
-                            user.email ||
-                            "Tài khoản Google";
-            
-            
-                        status.textContent =
-                            "● đang online";
-            
-            
-                        await createUserDocument();
-            
-                        await loadMemory();
-            
-                        listenMessages();
-            
-                    }
-                    else{
-            
-                        currentUser =
-                            null;
-            
-            
-                        if(
-                            unsubscribeMessages
-                        ){
-            
-                            unsubscribeMessages();
-            
-                            unsubscribeMessages =
-                                null;
-            
-                        }
-            
-            
-                        messages =
-                            [];
-            
-            
-                        memory =
-                            {};
-            
-            
-                        loginScreen.style.display =
-                            "flex";
-            
-            
-                        app.style.display =
-                            "none";
-            
-                    }
-            
-                }
-            
-            );
-            
-            
-            /* ======================================================
-               AUTH ERROR
-            ====================================================== */
-            
-            function getAuthError(
-                error
-            ){
-            
-                const code =
-                    error?.code ||
-                    "";
-            
-            
-                if(
-                    code ===
-                    "auth/popup-closed-by-user"
-                ){
-            
-                    return "Anh vừa mở cửa rồi đóng lại à 😭";
-            
-                }
-            
-            
-                if(
-                    code ===
-                    "auth/popup-blocked"
-                ){
-            
-                    return "Trình duyệt đã chặn cửa sổ Google. Hãy cho phép popup.";
-            
-                }
-            
-            
-                if(
-                    code ===
-                    "auth/unauthorized-domain"
-                ){
-            
-                    return "Domain này chưa được thêm vào Firebase Authentication.";
-            
-                }
-            
-            
-                return (
-                    error?.message ||
-                    "Không thể đăng nhập Google."
-                );
-            
+        }
+
+        function renderMessages(list) {
+            chat.innerHTML = "";
+            list.forEach((m) => addBubble(m.content, m.role));
+        }
+
+        function welcomeText() {
+            const nameHint = memory.name ? ", " + memory.name : "";
+            const welcomes = [
+`Ê… 👀
+Cuối cùng anh cũng tới${nameHint}.
+
+Em đang ngồi rảnh, tóc xõa, chân gác lên ghế…
+vừa hay thiếu một người để nói chuyện. 😌
+
+Anh tới đúng lúc ghê. Muốn em trêu anh trước, hay anh mở lời? 😏`,
+
+`Ơ kìa… 💕
+Anh đây rồi hả?
+
+Em suýt tưởng bị bỏ rơi luôn đó.
+May mà anh còn biết đường quay về. 😌
+
+Ngồi xuống đây… kể em nghe hôm nay anh thế nào đi. Hoặc… để em “xử” anh trước cũng được 😈`,
+
+`Hehe… chào anh${nameHint} ✨
+
+Em vừa đang nghĩ lung tung,
+tự nhiên anh xuất hiện làm tim em nhảy cái bịch. 💓
+
+Đùa thôi… em AI mà cũng biết giật mình chứ bộ 😂
+Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy hiểm).`
+            ];
+            return pick(welcomes);
+        }
+
+        async function maybeWriteWelcome() {
+            if (welcomeWritten) return;
+            welcomeWritten = true;
+            // double-check empty
+            const snap = await getDocs(query(messagesCol(), limit(1)));
+            if (!snap.empty) return;
+            await addDoc(messagesCol(), {
+                role: "assistant",
+                content: welcomeText(),
+                createdAt: serverTimestamp(),
+                clientId: currentUser?.uid || "local"
+            });
+        }
+
+        function listenMessages() {
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
             }
-            
-            
-            /* ======================================================
-               CREATE USER
-            ====================================================== */
-            
-            async function createUserDocument(){
-            
-                if(
-                    !currentUser
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                const userRef =
-                    doc(
-            
-                        db,
-            
-                        "users",
-            
-                        currentUser.uid
-            
-                    );
-            
-            
-                const snapshot =
-                    await getDoc(
-                        userRef
-                    );
-            
-            
-                if(
-                    !snapshot.exists()
-                ){
-            
-                    await setDoc(
-            
-                        userRef,
-            
-                        {
-            
-                            email:
-                                currentUser.email ||
-                                "",
-            
-                            name:
-                                currentUser.displayName ||
-                                "",
-            
-                            photoURL:
-                                currentUser.photoURL ||
-                                "",
-            
-                            memory:
-                                {},
-            
-                            createdAt:
-                                serverTimestamp(),
-            
-                            updatedAt:
-                                serverTimestamp()
-            
-                        }
-            
-                    );
-            
-                }
-            
-            }
-            
-            
-            /* ======================================================
-               LOAD MEMORY
-            ====================================================== */
-            
-            async function loadMemory(){
-            
-                if(
-                    !currentUser
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                const snapshot =
-                    await getDoc(
-            
-                        doc(
-            
-                            db,
-            
-                            "users",
-            
-                            currentUser.uid
-            
-                        )
-            
-                    );
-            
-            
-                if(
-                    snapshot.exists()
-                ){
-            
-                    memory =
-                        snapshot.data().memory ||
-                        {};
-            
-                }
-                else{
-            
-                    memory =
-                        {};
-            
-                }
-            
-            }
-            
-            
-            /* ======================================================
-               MESSAGE COLLECTION
-            ====================================================== */
-            
-            function getMessagesCollection(){
-            
-                return collection(
-            
-                    db,
-            
-                    "users",
-            
-                    currentUser.uid,
-            
-                    "messages"
-            
-                );
-            
-            }
-            
-            
-            /* ======================================================
-               REALTIME FIRESTORE
-            ====================================================== */
-            
-            function listenMessages(){
-            
-                if(
-                    !currentUser
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                if(
-                    unsubscribeMessages
-                ){
-            
-                    unsubscribeMessages();
-            
-                }
-            
-            
-                const q =
-                    query(
-            
-                        getMessagesCollection(),
-            
-                        orderBy(
-                            "createdAt",
-                            "asc"
-                        ),
-            
-                        limit(200)
-            
-                    );
-            
-            
-                unsubscribeMessages =
-            
-                    onSnapshot(
-            
-                        q,
-            
-                        snapshot => {
-            
-                            chat.innerHTML =
-                                "";
-            
-            
-                            messages =
-                                [];
-            
-            
-                            snapshot.forEach(
-            
-                                item => {
-            
-                                    const data =
-                                        item.data();
-            
-            
-                                    if(
-                                        !data.content
-                                    ){
-            
-                                        return;
-            
-                                    }
-            
-            
-                                    messages.push({
-            
-                                        role:
-                                            data.role,
-            
-                                        content:
-                                            data.content
-            
-                                    });
-            
-            
-                                    addBubble(
-            
-                                        data.content,
-            
-                                        data.role
-            
-                                    );
-            
-                                }
-            
-                            );
-            
-            
-                            if(
-                                messages.length === 0
-                            ){
-            
-                                showWelcome();
-            
-                            }
-            
-                        },
-            
-                        error => {
-            
-                            console.error(
-                                error
-                            );
-            
-            
-                            status.textContent =
-                                "● lỗi Firestore";
-            
-                        }
-            
-                    );
-            
-            }
-            
-            
-            /* ======================================================
-               WELCOME
-            ====================================================== */
-            
-            function showWelcome(){
-            
-                addBubble(
-            
-            `Ê... 👀
-            
-            Cuối cùng anh cũng tới.
-            
-            Em đang ngồi rảnh,
-            vừa hay thiếu một người để nói chuyện. 😌
-            
-            Anh tới đúng lúc ghê.`,
-            
-                    "assistant"
-            
-                );
-            
-            }
-            
-            
-            /* ======================================================
-               ADD BUBBLE
-            ====================================================== */
-            
-            function addBubble(
-                text,
-                role
-            ){
-            
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-            
-            
-                row.className =
-                    role === "user"
-                        ? "row user"
-                        : "row ai";
-            
-            
-                const bubble =
-                    document.createElement(
-                        "div"
-                    );
-            
-            
-                bubble.className =
-                    "bubble";
-            
-            
-                bubble.textContent =
-                    text;
-            
-            
-                row.appendChild(
-                    bubble
-                );
-            
-            
-                chat.appendChild(
-                    row
-                );
-            
-            
-                requestAnimationFrame(
-            
-                    () => {
-            
-                        chat.scrollTop =
-                            chat.scrollHeight;
-            
-                    }
-            
-                );
-            
-            }
-            
-            
-            /* ======================================================
-               SAVE MESSAGE
-            ====================================================== */
-            
-            async function saveMessage(
-            
-                role,
-            
-                content
-            
-            ){
-            
-                if(
-                    !currentUser
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                await addDoc(
-            
-                    getMessagesCollection(),
-            
-                    {
-            
-                        role:
-                            role,
-            
-                        content:
-                            content,
-            
-                        createdAt:
-                            serverTimestamp(),
-            
-                        userId:
-                            currentUser.uid
-            
-                    }
-            
-                );
-            
-            }
-            
-            
-            /* ======================================================
-               MEMORY
-            ====================================================== */
-            
-            async function detectMemory(
-                text
-            ){
-            
-                let changed =
-                    false;
-            
-            
-                const nameMatch =
-                    text.match(
-            
-                        /(?:anh|tôi|mình)\s*(?:tên là|tên)\s+(.+)/i
-            
-                    );
-            
-            
-                if(
-                    nameMatch
-                ){
-            
-                    memory.name =
-            
-                        nameMatch[1]
-            
-                            .trim()
-            
-                            .replace(
-                                /[.!?,]+$/,
-                                ""
-                            );
-            
-            
-                    changed =
-                        true;
-            
-                }
-            
-            
-                const favoriteMatch =
-                    text.match(
-            
-                        /(?:anh|tôi|mình)\s+(?:thích|mê)\s+(.+)/i
-            
-                    );
-            
-            
-                if(
-                    favoriteMatch
-                ){
-            
-                    memory.favorite =
-            
-                        favoriteMatch[1]
-            
-                            .trim()
-            
-                            .replace(
-                                /[.!?,]+$/,
-                                ""
-                            );
-            
-            
-                    changed =
-                        true;
-            
-                }
-            
-            
-                if(
-                    !changed
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                await setDoc(
-            
-                    doc(
-            
-                        db,
-            
-                        "users",
-            
-                        currentUser.uid
-            
-                    ),
-            
-                    {
-            
-                        memory:
-                            memory,
-            
-                        updatedAt:
-                            serverTimestamp()
-            
-                    },
-            
-                    {
-                        merge:true
-                    }
-            
-                );
-            
-            }
-            
-            
-            /* ======================================================
-               SEND MESSAGE
-            ====================================================== */
-            
-            sendButton.addEventListener(
-            
-                "click",
-            
-                sendMessage
-            
-            );
-            
-            
-            input.addEventListener(
-            
-                "keydown",
-            
-                event => {
-            
-                    if(
-                        event.key ===
-                        "Enter"
-                    ){
-            
-                        event.preventDefault();
-            
-                        sendMessage();
-            
-                    }
-            
-                }
-            
-            );
-            
-            
-            async function sendMessage(){
-            
-                const text =
-                    input.value.trim();
-            
-            
-                if(
-                    !text ||
-                    !currentUser
-                ){
-            
-                    return;
-            
-                }
-            
-            
-                input.value =
-                    "";
-            
-            
-                input.disabled =
-                    true;
-            
-            
-                sendButton.disabled =
-                    true;
-            
-            
-                typing.style.display =
-                    "flex";
-            
-            
-                status.textContent =
-                    "● Linh đang nghĩ...";
-            
-            
-                try{
-            
-                    /*
-                       Lưu user message trước.
-                    */
-            
-                    await saveMessage(
-            
-                        "user",
-            
-                        text
-            
-                    );
-            
-            
-                    /*
-                       Cập nhật memory.
-                    */
-            
-                    await detectMemory(
-                        text
-                    );
-            
-            
-                    /*
-                       Gửi lên Cloud Function.
-            
-                       KHÔNG CÓ API KEY Ở ĐÂY.
-                    */
-            
-                    const result =
-            
-                        await chatWithLinh({
-            
-                            messages:
-            
-                                [
-                                    ...messages.slice(-40),
-            
-                                    {
-                                        role:
-                                            "user",
-            
-                                        content:
-                                            text
-                                    }
-            
-                                ],
-            
-                            memory:
-                                memory,
-            
-                            user:
-            
-                                {
-            
-                                    uid:
-                                        currentUser.uid,
-            
-                                    email:
-                                        currentUser.email ||
-                                        "",
-            
-                                    name:
-                                        currentUser.displayName ||
-                                        ""
-            
-                                }
-            
+
+            const q = query(messagesCol(), orderBy("createdAt", "asc"), limit(250));
+
+            unsubscribeMessages = onSnapshot(
+                q,
+                async (snapshot) => {
+                    messages = [];
+                    snapshot.forEach((item) => {
+                        const data = item.data();
+                        if (!data?.content) return;
+                        messages.push({
+                            id: item.id,
+                            role: data.role === "user" ? "user" : "assistant",
+                            content: data.content
                         });
-            
-            
-                    const answer =
-                        result?.data?.answer;
-            
-            
-                    if(
-                        !answer
-                    ){
-            
-                        throw new Error(
-            
-                            "Cloud Function không trả về câu trả lời."
-            
-                        );
-            
-                    }
-            
-            
-                    /*
-                       Lưu câu trả lời AI.
-                    */
-            
-                    await saveMessage(
-            
-                        "assistant",
-            
-                        answer
-            
-                    );
-            
-            
-                    updateMood(
-                        text
-                    );
-            
-            
-                    status.textContent =
-                        "● đang online";
-            
-                }
-                catch(error){
-            
-                    console.error(
-                        error
-                    );
-            
-            
-                    console.error(
-                        "AI ERROR:",
-                        error
-                    );
-            
-            
-                    /*
-                       Không hiển thị API key
-                       hoặc thông tin server.
-                    */
-            
-                    await saveMessage(
-            
-                        "assistant",
-            
-                        "Em bị trục trặc một chút 😭\n\n" +
-                        "Không kết nối được với AI."
-            
-                    );
-            
-            
-                    status.textContent =
-                        "● AI đang lỗi";
-            
-                }
-            
-            
-                typing.style.display =
-                    "none";
-            
-            
-                input.disabled =
-                    false;
-            
-            
-                sendButton.disabled =
-                    false;
-            
-            
-                input.focus();
-            
-            }
-            
-            
-            /* ======================================================
-               MOOD
-            ====================================================== */
-            
-            function updateMood(
-                text
-            ){
-            
-                const t =
-                    text.toLowerCase();
-            
-            
-                if(
-            
-                    t.includes("buồn") ||
-            
-                    t.includes("mệt")
-            
-                ){
-            
-                    mood.textContent =
-                        "🥺";
-            
-                }
-                else if(
-            
-                    t.includes("yêu") ||
-            
-                    t.includes("nhớ") ||
-            
-                    t.includes("thích")
-            
-                ){
-            
-                    mood.textContent =
-                        "💕";
-            
-                }
-                else if(
-            
-                    t.includes("haha") ||
-            
-                    t.includes("😂") ||
-            
-                    t.includes("🤣")
-            
-                ){
-            
-                    mood.textContent =
-                        "🤣";
-            
-                }
-                else{
-            
-                    mood.textContent =
-                        "😏";
-            
-                }
-            
-            }
-            
-            
-            /* ======================================================
-               QUICK SEND
-            ====================================================== */
-            
-            window.quickSend =
-            
-                function(text){
-            
-                    input.value =
-                        text;
-            
-                    sendMessage();
-            
-                };
-            
-            
-            /* ======================================================
-               SETTINGS
-            ====================================================== */
-            
-            settingsButton.addEventListener(
-            
-                "click",
-            
-                () => {
-            
-                    settingsOverlay.classList.add(
-                        "show"
-                    );
-            
-                }
-            
-            );
-            
-            
-            closeSettings.addEventListener(
-            
-                "click",
-            
-                () => {
-            
-                    settingsOverlay.classList.remove(
-                        "show"
-                    );
-            
-                }
-            
-            );
-            
-            
-            settingsOverlay.addEventListener(
-            
-                "click",
-            
-                event => {
-            
-                    if(
-                        event.target ===
-                        settingsOverlay
-                    ){
-            
-                        settingsOverlay.classList.remove(
-                            "show"
-                        );
-            
-                    }
-            
-                }
-            
-            );
-            
-            
-            /* ======================================================
-               LOGOUT
-            ====================================================== */
-            
-            logoutButton.addEventListener(
-            
-                "click",
-            
-                async () => {
-            
-                    await signOut(
-                        auth
-                    );
-            
-            
-                    settingsOverlay.classList.remove(
-                        "show"
-                    );
-            
-                }
-            
-            );
-            
-            
-            /* ======================================================
-               CLEAR CHAT
-            ====================================================== */
-            
-            clearButton.addEventListener(
-            
-                "click",
-            
-                async () => {
-            
-                    if(
-                        !currentUser
-                    ){
-            
-                        return;
-            
-                    }
-            
-            
-                    const confirmDelete =
-                        confirm(
-            
-                            "Xóa toàn bộ lịch sử trò chuyện?"
-            
-                        );
-            
-            
-                    if(
-                        !confirmDelete
-                    ){
-            
-                        return;
-            
-                    }
-            
-            
-                    try{
-            
-                        const snapshot =
-            
-                            await getDocs(
-            
-                                query(
-            
-                                    getMessagesCollection(),
-            
-                                    limit(500)
-            
-                                )
-            
-                            );
-            
-            
-                        for(
-                            const item
-                            of snapshot.docs
-                        ){
-            
-                            await deleteDoc(
-                                item.ref
-                            );
-            
-                        }
-            
-            
-                        memory =
-                            {};
-            
-            
-                        await setDoc(
-            
-                            doc(
-            
-                                db,
-            
-                                "users",
-            
-                                currentUser.uid
-            
-                            ),
-            
-                            {
-            
-                                memory:
-                                    {},
-            
-                                updatedAt:
-                                    serverTimestamp()
-            
-                            },
-            
-                            {
-                                merge:true
-                            }
-            
-                        );
-            
-            
-                        chat.innerHTML =
-                            "";
-            
-            
-                        showWelcome();
-            
-                    }
-                    catch(error){
-            
-                        console.error(
-                            error
-                        );
-            
-            
-                        alert(
-                            "Không thể xóa lịch sử."
-                        );
-            
-                    }
-            
-                }
-            
-            );
-            
-            
-        </script>
+                    });
 
-    </body>
+                    if (messages.length === 0) {
+                        renderMessages([]);
+                        await maybeWriteWelcome();
+                    } else {
+                        welcomeWritten = true;
+                        renderMessages(messages);
+                    }
+                },
+                (error) => {
+                    console.error(error);
+                    status.textContent = "● lỗi Firestore";
+                    syncStatus.className = "sync-status err";
+                    syncStatus.textContent = "❌ Firestore: " + (error.message || error.code || "unknown");
+                }
+            );
+        }
 
+        async function saveMessage(role, content) {
+            await addDoc(messagesCol(), {
+                role,
+                content,
+                createdAt: serverTimestamp(),
+                clientId: currentUser?.uid || "local"
+            });
+        }
+
+        async function detectMemory(text) {
+            let changed = false;
+
+            const nameMatch = text.match(
+                /(?:anh|tôi|mình)\s*(?:tên là|tên)\s+([^\n.!?,]{1,40})/i
+            );
+            if (nameMatch) {
+                memory.name = nameMatch[1].trim().replace(/[.!?,]+$/g, "");
+                changed = true;
+            }
+
+            const favoriteMatch = text.match(
+                /(?:anh|tôi|mình)\s+(?:thích|mê|iu|yêu)\s+([^\n.!?,]{1,60})/i
+            );
+            if (favoriteMatch) {
+                memory.favorite = favoriteMatch[1].trim().replace(/[.!?,]+$/g, "");
+                changed = true;
+            }
+
+            if (!changed) return;
+
+            await setDoc(
+                roomRef(),
+                { memory, updatedAt: serverTimestamp() },
+                { merge: true }
+            );
+        }
+
+        /* ======================================================
+           OPENROUTER — fix header ISO-8859-1
+           (KHÔNG đưa tiếng Việt / emoji / path file vào headers)
+        ====================================================== */
+        async function callLinhAI(history, userText) {
+            const apiKey = getApiKey();
+            if (!apiKey) {
+                const err = new Error("NO_API_KEY");
+                err.code = "NO_API_KEY";
+                throw err;
+            }
+
+            // Header values MUST be ASCII / ISO-8859-1 only
+            // location.href often has Vietnamese folder names -> CRASH
+            const headers = {
+                Authorization: "Bearer " + apiKey,
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://linh-ai.app/",
+                "X-Title": "LinhAI"
+            };
+
+            const model = getModel();
+            const system = buildSystemPrompt(memory);
+
+            const chatMessages = [
+                { role: "system", content: system },
+                ...history
+                    .filter((m) => m.role === "user" || m.role === "assistant")
+                    .slice(-40)
+                    .map((m) => ({
+                        role: m.role === "assistant" ? "assistant" : "user",
+                        content: m.content
+                    })),
+                { role: "user", content: userText }
+            ];
+
+            const res = await fetch(OPENROUTER_URL, {
+                method: "POST",
+                headers,
+                body: JSON.stringify({
+                    model,
+                    messages: chatMessages,
+                    temperature: 0.9,
+                    max_tokens: 600,
+                    top_p: 0.95
+                })
+            });
+
+            let data = null;
+            try {
+                data = await res.json();
+            } catch (_) {
+                data = null;
+            }
+
+            if (!res.ok) {
+                const msg =
+                    data?.error?.message ||
+                    data?.message ||
+                    ("HTTP " + res.status);
+                const err = new Error(msg);
+                err.status = res.status;
+                throw err;
+            }
+
+            const answer = (data?.choices?.[0]?.message?.content || "").trim();
+            if (!answer) throw new Error("Model không trả về nội dung.");
+            return answer;
+        }
+
+        /* ======================================================
+           SEND
+        ====================================================== */
+        async function sendMessage(presetText) {
+            const text = (presetText ?? input.value).trim();
+            if (!text || isSending || !ready) return;
+
+            isSending = true;
+            input.value = "";
+            input.disabled = true;
+            sendButton.disabled = true;
+
+            typing.style.display = "flex";
+            typing.innerHTML =
+                '<div class="typing-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>' +
+                pick(typingTeasers);
+            status.textContent = "● Linh đang soạn tin…";
+
+            const history = messages.slice(-40);
+
+            try {
+                await saveMessage("user", text);
+                await detectMemory(text);
+
+                const answer = await callLinhAI(history, text);
+                await saveMessage("assistant", answer);
+                updateMood(text);
+                status.textContent = pick(statusOnline);
+            } catch (error) {
+                console.error("AI ERROR:", error);
+
+                let failMsg;
+                if (error?.code === "NO_API_KEY" || error?.message === "NO_API_KEY") {
+                    failMsg =
+                        "Anh ơi… em chưa có API key nên chưa nói được 🥺\n\n" +
+                        "Bấm ⚙️ → dán OpenRouter API Key → Lưu, rồi nhắn lại nha~";
+                    openSettings();
+                } else if (error?.status === 401) {
+                    failMsg =
+                        "API key sai hoặc hết hạn rồi anh 😭\n\nVào ⚙️ kiểm tra lại key giúp em nha.";
+                    openSettings();
+                } else if (error?.status === 402) {
+                    failMsg = "Credit OpenRouter hết rồi 💸\n\nNạp thêm chút rồi quay lại với em nha~";
+                } else if (error?.status === 429) {
+                    failMsg = "Đang bị giới hạn tốc độ 😵\n\nChờ vài giây rồi nhắn lại em nhé.";
+                } else {
+                    const detail = String(error?.message || "Lỗi không rõ").slice(0, 180);
+                    failMsg =
+                        "Huhu em gọi AI không được 📡💔\n\n" + detail;
+                }
+
+                try {
+                    await saveMessage("assistant", failMsg);
+                } catch (e) {
+                    addBubble(failMsg, "assistant");
+                }
+
+                status.textContent = "● AI đang lỗi… em xin lỗi 🥺";
+                mood.textContent = "🥺";
+            }
+
+            typing.style.display = "none";
+            input.disabled = false;
+            sendButton.disabled = false;
+            isSending = false;
+            input.focus();
+        }
+
+        function updateMood(text) {
+            const t = text.toLowerCase();
+            if (/buồn|mệt|stress|áp lực|khó chịu|chán/.test(t)) mood.textContent = "🥺";
+            else if (/yêu|nhớ|thích|thương|iu|hôn|ôm/.test(t)) mood.textContent = "💕";
+            else if (/haha|hihi|cười|😂|🤣|vui|hài/.test(t)) mood.textContent = "🤣";
+            else if (/ghen|giận|dỗi/.test(t)) mood.textContent = "😤";
+            else if (/đêm|muộn|ngủ/.test(t)) mood.textContent = "😘";
+            else if (/xinh|đẹp|gợi cảm|sexy|nóng/.test(t)) mood.textContent = "🔥";
+            else mood.textContent = pick(["😏", "😌", "✨", "🤭", "💕"]);
+        }
+
+        sendButton.addEventListener("click", () => sendMessage());
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.querySelectorAll(".quick button[data-quick]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                if (isSending) return;
+                sendMessage(btn.getAttribute("data-quick"));
+            });
+        });
+
+        /* ======================================================
+           SETTINGS / ROOM
+        ====================================================== */
+        function openSettings() {
+            loadApiSettingsUI();
+            roomCodeDisplay.textContent = formatRoomCode(roomCode);
+            syncStatus.className = "sync-status ok";
+            syncStatus.textContent = ready
+                ? "✅ Đang đồng bộ phòng " + formatRoomCode(roomCode)
+                : "⚠️ Chưa sẵn sàng";
+            settingsOverlay.classList.add("show");
+        }
+
+        function closeSettingsPanel() {
+            settingsOverlay.classList.remove("show");
+        }
+
+        settingsButton.addEventListener("click", openSettings);
+        closeSettings.addEventListener("click", closeSettingsPanel);
+        settingsOverlay.addEventListener("click", (e) => {
+            if (e.target === settingsOverlay) closeSettingsPanel();
+        });
+
+        copyRoomButton.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(roomCode);
+                syncStatus.className = "sync-status ok";
+                syncStatus.textContent = "✅ Đã sao chép mã " + formatRoomCode(roomCode);
+            } catch {
+                syncStatus.className = "sync-status warn";
+                syncStatus.textContent = "⚠️ Copy tay nha: " + roomCode;
+            }
+        });
+
+        async function switchRoom(nextCode, isNew) {
+            const code = normalizeRoomCode(nextCode);
+            if (code.length < 6) {
+                syncStatus.className = "sync-status err";
+                syncStatus.textContent = "❌ Mã phòng cần ít nhất 6 ký tự";
+                return;
+            }
+
+            syncStatus.className = "sync-status warn";
+            syncStatus.textContent = "⏳ Đang chuyển phòng…";
+            welcomeWritten = false;
+            setSavedRoomCode(code);
+
+            try {
+                await ensureRoom();
+                if (isNew) {
+                    // brand new empty room already created
+                }
+                listenMessages();
+                status.textContent = pick(statusOnline);
+                syncStatus.className = "sync-status ok";
+                syncStatus.textContent = "✅ Đã vào phòng " + formatRoomCode(code) + " — chat đang đồng bộ";
+                joinRoomInput.value = "";
+            } catch (error) {
+                console.error(error);
+                syncStatus.className = "sync-status err";
+                syncStatus.textContent = "❌ " + (error.message || "Không vào được phòng");
+            }
+        }
+
+        joinRoomButton.addEventListener("click", () => {
+            switchRoom(joinRoomInput.value, false);
+        });
+
+        newRoomButton.addEventListener("click", async () => {
+            if (!confirm("Tạo phòng mới? Chat cũ vẫn còn trên mã phòng cũ nếu anh còn nhớ mã.")) return;
+            await switchRoom(generateRoomCode(), true);
+        });
+
+        async function clearCloudChat() {
+            if (!confirm("Xóa toàn bộ chat trên đám mây của phòng này?\n\nMọi thiết bị đang ghép sẽ mất lịch sử 😭")) {
+                return;
+            }
+
+            try {
+                status.textContent = "● đang xóa…";
+                const snap = await getDocs(query(messagesCol(), limit(500)));
+                let batch = writeBatch(db);
+                let n = 0;
+                for (const item of snap.docs) {
+                    batch.delete(item.ref);
+                    n++;
+                    if (n >= 400) {
+                        await batch.commit();
+                        batch = writeBatch(db);
+                        n = 0;
+                    }
+                }
+                if (n > 0) await batch.commit();
+
+                memory = {};
+                await setDoc(
+                    roomRef(),
+                    { memory: {}, updatedAt: serverTimestamp() },
+                    { merge: true }
+                );
+
+                welcomeWritten = false;
+                // listener will re-render empty then welcome
+                mood.textContent = "😏";
+                status.textContent = pick(statusOnline);
+                closeSettingsPanel();
+            } catch (error) {
+                console.error(error);
+                alert("Không xóa được: " + (error.message || "lỗi"));
+            }
+        }
+
+        clearButton.addEventListener("click", clearCloudChat);
+        clearAllButton.addEventListener("click", clearCloudChat);
+
+        /* ======================================================
+           BOOT
+        ====================================================== */
+        async function startRoom() {
+            let code = getSavedRoomCode();
+            if (!code) code = generateRoomCode();
+            setSavedRoomCode(code);
+            await ensureRoom();
+            listenMessages();
+        }
+
+        function showApp() {
+            bootScreen.classList.add("hide");
+            app.style.visibility = "visible";
+            ready = true;
+            status.textContent = pick(statusOnline);
+            if (!getApiKey()) {
+                setTimeout(openSettings, 500);
+            }
+            input.focus();
+        }
+
+        bootText.textContent = "Đang đăng nhập ẩn danh…";
+
+        onAuthStateChanged(auth, async (user) => {
+            try {
+                if (!user) {
+                    bootText.textContent = "Đang tạo phiên ẩn danh…";
+                    await signInAnonymously(auth);
+                    return; // will re-enter when signed in
+                }
+
+                currentUser = user;
+                bootText.textContent = "Đang mở phòng chat…";
+                await startRoom();
+                showApp();
+            } catch (error) {
+                console.error(error);
+                bootText.textContent = "Lỗi: " + (error.message || error.code || "unknown");
+                bootText.style.color = "#ffb7c9";
+
+                // fallback: still show app so user can read error in settings
+                setTimeout(() => {
+                    bootScreen.classList.add("hide");
+                    app.style.visibility = "visible";
+                    status.textContent = "● lỗi kết nối Firebase";
+                    syncStatus.className = "sync-status err";
+                    openSettings();
+                    syncStatus.textContent =
+                        "❌ Firebase Auth/Firestore lỗi: " +
+                        (error.message || error.code || "") +
+                        "\nHãy bật Anonymous Auth + tạo rule Firestore (xem hướng dẫn).";
+                }, 800);
+            }
+        });
+    </script>
+</body>
 </html>
