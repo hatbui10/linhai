@@ -479,6 +479,126 @@
 
         .quick button:active { transform: scale(.96); }
 
+
+        .tool-btn {
+            width: 42px;
+            height: 48px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 130, 180, .18);
+            border-radius: 16px;
+            background: #1e1830;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .tool-btn:hover { border-color: rgba(255, 130, 180, .45); }
+        .tool-btn.active {
+            background: linear-gradient(135deg, rgba(255, 63, 129, .35), rgba(160, 76, 255, .35));
+            border-color: rgba(255, 130, 180, .55);
+        }
+
+        .emoji-panel {
+            display: none;
+            flex-shrink: 0;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 12px 8px;
+            background: linear-gradient(180deg, #14101c, #100c18);
+            border-top: 1px solid rgba(255, 120, 180, .12);
+            max-height: 210px;
+        }
+
+        .emoji-panel.show { display: flex; }
+
+        .emoji-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .emoji-tabs::-webkit-scrollbar { display: none; }
+
+        .emoji-tab {
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 130, 180, .15);
+            border-radius: 16px;
+            padding: 5px 10px;
+            background: #221a30;
+            color: #e8d0e0;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .emoji-tab.active {
+            background: linear-gradient(135deg, #ff3f81, #a04cff);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            overflow-y: auto;
+            max-height: 150px;
+            padding-bottom: 2px;
+        }
+
+        @media (max-width: 420px) {
+            .emoji-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        .emoji-item {
+            border: 0;
+            border-radius: 12px;
+            background: #1a1426;
+            height: 40px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .emoji-item:hover {
+            background: #2a2038;
+            transform: scale(1.08);
+        }
+
+        .emoji-item:active { transform: scale(.94); }
+
+        .emoji-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .emoji-actions .hint {
+            flex: 1;
+            font-size: 11px;
+            color: #7a6580;
+        }
+
+        .emoji-mini-btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 6px 10px;
+            background: #2a2038;
+            color: #f0d8e8;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .bubble .sticker-xl {
+            font-size: 42px;
+            line-height: 1.15;
+            letter-spacing: 2px;
+        }
+
+
         .input-area {
             flex-shrink: 0;
             display: flex;
@@ -951,13 +1071,27 @@
             <button type="button" data-quick="Gửi anh ảnh phong cảnh đẹp">🌄 Ảnh đẹp</button>
         </div>
 
+        <!-- STICKER / EMOJI PANEL -->
+        <div class="emoji-panel" id="emojiPanel">
+            <div class="emoji-tabs" id="emojiTabs"></div>
+            <div class="emoji-grid" id="emojiGrid"></div>
+            <div class="emoji-actions">
+                <span class="hint">Chạm 1 lần = chèn · chạm đúp = gửi ngay</span>
+                <button type="button" class="emoji-mini-btn" id="emojiSendOnlyBtn">Gửi icon</button>
+                <button type="button" class="emoji-mini-btn" id="emojiCloseBtn">Đóng</button>
+            </div>
+        </div>
+
         <div class="input-area">
-            <button class="voice-btn" id="micButton" type="button" title="Giữ để nói / bấm để bật mic">🎤</button>
+            <button class="voice-btn" id="micButton" type="button" title="Nói chuyện">🎤</button>
+            <button class="tool-btn" id="emojiToggleBtn" type="button" title="Icon tâm trạng">😊</button>
+            <button class="tool-btn" id="attachImageBtn" type="button" title="Gửi ảnh từ máy">🖼️</button>
+            <input type="file" id="userImageInput" accept="image/*" style="display:none">
             <input
                 class="message-input"
                 id="messageInput"
                 type="text"
-                placeholder="Nhắn hoặc bấm mic nói… 💋"
+                placeholder="Nhắn, gửi icon hoặc ảnh… 💋"
                 autocomplete="off"
                 autocapitalize="off"
                 autocorrect="off"
@@ -1955,9 +2089,32 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
         }
 
         function renderMessageHtml(raw) {
-            let text = expandImageTags(raw);
-            // Extract markdown images first
+            const original = String(raw ?? "");
+            // sticker-only message (emoji/short) -> big
+            const stickerOnly = original.trim();
+            if (
+                stickerOnly.length > 0 &&
+                stickerOnly.length <= 12 &&
+                !stickerOnly.includes("http") &&
+                !stickerOnly.includes("[[") &&
+                !stickerOnly.includes("data:image") &&
+                /^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(stickerOnly)
+            ) {
+                return '<div class="sticker-xl">' + escapeHtml(stickerOnly) + "</div>";
+            }
+
+            let text = expandImageTags(original);
             const slots = [];
+
+            // markdown images http or data
+            text = text.replace(
+                /!\[([^\]]*)\]\((data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+)\)/g,
+                (_, alt, url) => {
+                    const i = slots.length;
+                    slots.push({ type: "img", alt: alt || "image", url: url.replace(/\s+/g, "") });
+                    return "\u0000SLOT" + i + "\u0000";
+                }
+            );
             text = text.replace(
                 /!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g,
                 (_, alt, url) => {
@@ -1966,7 +2123,18 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                     return "\u0000SLOT" + i + "\u0000";
                 }
             );
-            // Bare image URLs on their own line
+
+            // bare data image urls
+            text = text.replace(
+                /(^|\n)(data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=\s]{40,})(?=\n|$)/g,
+                (m, pre, url) => {
+                    const i = slots.length;
+                    slots.push({ type: "img", alt: "image", url: url.replace(/\s+/g, "") });
+                    return pre + "\u0000SLOT" + i + "\u0000";
+                }
+            );
+
+            // bare http image urls
             text = text.replace(
                 /(^|\n)(https?:\/\/[^\s<]+)(?=\n|$)/g,
                 (m, pre, url) => {
@@ -1976,28 +2144,22 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                     return pre + "\u0000SLOT" + i + "\u0000";
                 }
             );
-            // Escape remaining text
+
             let html = escapeHtml(text);
-            // links (non-image already slotted)
             html = html.replace(
                 /(https?:\/\/[^\s<]+)/g,
                 (url) => '<a class="msg-link" href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + "</a>"
             );
-            // newlines
             html = html.replace(/\n/g, "<br>");
-            // restore slots
             html = html.replace(/\u0000SLOT(\d+)\u0000/g, (_, n) => {
                 const s = slots[Number(n)];
                 if (!s) return "";
-                if (s.type === "img") {
-                    const alt = escapeHtml(s.alt);
-                    const url = escapeHtml(s.url);
-                    return (
-                        '<img class="msg-img loading" src="' + url + '" alt="' + alt + '" loading="lazy" referrerpolicy="no-referrer" onclick="window.open(this.src,\'_blank\')">' +
-                        (s.alt && s.alt !== "image" ? '<span class="img-cap">' + alt + "</span>" : "")
-                    );
-                }
-                return "";
+                const alt = escapeHtml(s.alt);
+                const url = escapeHtml(s.url);
+                return (
+                    '<img class="msg-img loading" src="' + url + '" alt="' + alt + '" loading="lazy" referrerpolicy="no-referrer" onclick="window.open(this.src,\'_blank\')">' +
+                    (s.alt && s.alt !== "image" ? '<span class="img-cap">' + alt + "</span>" : "")
+                );
             });
             return html;
         }
@@ -2654,9 +2816,235 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             return answer;
         }
 
+
+        /* ======================================================
+           STICKERS (~50 mood icons) + USER IMAGE SEND
+        ====================================================== */
+        const STICKER_CATS = [
+            {
+                id: "happy",
+                label: "Vui",
+                icons: ["😀","😄","😁","😆","😂","🤣","😊","😇","🙂","😉","😋","😎","🤩","🥳","✨","🎉"]
+            },
+            {
+                id: "love",
+                label: "Yêu",
+                icons: ["😍","🥰","😘","😗","😙","😚","💕","💖","💗","💓","💞","❤️","🧡","💛","💘","💝"]
+            },
+            {
+                id: "play",
+                label: "Tinh nghịch",
+                icons: ["😏","😜","😝","😛","🤪","🤭","🙈","😼","😈","👻","🫠","🫢","😺","💫","🔥","💋"]
+            },
+            {
+                id: "sad",
+                label: "Buồn",
+                icons: ["😔","😢","😭","😞","😟","🥺","😣","😖","😫","😩","💔","😿","🌧️","💧","🫂","🖤"]
+            },
+            {
+                id: "mad",
+                label: "Giận",
+                icons: ["😠","😡","🤬","😤","😒","🙄","😑","😶","💢","🗯️","👿","🥵","🥶","😬","🫤","😐"]
+            },
+            {
+                id: "shy",
+                label: "Ngại",
+                icons: ["😳","🫣","😅","😓","😥","😰","🫢","😶‍🌫️","👀","👉👈","🌸","🌷","💐","🫶","💭","💦"]
+            },
+            {
+                id: "tired",
+                label: "Mệt",
+                icons: ["😪","😴","🥱","😷","🤒","🤕","😵","😵‍💫","💤","🛏️","☕","🍵","😮‍💨","😌","🧘","🌙"]
+            },
+            {
+                id: "extra",
+                label: "Khác",
+                icons: ["🤔","🤨","🫡","🤝","👍","👎","👏","🙏","💪","🫡","🫡","⭐","🌟","⚡","🌈","🍀","🍫","🍓","🐱","🐰"]
+            }
+        ];
+
+        // unique flat list for count (~50+ unique preferred)
+        const MOOD_STICKERS = (() => {
+            const preferred = [
+                // vui / hài
+                "😀","😄","😁","😆","😂","🤣","😊","😉","😋","😎","🤩","🥳","🎉","✨",
+                // yêu
+                "😍","🥰","😘","💕","💖","💗","❤️","💘","💋","🫶",
+                // tinh nghịch
+                "😏","😜","😝","🤪","🤭","🙈","😈","🫠","🔥","😼",
+                // buồn
+                "😔","😢","😭","🥺","😞","💔","😿","🌧️","🫂","💧",
+                // giận / dỗi
+                "😠","😡","😤","😒","🙄","😑","💢","👿",
+                // ngại / mệt / khác
+                "😳","🫣","😅","😴","😪","🥱","😮‍💨","🤔","🫡","👍","🙏","⭐","🌈","🐱","🐰"
+            ];
+            // ensure uniqueness preserve order
+            const seen = new Set();
+            const out = [];
+            for (const e of preferred) {
+                if (!seen.has(e)) { seen.add(e); out.push(e); }
+            }
+            // pad from cats if needed
+            for (const cat of STICKER_CATS) {
+                for (const e of cat.icons) {
+                    if (!seen.has(e)) { seen.add(e); out.push(e); }
+                    if (out.length >= 56) break;
+                }
+                if (out.length >= 56) break;
+            }
+            return out;
+        })();
+
+        let emojiPanelOpen = false;
+        let activeEmojiTab = "all";
+        let lastEmoji = "";
+
+        function insertAtCursor(inputEl, textToInsert) {
+            const start = inputEl.selectionStart ?? inputEl.value.length;
+            const end = inputEl.selectionEnd ?? inputEl.value.length;
+            const v = inputEl.value;
+            inputEl.value = v.slice(0, start) + textToInsert + v.slice(end);
+            const pos = start + textToInsert.length;
+            try { inputEl.setSelectionRange(pos, pos); } catch {}
+            inputEl.focus();
+        }
+
+        function getStickersForTab(tabId) {
+            if (tabId === "all") return MOOD_STICKERS;
+            const cat = STICKER_CATS.find((c) => c.id === tabId);
+            return cat ? cat.icons : MOOD_STICKERS;
+        }
+
+        function renderEmojiTabs() {
+            const tabs = document.getElementById("emojiTabs");
+            if (!tabs) return;
+            const items = [{ id: "all", label: "Tất cả" }].concat(
+                STICKER_CATS.map((c) => ({ id: c.id, label: c.label }))
+            );
+            tabs.innerHTML = "";
+            items.forEach((t) => {
+                const b = document.createElement("button");
+                b.type = "button";
+                b.className = "emoji-tab" + (t.id === activeEmojiTab ? " active" : "");
+                b.textContent = t.label;
+                b.addEventListener("click", () => {
+                    activeEmojiTab = t.id;
+                    renderEmojiTabs();
+                    renderEmojiGrid();
+                });
+                tabs.appendChild(b);
+            });
+        }
+
+        function renderEmojiGrid() {
+            const grid = document.getElementById("emojiGrid");
+            if (!grid) return;
+            grid.innerHTML = "";
+            const list = getStickersForTab(activeEmojiTab);
+            list.forEach((emo) => {
+                const b = document.createElement("button");
+                b.type = "button";
+                b.className = "emoji-item";
+                b.textContent = emo;
+                b.title = "Chạm: chèn · Đúp: gửi";
+                let taps = 0;
+                let timer = null;
+                b.addEventListener("click", () => {
+                    taps += 1;
+                    lastEmoji = emo;
+                    if (taps === 1) {
+                        timer = setTimeout(() => {
+                            taps = 0;
+                            insertAtCursor(input, emo);
+                        }, 250);
+                    } else if (taps === 2) {
+                        clearTimeout(timer);
+                        taps = 0;
+                        sendMessage(emo);
+                    }
+                });
+                grid.appendChild(b);
+            });
+        }
+
+        function setEmojiPanel(open) {
+            emojiPanelOpen = open;
+            const panel = document.getElementById("emojiPanel");
+            const btn = document.getElementById("emojiToggleBtn");
+            if (panel) panel.classList.toggle("show", open);
+            if (btn) btn.classList.toggle("active", open);
+            if (open) {
+                renderEmojiTabs();
+                renderEmojiGrid();
+            }
+        }
+
+        function toggleEmojiPanel() {
+            setEmojiPanel(!emojiPanelOpen);
+        }
+
+        async function sendUserImageFile(file) {
+            if (!file || !ready || isSending) return;
+            try {
+                status.textContent = "● đang gửi ảnh…";
+                // compress a bit larger than avatar for chat clarity
+                const dataUrl = await compressImageFile(file, 960, 0.8);
+                // markdown so bubble renderer shows image
+                const payload = "![ảnh của anh](" + dataUrl + ")";
+                await sendMessage(payload);
+            } catch (e) {
+                console.error(e);
+                alert("Không gửi được ảnh: " + (e.message || e));
+                status.textContent = pick(statusOnline);
+            }
+        }
+
+        function wireStickerAndImageUI() {
+            const emojiToggleBtn = document.getElementById("emojiToggleBtn");
+            const emojiCloseBtn = document.getElementById("emojiCloseBtn");
+            const emojiSendOnlyBtn = document.getElementById("emojiSendOnlyBtn");
+            const attachImageBtn = document.getElementById("attachImageBtn");
+            const userImageInput = document.getElementById("userImageInput");
+
+            if (emojiToggleBtn) emojiToggleBtn.addEventListener("click", toggleEmojiPanel);
+            if (emojiCloseBtn) emojiCloseBtn.addEventListener("click", () => setEmojiPanel(false));
+            if (emojiSendOnlyBtn) {
+                emojiSendOnlyBtn.addEventListener("click", () => {
+                    const v = (input.value || "").trim() || lastEmoji;
+                    if (!v) return;
+                    // if input has text+emoji send all; if empty send last emoji
+                    if ((input.value || "").trim()) sendMessage();
+                    else sendMessage(lastEmoji);
+                });
+            }
+            if (attachImageBtn && userImageInput) {
+                attachImageBtn.addEventListener("click", () => userImageInput.click());
+                userImageInput.addEventListener("change", () => {
+                    const f = userImageInput.files && userImageInput.files[0];
+                    userImageInput.value = "";
+                    if (f) sendUserImageFile(f);
+                });
+            }
+        }
+
+
         /* ======================================================
            SEND
         ====================================================== */
+        function toModelUserText(text) {
+            // Don't send huge base64 to the model
+            if (/data:image\//i.test(text)) {
+                return "[Anh vừa gửi một tấm ảnh cho em. Hãy phản ứng tự nhiên, tinh nghịch hoặc ngọt ngào tùy tính cách, có thể hỏi ảnh gì / khen / trêu.]";
+            }
+            // sticker only
+            const t = text.trim();
+            if (t.length <= 12 && /^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(t)) {
+                return "Anh gửi icon tâm trạng: " + t + "\nHãy phản ứng đúng mood icon đó (ngắn, dễ thương).";
+            }
+            return text;
+        }
+
         async function sendMessage(presetText) {
             const text = (presetText ?? input.value).trim();
             if (!text || isSending || !ready) return;
@@ -2665,6 +3053,7 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             input.value = "";
             input.disabled = true;
             sendButton.disabled = true;
+            setEmojiPanel(false);
 
             typing.style.display = "flex";
             typing.innerHTML =
@@ -2673,12 +3062,17 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             status.textContent = "● " + (persona.charName || "Linh") + " đang soạn tin…";
 
             const history = messages.slice(-40);
+            // history for model should not include giant base64
+            const historyForModel = history.map((m) => ({
+                role: m.role,
+                content: toModelUserText(m.content)
+            }));
 
             try {
                 await saveMessage("user", text);
                 await detectMemory(text);
 
-                let answer = await callLinhAI(history, text);
+                let answer = await callLinhAI(historyForModel, toModelUserText(text));
                 answer = ensureImageInAnswer(text, answer);
                 await saveMessage("assistant", answer);
                 updateMood(text);
@@ -2727,13 +3121,15 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
         }
 
         function updateMood(text) {
-            const t = text.toLowerCase();
-            if (/buồn|mệt|stress|áp lực|khó chịu|chán/.test(t)) mood.textContent = "🥺";
-            else if (/yêu|nhớ|thích|thương|iu|hôn|ôm/.test(t)) mood.textContent = "💕";
-            else if (/haha|hihi|cười|😂|🤣|vui|hài/.test(t)) mood.textContent = "🤣";
-            else if (/ghen|giận|dỗi/.test(t)) mood.textContent = "😤";
-            else if (/đêm|muộn|ngủ/.test(t)) mood.textContent = "😘";
-            else if (/xinh|đẹp|gợi cảm|sexy|nóng/.test(t)) mood.textContent = "🔥";
+            const raw = String(text || "");
+            const t = raw.toLowerCase();
+            if (/😢|😭|😔|💔|🥺|buồn|mệt|stress|áp lực|khó chịu|chán/.test(raw) || /buồn|mệt|stress|áp lực|khó chịu|chán/.test(t)) mood.textContent = "🥺";
+            else if (/😍|🥰|😘|💕|❤️|💘|yêu|nhớ|thích|thương|iu|hôn|ôm/.test(raw) || /yêu|nhớ|thích|thương|iu|hôn|ôm/.test(t)) mood.textContent = "💕";
+            else if (/😂|🤣|😆|😁|🎉|haha|hihi|cười|vui|hài/.test(raw) || /haha|hihi|cười|vui|hài/.test(t)) mood.textContent = "🤣";
+            else if (/😠|😡|😤|😒|💢|ghen|giận|dỗi/.test(raw) || /ghen|giận|dỗi/.test(t)) mood.textContent = "😤";
+            else if (/😴|😪|🥱|💤|đêm|muộn|ngủ/.test(raw) || /đêm|muộn|ngủ/.test(t)) mood.textContent = "😴";
+            else if (/😏|🔥|😈|😜|xinh|đẹp|gợi cảm|sexy|nóng/.test(raw) || /xinh|đẹp|gợi cảm|sexy|nóng/.test(t)) mood.textContent = "🔥";
+            else if (/data:image|!\[ảnh/.test(raw)) mood.textContent = "📸";
             else mood.textContent = pick(["😏", "😌", "✨", "🤭", "💕"]);
         }
 
@@ -3151,5 +3547,5 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
         setTimeout(() => { try { refreshVoices(); renderVoiceGrid(); } catch {} }, 1200);
         bootFirebase();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30e59b38c824679',t:'MTc4NzcwMDI2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30e5e2fb83c86b1',t:'MTc4NzcwMDQ1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
