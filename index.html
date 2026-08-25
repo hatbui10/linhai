@@ -80,6 +80,185 @@
                 0 4px 14px rgba(0, 0, 0, .25);
         }
 
+        
+        .avatar {
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .avatar.has-img {
+            font-size: 0 !important;
+            background-color: #1a1426;
+        }
+
+        .avatar-edit-hint {
+            display: none;
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0,0,0,.45);
+            color: #fff;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .avatar-wrap:hover .avatar-edit-hint {
+            display: flex;
+        }
+
+        .voice-btn {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 130, 180, .2);
+            border-radius: 50%;
+            background: #1e1830;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .voice-btn:hover { border-color: rgba(255, 130, 180, .5); }
+
+        .voice-btn.listening {
+            background: linear-gradient(135deg, #ff3f81, #ff6b4a);
+            border-color: transparent;
+            animation: micPulse 1s ease-in-out infinite;
+            box-shadow: 0 0 0 6px rgba(255, 80, 120, .2);
+        }
+
+        .voice-btn.speaking-wait {
+            opacity: .7;
+        }
+
+        @keyframes micPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .speak-btn {
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(0,0,0,.18);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .speak-btn.on {
+            background: rgba(255,255,255,.28);
+            box-shadow: 0 0 0 2px rgba(255,255,255,.35);
+        }
+
+        .voice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+            margin-top: 6px;
+            padding-right: 4px;
+        }
+
+        .voice-option {
+            text-align: left;
+            border: 1px solid rgba(255, 140, 190, .14);
+            border-radius: 12px;
+            padding: 8px 9px;
+            background: #1a1426;
+            color: #f0d8e8;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .voice-option.active {
+            border-color: rgba(255, 100, 160, .65);
+            background: linear-gradient(145deg, rgba(255, 60, 130, .18), rgba(140, 60, 255, .16));
+        }
+
+        .voice-option .v-name { font-weight: 750; color: #ffe0f0; font-size: 12px; }
+        .voice-option .v-meta { margin-top: 2px; font-size: 10px; color: #9a8098; }
+
+        .avatar-preview {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff, #ffe0ef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 8px auto 10px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(255,140,190,.35);
+            overflow: hidden;
+        }
+
+        .avatar-preview.has-img { font-size: 0; }
+
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #1a1426;
+            border: 1px solid rgba(255,140,190,.12);
+            font-size: 12px;
+            color: #f0d8e8;
+        }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .switch input { display: none; }
+
+        .switch span {
+            position: absolute;
+            inset: 0;
+            background: #3a3048;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .switch span::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .2s;
+        }
+
+        .switch input:checked + span {
+            background: linear-gradient(135deg, #ff3f81, #a04cff);
+        }
+
+        .switch input:checked + span::after {
+            transform: translateX(18px);
+        }
+
+
         .avatar-online {
             position: absolute;
             bottom: 1px;
@@ -733,15 +912,18 @@
 
     <div class="app" id="app" style="visibility:hidden">
         <div class="header">
-            <div class="avatar-wrap">
+            <div class="avatar-wrap" id="avatarWrap" title="Đổi ảnh đại diện">
                 <div class="avatar" id="charAvatar">👩🏻</div>
+                <div class="avatar-edit-hint">📷</div>
                 <span class="avatar-online"></span>
+                <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
             </div>
             <div class="info">
                 <div class="name" id="charNameLabel">Linh 💕</div>
                 <div class="status" id="status">● đang kết nối…</div>
             </div>
             <div class="mood" id="mood">😏</div>
+            <button class="speak-btn" id="speakToggleBtn" type="button" title="Bật/tắt bot nói">🔇</button>
             <button class="header-button" id="settingsButton" title="Cài đặt" type="button">⚙️</button>
         </div>
 
@@ -770,11 +952,12 @@
         </div>
 
         <div class="input-area">
+            <button class="voice-btn" id="micButton" type="button" title="Giữ để nói / bấm để bật mic">🎤</button>
             <input
                 class="message-input"
                 id="messageInput"
                 type="text"
-                placeholder="Nhắn gì đó cho Linh nè… 💋"
+                placeholder="Nhắn hoặc bấm mic nói… 💋"
                 autocomplete="off"
                 autocapitalize="off"
                 autocorrect="off"
@@ -884,6 +1067,53 @@
 
                 <button class="save-api-button" id="saveApiButton" type="button">💾 Lưu API Key</button>
                 <div class="api-status" id="apiStatus"></div>
+            </div>
+
+            <!-- AVATAR -->
+            <div class="section">
+                <div class="section-title">🖼️ Avatar bot</div>
+                <div class="avatar-preview" id="avatarPreview">👩🏻</div>
+                <label class="field-label" for="avatarUrlInput">LINK ẢNH (https…)</label>
+                <input class="field-input" id="avatarUrlInput" type="text" placeholder="https://...jpg" autocomplete="off" spellcheck="false">
+                <div class="row-btns">
+                    <button class="btn-secondary" id="avatarUploadBtn" type="button">📁 Tải ảnh lên</button>
+                    <button class="btn-secondary" id="avatarClearBtn" type="button">🗑 Xóa ảnh</button>
+                </div>
+                <button class="btn-full" id="saveAvatarButton" type="button" style="margin-top:10px">💾 Lưu avatar</button>
+                <p class="field-hint">Ảnh sẽ nén nhỏ để đồng bộ Firebase. Bấm avatar trên header cũng chọn ảnh được.</p>
+                <div class="api-status" id="avatarStatus"></div>
+            </div>
+
+            <!-- VOICE -->
+            <div class="section">
+                <div class="section-title">🎙️ Chat thoại · 20 giọng nữ</div>
+
+                <div class="switch-row">
+                    <span>Bot tự đọc tin nhắn (TTS)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoSpeakCheck">
+                        <span></span>
+                    </label>
+                </div>
+                <div class="switch-row">
+                    <span>Gửi tự động sau khi nói xong (mic)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoSendVoiceCheck" checked>
+                        <span></span>
+                    </label>
+                </div>
+
+                <label class="field-label" style="margin-top:14px">CHỌN GIỌNG NỮ</label>
+                <div class="voice-grid" id="voiceGrid"></div>
+                <div class="row-btns">
+                    <button class="btn-secondary" id="previewVoiceBtn" type="button">🎧 Nghe thử</button>
+                    <button class="btn-secondary" id="stopSpeakBtn" type="button">⏹ Dừng nói</button>
+                </div>
+                <p class="field-hint">
+                    Dùng giọng có sẵn trên máy (Web Speech). iPhone/Safari và Chrome có bộ giọng khác nhau.
+                    Mic cần quyền micro · HTTPS hoặc localhost.
+                </p>
+                <div class="api-status" id="voiceStatus"></div>
             </div>
 
             <!-- PERSONA -->
@@ -1221,8 +1451,41 @@
         const DEFAULT_PERSONA = {
             id: "sexy_playful",
             charName: "Linh",
-            note: ""
+            note: "",
+            avatarUrl: ""
         };
+
+        /* ======================================================
+           20 FEMALE VOICE PROFILES (Web Speech mapping)
+        ====================================================== */
+        const FEMALE_VOICES = [
+            { id: "linh_nhe", name: "Linh nhẹ nhàng", emoji: "🌸", lang: "vi-VN", pitch: 1.12, rate: 1.0, prefer: ["google tieng viet", "microsoft hoai", "vietnamese female", "linh", "vi-vn"] },
+            { id: "linh_ngot", name: "Linh ngọt", emoji: "🍭", lang: "vi-VN", pitch: 1.28, rate: 0.95, prefer: ["vi-vn", "hoai", "vietnamese"] },
+            { id: "linh_sexy", name: "Linh quyến rũ", emoji: "🔥", lang: "vi-VN", pitch: 0.92, rate: 0.9, prefer: ["vi-vn", "vietnamese"] },
+            { id: "linh_vui", name: "Linh vui tươi", emoji: "😄", lang: "vi-VN", pitch: 1.2, rate: 1.12, prefer: ["vi-vn", "vietnamese"] },
+            { id: "linh_tram", name: "Linh trầm ấm", emoji: "🌙", lang: "vi-VN", pitch: 0.85, rate: 0.92, prefer: ["vi-vn", "vietnamese"] },
+            { id: "mai_hn", name: "Mai Hà Nội", emoji: "🏛️", lang: "vi-VN", pitch: 1.05, rate: 1.0, prefer: ["vi-vn", "hoai my", "vietnamese"] },
+            { id: "my_sg", name: "My Sài Gòn", emoji: "🌆", lang: "vi-VN", pitch: 1.15, rate: 1.05, prefer: ["vi-vn", "vietnamese"] },
+            { id: "ha_thu", name: "Hà thư sinh", emoji: "📖", lang: "vi-VN", pitch: 1.08, rate: 0.96, prefer: ["vi-vn"] },
+            { id: "en_soft", name: "Soft English Girl", emoji: "💕", lang: "en-US", pitch: 1.2, rate: 0.98, prefer: ["samantha", "zira", "female", "google us english", "jenny", "aria"] },
+            { id: "en_warm", name: "Warm English", emoji: "☕", lang: "en-US", pitch: 1.05, rate: 0.95, prefer: ["aria", "jenny", "samantha", "female"] },
+            { id: "en_bright", name: "Bright English", emoji: "🌟", lang: "en-US", pitch: 1.3, rate: 1.08, prefer: ["samantha", "zira", "female"] },
+            { id: "en_sultry", name: "Sultry English", emoji: "🍷", lang: "en-US", pitch: 0.88, rate: 0.9, prefer: ["aria", "jenny", "female"] },
+            { id: "uk_lady", name: "UK Lady", emoji: "🇬🇧", lang: "en-GB", pitch: 1.1, rate: 0.98, prefer: ["uk english female", "google uk english female", "libby", "sonia", "fable"] },
+            { id: "uk_soft", name: "UK Soft", emoji: "🍵", lang: "en-GB", pitch: 1.22, rate: 0.95, prefer: ["uk english female", "libby", "sonia"] },
+            { id: "ja_kawaii", name: "Japanese Kawaii", emoji: "🎀", lang: "ja-JP", pitch: 1.35, rate: 1.05, prefer: ["kyoko", "nanami", "google 日本語", "japanese female"] },
+            { id: "ja_soft", name: "Japanese Soft", emoji: "🍡", lang: "ja-JP", pitch: 1.15, rate: 0.95, prefer: ["kyoko", "nanami", "japanese"] },
+            { id: "ko_soft", name: "Korean Soft", emoji: "💗", lang: "ko-KR", pitch: 1.18, rate: 1.0, prefer: ["google 한국의", "heami", "sunhi", "korean female"] },
+            { id: "zh_soft", name: "Chinese Soft", emoji: "🧧", lang: "zh-CN", pitch: 1.15, rate: 0.98, prefer: ["tingting", "xiaoxiao", "google 普通话", "chinese female"] },
+            { id: "fr_soft", name: "French Douce", emoji: "🥐", lang: "fr-FR", pitch: 1.15, rate: 0.98, prefer: ["thomas", "google français", "french female", "denise", "eloise"] },
+            { id: "es_warm", name: "Spanish Cálida", emoji: "💃", lang: "es-ES", pitch: 1.12, rate: 1.0, prefer: ["google español", "sabina", "elsa", "spanish female", "helena"] }
+        ];
+
+        const STORAGE_VOICE_ID = "linh_voice_id_v1";
+        const STORAGE_AUTO_SPEAK = "linh_auto_speak_v1";
+        const STORAGE_AUTO_SEND_VOICE = "linh_auto_send_voice_v1";
+        const STORAGE_AVATAR_LOCAL = "linh_avatar_data_v1";
+
 
         /* ======================================================
            SYSTEM PROMPT
@@ -1366,19 +1629,41 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                 .trim()
                 .slice(0, 24) || "Linh";
             const note = String(raw?.note || "").trim().slice(0, 500);
-            return { id, charName, note };
+            let avatarUrl = String(raw?.avatarUrl || "").trim();
+            if (avatarUrl.length > 900000) avatarUrl = ""; // safety
+            return { id, charName, note, avatarUrl };
+        }
+
+        function setAvatarElement(el, url) {
+            if (!el) return;
+            if (url) {
+                el.classList.add("has-img");
+                el.style.backgroundImage = "url(\"" + url.replace(/"/g, "%22") + "\")";
+                el.textContent = "";
+            } else {
+                el.classList.remove("has-img");
+                el.style.backgroundImage = "";
+                el.textContent = "👩🏻";
+            }
         }
 
         function applyPersonaToUI() {
             const p = PERSONAS[persona.id] || PERSONAS.sexy_playful;
             charNameLabel.textContent = persona.charName + " " + (p.emoji || "💕");
             mood.textContent = p.emoji || "😏";
-            // keep girl avatar; mood shows vibe
-            charAvatar.textContent = "👩🏻";
             document.title = persona.charName + " AI " + (p.emoji || "💕");
 
-            // typing line name
-            // settings fields
+            const avatarUrl = persona.avatarUrl || localStorage.getItem(STORAGE_AVATAR_LOCAL) || "";
+            setAvatarElement(charAvatar, avatarUrl);
+            const prev = document.getElementById("avatarPreview");
+            setAvatarElement(prev, avatarUrl);
+            const avatarUrlInput = document.getElementById("avatarUrlInput");
+            if (avatarUrlInput && avatarUrl && !avatarUrl.startsWith("data:")) {
+                avatarUrlInput.value = avatarUrl;
+            } else if (avatarUrlInput && !avatarUrl) {
+                avatarUrlInput.value = "";
+            }
+
             if (charNameInput) charNameInput.value = persona.charName;
             if (personaNoteInput) personaNoteInput.value = persona.note || "";
 
@@ -1386,6 +1671,14 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                 personaGrid.querySelectorAll(".persona-option").forEach((btn) => {
                     btn.classList.toggle("active", btn.dataset.id === persona.id);
                 });
+            }
+
+            // speak toggle UI
+            const speakBtn = document.getElementById("speakToggleBtn");
+            if (speakBtn) {
+                const on = localStorage.getItem(STORAGE_AUTO_SPEAK) === "1";
+                speakBtn.classList.toggle("on", on);
+                speakBtn.textContent = on ? "🔊" : "🔇";
             }
         }
 
@@ -1419,7 +1712,8 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
             persona = normalizePersona({
                 id: persona.id,
                 charName: charNameInput.value,
-                note: personaNoteInput.value
+                note: personaNoteInput.value,
+                avatarUrl: persona.avatarUrl || ""
             });
 
             if (!roomCode) {
@@ -1884,6 +2178,412 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             );
         };
 
+
+        /* ======================================================
+           VOICE ENGINE (STT + TTS) + AVATAR HELPERS
+        ====================================================== */
+        let cachedVoices = [];
+        let selectedVoiceId = localStorage.getItem(STORAGE_VOICE_ID) || "linh_nhe";
+        let recognition = null;
+        let recognizing = false;
+        let speaking = false;
+
+        function refreshVoices() {
+            try {
+                cachedVoices = window.speechSynthesis ? speechSynthesis.getVoices() || [] : [];
+            } catch {
+                cachedVoices = [];
+            }
+            return cachedVoices;
+        }
+
+        if (typeof speechSynthesis !== "undefined") {
+            refreshVoices();
+            speechSynthesis.onvoiceschanged = () => refreshVoices();
+        }
+
+        function scoreVoice(sysVoice, profile) {
+            const name = (sysVoice.name || "").toLowerCase();
+            const lang = (sysVoice.lang || "").toLowerCase();
+            let score = 0;
+            const want = (profile.lang || "vi-VN").toLowerCase();
+            if (lang === want.toLowerCase()) score += 50;
+            else if (lang.startsWith(want.slice(0, 2))) score += 25;
+            for (const pref of profile.prefer || []) {
+                const p = pref.toLowerCase();
+                if (name.includes(p)) score += 30;
+                if (lang.includes(p)) score += 10;
+            }
+            // female heuristics
+            if (/female|woman|girl|zira|samantha|victoria|karen|moira|tessa|fiona|veena|aria|jenny|libby|sonia|nanami|kyoko|hoai|my|linh|nữ|nu /i.test(name)) {
+                score += 15;
+            }
+            if (/male|david|mark|george|daniel|male/i.test(name) && !/female/i.test(name)) score -= 40;
+            return score;
+        }
+
+        function pickSystemVoice(profile) {
+            const voices = refreshVoices();
+            if (!voices.length) return null;
+            let best = null;
+            let bestScore = -1e9;
+            for (const v of voices) {
+                const s = scoreVoice(v, profile);
+                if (s > bestScore) {
+                    bestScore = s;
+                    best = v;
+                }
+            }
+            return best;
+        }
+
+        function getVoiceProfile(id) {
+            return FEMALE_VOICES.find((v) => v.id === id) || FEMALE_VOICES[0];
+        }
+
+        function stripForSpeech(text) {
+            return String(text || "")
+                .replace(/\[\[\s*image\s*:[\s\S]*?\]\]/gi, " ")
+                .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+                .replace(/https?:\/\/\S+/g, " ")
+                .replace(/[*_`#>-]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim()
+                .slice(0, 600);
+        }
+
+        function stopSpeaking() {
+            try {
+                if (window.speechSynthesis) speechSynthesis.cancel();
+            } catch {}
+            speaking = false;
+        }
+
+        function speakText(text, opts = {}) {
+            if (!window.speechSynthesis) {
+                const vs = document.getElementById("voiceStatus");
+                if (vs) {
+                    vs.className = "api-status err";
+                    vs.textContent = "❌ Trình duyệt không hỗ trợ đọc tiếng (speechSynthesis).";
+                }
+                return;
+            }
+            const clean = stripForSpeech(text);
+            if (!clean) return;
+
+            stopSpeaking();
+            // chrome bug: cancel then speak needs tiny delay
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(clean);
+                const profile = getVoiceProfile(selectedVoiceId);
+                const sys = pickSystemVoice(profile);
+                if (sys) u.voice = sys;
+                u.lang = profile.lang || (sys && sys.lang) || "vi-VN";
+                u.pitch = Math.min(2, Math.max(0.5, profile.pitch || 1));
+                u.rate = Math.min(1.4, Math.max(0.7, profile.rate || 1));
+                u.volume = 1;
+                u.onstart = () => { speaking = true; };
+                u.onend = () => {
+                    speaking = false;
+                    if (opts.onend) opts.onend();
+                };
+                u.onerror = () => { speaking = false; };
+                speaking = true;
+                speechSynthesis.speak(u);
+            }, 60);
+        }
+
+        function isAutoSpeak() {
+            return localStorage.getItem(STORAGE_AUTO_SPEAK) === "1";
+        }
+
+        function setAutoSpeak(on) {
+            localStorage.setItem(STORAGE_AUTO_SPEAK, on ? "1" : "0");
+            applyPersonaToUI();
+            const chk = document.getElementById("autoSpeakCheck");
+            if (chk) chk.checked = on;
+        }
+
+        function renderVoiceGrid() {
+            const grid = document.getElementById("voiceGrid");
+            if (!grid) return;
+            grid.innerHTML = "";
+            const voices = refreshVoices();
+            FEMALE_VOICES.forEach((profile) => {
+                const sys = pickSystemVoice(profile);
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "voice-option" + (profile.id === selectedVoiceId ? " active" : "");
+                btn.innerHTML =
+                    '<div class="v-name">' + profile.emoji + " " + profile.name + "</div>" +
+                    '<div class="v-meta">' + profile.lang +
+                    (sys ? (" · " + sys.name.slice(0, 28)) : " · (chờ giọng máy)") +
+                    " · p" + profile.pitch + " r" + profile.rate + "</div>";
+                btn.addEventListener("click", () => {
+                    selectedVoiceId = profile.id;
+                    localStorage.setItem(STORAGE_VOICE_ID, selectedVoiceId);
+                    renderVoiceGrid();
+                    const vs = document.getElementById("voiceStatus");
+                    if (vs) {
+                        vs.className = "api-status ok";
+                        vs.textContent = "✅ Đã chọn: " + profile.name;
+                    }
+                });
+                grid.appendChild(btn);
+            });
+            const vs = document.getElementById("voiceStatus");
+            if (vs && voices.length) {
+                vs.className = "api-status ok";
+                vs.textContent = "✅ Máy có " + voices.length + " giọng · đang dùng profile nữ đã chọn (map giọng gần nhất).";
+            }
+        }
+
+        function getSpeechRecognition() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            return SR ? SR : null;
+        }
+
+        function stopListening() {
+            recognizing = false;
+            const micButton = document.getElementById("micButton");
+            if (micButton) micButton.classList.remove("listening");
+            try {
+                if (recognition) recognition.stop();
+            } catch {}
+        }
+
+        function startListening() {
+            const SR = getSpeechRecognition();
+            const micButton = document.getElementById("micButton");
+            const vs = document.getElementById("voiceStatus");
+            if (!SR) {
+                alert("Trình duyệt không hỗ trợ nhận giọng nói.\\nDùng Chrome/Edge (hoặc Safari mới). Cần HTTPS/localhost.");
+                return;
+            }
+            if (recognizing) {
+                stopListening();
+                return;
+            }
+            stopSpeaking();
+
+            recognition = new SR();
+            const profile = getVoiceProfile(selectedVoiceId);
+            recognition.lang = (profile.lang && profile.lang.startsWith("vi")) ? "vi-VN" : (profile.lang || "vi-VN");
+            // Prefer Vietnamese for input if available
+            recognition.lang = "vi-VN";
+            recognition.interimResults = true;
+            recognition.continuous = false;
+            recognition.maxAlternatives = 1;
+
+            let finalTranscript = "";
+
+            recognition.onstart = () => {
+                recognizing = true;
+                if (micButton) micButton.classList.add("listening");
+                status.textContent = "● đang nghe anh nói… 🎤";
+            };
+
+            recognition.onerror = (e) => {
+                console.warn("STT error", e);
+                stopListening();
+                status.textContent = "● mic lỗi: " + (e.error || "unknown");
+                if (e.error === "not-allowed") {
+                    alert("Anh cần cho phép micro trong trình duyệt.");
+                }
+            };
+
+            recognition.onend = () => {
+                const was = recognizing;
+                stopListening();
+                status.textContent = pick(statusOnline);
+                const textOut = (finalTranscript || input.value).trim();
+                if (!textOut) return;
+                input.value = textOut;
+                const autoSend = localStorage.getItem(STORAGE_AUTO_SEND_VOICE) !== "0";
+                if (autoSend && was) {
+                    sendMessage();
+                }
+            };
+
+            recognition.onresult = (event) => {
+                let interim = "";
+                finalTranscript = "";
+                for (let i = 0; i < event.results.length; i++) {
+                    const r = event.results[i];
+                    if (r.isFinal) finalTranscript += r[0].transcript;
+                    else interim += r[0].transcript;
+                }
+                input.value = (finalTranscript || interim).trim();
+            };
+
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error(e);
+                stopListening();
+            }
+        }
+
+        async function compressImageFile(file, maxSide = 256, quality = 0.72) {
+            const bmp = await createImageBitmap(file);
+            let w = bmp.width;
+            let h = bmp.height;
+            const scale = Math.min(1, maxSide / Math.max(w, h));
+            w = Math.max(1, Math.round(w * scale));
+            h = Math.max(1, Math.round(h * scale));
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(bmp, 0, 0, w, h);
+            bmp.close();
+            const dataUrl = canvas.toDataURL("image/jpeg", quality);
+            return dataUrl;
+        }
+
+        async function saveAvatarData(dataUrlOrHttp) {
+            const avatarStatus = document.getElementById("avatarStatus");
+            let url = (dataUrlOrHttp || "").trim();
+            if (!url) {
+                persona = normalizePersona({ ...persona, avatarUrl: "" });
+                localStorage.removeItem(STORAGE_AVATAR_LOCAL);
+            } else {
+                persona = normalizePersona({ ...persona, avatarUrl: url });
+                if (url.startsWith("data:")) {
+                    localStorage.setItem(STORAGE_AVATAR_LOCAL, url);
+                }
+            }
+            applyPersonaToUI();
+
+            try {
+                if (!localMode && roomCode) {
+                    // store on room for sync (ok if small)
+                    if (url.startsWith("data:") && url.length > 700000) {
+                        if (avatarStatus) {
+                            avatarStatus.className = "api-status warn";
+                            avatarStatus.textContent = "⚠️ Ảnh hơi nặng — lưu local máy này, không sync cloud.";
+                        }
+                        // still keep local
+                        return;
+                    }
+                    await setDoc(
+                        roomRef(),
+                        { persona, updatedAt: serverTimestamp() },
+                        { merge: true }
+                    );
+                    if (avatarStatus) {
+                        avatarStatus.className = "api-status ok";
+                        avatarStatus.textContent = "✅ Đã lưu avatar (đồng bộ phòng).";
+                    }
+                } else {
+                    if (avatarStatus) {
+                        avatarStatus.className = "api-status warn";
+                        avatarStatus.textContent = "⚠️ Đã lưu avatar trên máy (local).";
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                if (avatarStatus) {
+                    avatarStatus.className = "api-status err";
+                    avatarStatus.textContent = "❌ Lưu avatar lỗi: " + (e.message || "err");
+                }
+            }
+        }
+
+        function wireVoiceAndAvatarUI() {
+            const micButton = document.getElementById("micButton");
+            const speakToggleBtn = document.getElementById("speakToggleBtn");
+            const autoSpeakCheck = document.getElementById("autoSpeakCheck");
+            const autoSendVoiceCheck = document.getElementById("autoSendVoiceCheck");
+            const previewVoiceBtn = document.getElementById("previewVoiceBtn");
+            const stopSpeakBtn = document.getElementById("stopSpeakBtn");
+            const avatarWrap = document.getElementById("avatarWrap");
+            const avatarFileInput = document.getElementById("avatarFileInput");
+            const avatarUploadBtn = document.getElementById("avatarUploadBtn");
+            const avatarClearBtn = document.getElementById("avatarClearBtn");
+            const saveAvatarButton = document.getElementById("saveAvatarButton");
+            const avatarUrlInput = document.getElementById("avatarUrlInput");
+
+            if (autoSpeakCheck) {
+                autoSpeakCheck.checked = isAutoSpeak();
+                autoSpeakCheck.addEventListener("change", () => setAutoSpeak(autoSpeakCheck.checked));
+            }
+            if (autoSendVoiceCheck) {
+                autoSendVoiceCheck.checked = localStorage.getItem(STORAGE_AUTO_SEND_VOICE) !== "0";
+                autoSendVoiceCheck.addEventListener("change", () => {
+                    localStorage.setItem(STORAGE_AUTO_SEND_VOICE, autoSendVoiceCheck.checked ? "1" : "0");
+                });
+            }
+            if (speakToggleBtn) {
+                speakToggleBtn.addEventListener("click", () => {
+                    setAutoSpeak(!isAutoSpeak());
+                    if (isAutoSpeak()) {
+                        speakText("Em đây, anh gọi em nha.");
+                    } else {
+                        stopSpeaking();
+                    }
+                });
+            }
+            if (micButton) {
+                micButton.addEventListener("click", () => startListening());
+            }
+            if (previewVoiceBtn) {
+                previewVoiceBtn.addEventListener("click", () => {
+                    const p = getVoiceProfile(selectedVoiceId);
+                    const sample =
+                        p.lang && p.lang.startsWith("vi")
+                            ? "Chào anh, em là " + (persona.charName || "Linh") + ". Giọng này dễ thương không ạ?"
+                            : p.lang && p.lang.startsWith("ja")
+                            ? "こんにちは。わたしは " + (persona.charName || "Linh") + " です。"
+                            : "Hi, I am " + (persona.charName || "Linh") + ". Do you like this voice?";
+                    speakText(sample);
+                });
+            }
+            if (stopSpeakBtn) stopSpeakBtn.addEventListener("click", stopSpeaking);
+
+            async function onPickFile(file) {
+                if (!file) return;
+                try {
+                    const dataUrl = await compressImageFile(file);
+                    await saveAvatarData(dataUrl);
+                } catch (e) {
+                    alert("Không đọc được ảnh: " + (e.message || e));
+                }
+            }
+
+            if (avatarFileInput) {
+                avatarFileInput.addEventListener("change", () => {
+                    const f = avatarFileInput.files && avatarFileInput.files[0];
+                    onPickFile(f);
+                    avatarFileInput.value = "";
+                });
+            }
+            if (avatarWrap) {
+                avatarWrap.addEventListener("click", () => avatarFileInput && avatarFileInput.click());
+            }
+            if (avatarUploadBtn) {
+                avatarUploadBtn.addEventListener("click", () => avatarFileInput && avatarFileInput.click());
+            }
+            if (avatarClearBtn) {
+                avatarClearBtn.addEventListener("click", () => saveAvatarData(""));
+            }
+            if (saveAvatarButton) {
+                saveAvatarButton.addEventListener("click", async () => {
+                    const url = (avatarUrlInput && avatarUrlInput.value || "").trim();
+                    if (url && !/^https?:\/\//i.test(url) && !url.startsWith("data:")) {
+                        const st = document.getElementById("avatarStatus");
+                        if (st) {
+                            st.className = "api-status err";
+                            st.textContent = "❌ Link ảnh cần bắt đầu bằng https://";
+                        }
+                        return;
+                    }
+                    await saveAvatarData(url);
+                });
+            }
+        }
+
+
         /* ======================================================
            OPENROUTER — fix header ISO-8859-1
            (KHÔNG đưa tiếng Việt / emoji / path file vào headers)
@@ -1983,6 +2683,9 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                 await saveMessage("assistant", answer);
                 updateMood(text);
                 status.textContent = pick(statusOnline);
+                if (isAutoSpeak()) {
+                    speakText(answer);
+                }
             } catch (error) {
                 console.error("AI ERROR:", error);
 
@@ -2055,7 +2758,10 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
         function openSettings() {
             loadApiSettingsUI();
             renderPersonaGrid();
+            renderVoiceGrid();
             applyPersonaToUI();
+            const autoSpeakCheck = document.getElementById("autoSpeakCheck");
+            if (autoSpeakCheck) autoSpeakCheck.checked = isAutoSpeak();
             personaStatus.className = "persona-status";
             personaStatus.textContent = "";
             roomCodeDisplay.textContent = formatRoomCode(roomCode);
@@ -2324,7 +3030,8 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                 persona = normalizePersona({
                     id: persona.id,
                     charName: charNameInput.value,
-                    note: personaNoteInput.value
+                    note: personaNoteInput.value,
+                    avatarUrl: persona.avatarUrl || ""
                 });
                 saveLocalMeta();
                 applyPersonaToUI();
@@ -2439,7 +3146,10 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
         });
 
         // Start
+        try { wireVoiceAndAvatarUI(); } catch (e) { console.error(e); }
+        setTimeout(() => { try { refreshVoices(); } catch {} }, 400);
+        setTimeout(() => { try { refreshVoices(); renderVoiceGrid(); } catch {} }, 1200);
         bootFirebase();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30e53c5be4e4679',t:'MTc4NzcwMDAyNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30e59b38c824679',t:'MTc4NzcwMDI2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
