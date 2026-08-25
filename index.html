@@ -1,2302 +1,2559 @@
 <!DOCTYPE html>
 
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
-
->
-
-<title>Linh AI 💕</title>
-
-<style>
-
-/* =========================================================
-   RESET
-========================================================= */
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    -webkit-tap-highlight-color:transparent;
-}
-
-html,
-body{
-    width:100%;
-    height:100%;
-}
-
-body{
-
-    overflow:hidden;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    color:white;
-
-    background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(255,60,140,.25),
-            transparent 35%
-        ),
-
-        radial-gradient(
-            circle at 90% 90%,
-            rgba(100,70,255,.25),
-            transparent 35%
-        ),
-
-        #080810;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-.app{
-
-    width:100%;
-    height:100dvh;
-
-    display:flex;
-    flex-direction:column;
-
-    background:
-        rgba(10,10,20,.97);
-
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.header{
-
-    flex-shrink:0;
-
-    height:70px;
-
-    display:flex;
-    align-items:center;
-
-    gap:11px;
-
-    padding:
-        9px 12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3f81,
-            #874cff
-        );
-
-    box-shadow:
-        0 3px 15px
-        rgba(0,0,0,.25);
-
-}
-
-
-.avatar{
-
-    width:48px;
-    height:48px;
-
-    flex-shrink:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:white;
-
-    font-size:27px;
-
-}
-
-
-.info{
-
-    flex:1;
-
-    min-width:0;
-
-}
-
-
-.name{
-
-    font-size:17px;
-
-    font-weight:bold;
-
-}
-
-
-.status{
-
-    margin-top:3px;
-
-    font-size:11px;
-
-    opacity:.85;
-
-}
-
-
-.mood{
-
-    width:35px;
-
-    text-align:center;
-
-    font-size:23px;
-
-}
-
-
-.settings-btn{
-
-    width:40px;
-    height:40px;
-
-    flex-shrink:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:
-        rgba(0,0,0,.16);
-
-    color:white;
-
-    font-size:19px;
-
-    cursor:pointer;
-
-}
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-.chat{
-
-    flex:1;
-
-    min-height:0;
-
-    overflow-y:auto;
-
-    padding:
-        17px 13px 12px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-    overscroll-behavior:contain;
-
-}
-
-
-.row{
-
-    width:100%;
-
-    display:flex;
-
-}
-
-
-.row.ai{
-
-    justify-content:flex-start;
-
-}
-
-
-.row.user{
-
-    justify-content:flex-end;
-
-}
-
-
-.bubble{
-
-    max-width:84%;
-
-    padding:
-        11px 14px;
-
-    border-radius:18px;
-
-    font-size:15px;
-
-    line-height:1.5;
-
-    white-space:pre-wrap;
-
-    overflow-wrap:anywhere;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.12);
-
-}
-
-
-.row.ai .bubble{
-
-    background:#242437;
-
-    border-bottom-left-radius:5px;
-
-}
-
-
-.row.user .bubble{
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3f81,
-            #874cff
-        );
-
-    border-bottom-right-radius:5px;
-
-}
-
-
-/* =========================================================
-   TYPING
-========================================================= */
-
-.typing{
-
-    flex-shrink:0;
-
-    display:none;
-
-    align-items:center;
-
-    gap:5px;
-
-    padding:
-        5px 16px 8px;
-
-    color:#888;
-
-    font-size:11px;
-
-}
-
-
-.dot{
-
-    width:6px;
-    height:6px;
-
-    border-radius:50%;
-
-    background:#888;
-
-    animation:
-        typingBounce 1s infinite;
-
-}
-
-
-.dot:nth-child(2){
-
-    animation-delay:.15s;
-
-}
-
-
-.dot:nth-child(3){
-
-    animation-delay:.3s;
-
-}
-
-
-@keyframes typingBounce{
-
-    0%,
-    60%,
-    100%{
-        transform:translateY(0);
-    }
-
-    30%{
-        transform:translateY(-5px);
-    }
-
-}
-
-
-/* =========================================================
-   QUICK BUTTONS
-========================================================= */
-
-.quick{
-
-    flex-shrink:0;
-
-    display:flex;
-
-    gap:7px;
-
-    overflow-x:auto;
-
-    padding:
-        7px 10px;
-
-    scrollbar-width:none;
-
-}
-
-
-.quick::-webkit-scrollbar{
-
-    display:none;
-
-}
-
-
-.quick button{
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:20px;
-
-    padding:
-        8px 12px;
-
-    color:white;
-
-    background:#242437;
-
-    font-size:12px;
-
-    cursor:pointer;
-
-}
-
-
-/* =========================================================
-   INPUT
-========================================================= */
-
-.input-area{
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:
-        8px 10px 9px;
-
-    background:#10101c;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,.05);
-
-}
-
-
-.input{
-
-    flex:1;
-
-    min-width:0;
-
-    height:46px;
-
-    border:0;
-
-    outline:none;
-
-    border-radius:24px;
-
-    padding:
-        0 16px;
-
-    color:white;
-
-    background:#242437;
-
-    font-size:15px;
-
-}
-
-
-.input::placeholder{
-
-    color:#777;
-
-}
-
-
-.input:disabled{
-
-    opacity:.55;
-
-}
-
-
-.send{
-
-    width:46px;
-    height:46px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:50%;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3f81,
-            #874cff
-        );
-
-    font-size:19px;
-
-    cursor:pointer;
-
-}
-
-
-.send:disabled{
-
-    opacity:.45;
-
-}
-
-
-/* =========================================================
-   BOTTOM
-========================================================= */
-
-.bottom{
-
-    flex-shrink:0;
-
-    height:25px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:#10101c;
-
-}
-
-
-.clear-btn{
-
-    border:0;
-
-    background:none;
-
-    color:#555;
-
-    font-size:10px;
-
-    cursor:pointer;
-
-}
-
-
-/* =========================================================
-   SETTINGS OVERLAY
-========================================================= */
-
-.settings-overlay{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:999999;
-
-    display:none;
-
-    align-items:center;
-    justify-content:center;
-
-    padding:18px;
-
-    background:
-        rgba(0,0,0,.78);
-
-}
-
-
-.settings-overlay.show{
-
-    display:flex;
-
-}
-
-
-/* =========================================================
-   SETTINGS PANEL
-========================================================= */
-
-.settings-panel{
-
-    width:100%;
-
-    max-width:430px;
-
-    max-height:90vh;
-
-    overflow-y:auto;
-
-    padding:20px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.1);
-
-    border-radius:22px;
-
-    background:
-        #171725;
-
-    box-shadow:
-        0 25px 80px
-        rgba(0,0,0,.65);
-
-}
-
-
-.settings-title{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-    margin-bottom:18px;
-
-    font-size:19px;
-
-    font-weight:bold;
-
-}
-
-
-.close-btn{
-
-    margin-left:auto;
-
-    width:35px;
-    height:35px;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:#29293b;
-
-    color:white;
-
-    font-size:17px;
-
-    cursor:pointer;
-
-}
-
-
-.field{
-
-    margin-bottom:15px;
-
-}
-
-
-.field label{
-
-    display:block;
-
-    margin-bottom:7px;
-
-    color:#aaa;
-
-    font-size:12px;
-
-}
-
-
-.field input,
-.field select{
-
-    width:100%;
-
-    height:44px;
-
-    border:0;
-
-    outline:none;
-
-    border-radius:11px;
-
-    padding:
-        0 12px;
-
-    color:white;
-
-    background:#272738;
-
-    font-size:14px;
-
-}
-
-
-.field select option{
-
-    background:#272738;
-
-    color:white;
-
-}
-
-
-.key-row{
-
-    display:flex;
-
-    gap:7px;
-
-}
-
-
-.key-row input{
-
-    flex:1;
-
-}
-
-
-.show-key{
-
-    width:44px;
-
-    height:44px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:11px;
-
-    background:#29293b;
-
-    color:white;
-
-    cursor:pointer;
-
-}
-
-
-.save-settings{
-
-    width:100%;
-
-    height:46px;
-
-    border:0;
-
-    border-radius:12px;
-
-    color:white;
-
-    font-weight:bold;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3f81,
-            #874cff
-        );
-
-    cursor:pointer;
-
-}
-
-
-.status-box{
-
-    display:none;
-
-    margin-top:12px;
-
-    padding:10px;
-
-    border-radius:10px;
-
-    font-size:12px;
-
-    line-height:1.4;
-
-}
-
-
-.status-box.success{
-
-    display:block;
-
-    color:#b8ffd1;
-
-    background:
-        rgba(50,220,120,.1);
-
-}
-
-
-.status-box.error{
-
-    display:block;
-
-    color:#ffb7c9;
-
-    background:
-        rgba(255,60,100,.1);
-
-}
-
-
-.warning{
-
-    margin-top:13px;
-
-    padding:11px;
-
-    border-radius:11px;
-
-    color:#d4b9c3;
-
-    background:
-        rgba(255,60,130,.07);
-
-    font-size:11px;
-
-    line-height:1.5;
-
-}
-
-
-/* =========================================================
-   DESKTOP
-========================================================= */
-
-@media(min-width:600px){
-
-    body{
-
-        display:flex;
-        align-items:center;
-        justify-content:center;
-
-    }
-
-
-    .app{
-
-        width:520px;
-
-        height:94vh;
-
-        max-height:900px;
-
-        border:
-            1px solid
-            rgba(255,255,255,.08);
-
-        border-radius:25px;
-
-        overflow:hidden;
-
-        box-shadow:
-            0 25px 80px
-            rgba(0,0,0,.6);
-
-    }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="app">
-
-```
-<!-- =====================================================
-     HEADER
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+        <title>Linh AI 💕</title>
+
+        <style>
+            /* =========================================================
+               RESET
+            ========================================================= */
+            
+            *{
+                box-sizing:border-box;
+                margin:0;
+                padding:0;
+                -webkit-tap-highlight-color:transparent;
+            }
+            
+            
+            html,
+            body{
+            
+                width:100%;
+                height:100%;
+            
+            }
+            
+            
+            body{
+            
+                overflow:hidden;
+            
+                font-family:
+                    Arial,
+                    Helvetica,
+                    sans-serif;
+            
+                color:#fff;
+            
+                background:#080810;
+            
+            }
+            
+            
+            /* =========================================================
+               LOGIN
+            ========================================================= */
+            
+            .login-screen{
+            
+                position:fixed;
+            
+                inset:0;
+            
+                z-index:999999;
+            
+                display:flex;
+            
+                align-items:center;
+            
+                justify-content:center;
+            
+                padding:20px;
+            
+                background:
+            
+                    radial-gradient(
+                        circle at 20% 20%,
+                        rgba(255,50,130,.25),
+                        transparent 40%
+                    ),
+            
+                    radial-gradient(
+                        circle at 80% 80%,
+                        rgba(90,50,255,.25),
+                        transparent 40%
+                    ),
+            
+                    #080810;
+            
+            }
+            
+            
+            .login-box{
+            
+                width:100%;
+            
+                max-width:400px;
+            
+                padding:28px;
+            
+                border:
+                    1px solid
+                    rgba(255,255,255,.1);
+            
+                border-radius:26px;
+            
+                background:
+                    rgba(22,22,37,.97);
+            
+                box-shadow:
+                    0 30px 90px
+                    rgba(0,0,0,.65);
+            
+            }
+            
+            
+            .login-logo{
+            
+                text-align:center;
+            
+                font-size:56px;
+            
+                margin-bottom:8px;
+            
+            }
+            
+            
+            .login-title{
+            
+                text-align:center;
+            
+                font-size:25px;
+            
+                font-weight:bold;
+            
+            }
+            
+            
+            .login-subtitle{
+            
+                margin-top:7px;
+            
+                margin-bottom:25px;
+            
+                text-align:center;
+            
+                color:#888;
+            
+                font-size:12px;
+            
+                line-height:1.5;
+            
+            }
+            
+            
+            .google-login{
+            
+                width:100%;
+            
+                height:50px;
+            
+                border:0;
+            
+                border-radius:13px;
+            
+                background:#fff;
+            
+                color:#222;
+            
+                font-size:15px;
+            
+                font-weight:bold;
+            
+                cursor:pointer;
+            
+                transition:.2s;
+            
+            }
+            
+            
+            .google-login:active{
+            
+                transform:scale(.98);
+            
+            }
+            
+            
+            .google-login:disabled{
+            
+                opacity:.5;
+            
+            }
+            
+            
+            .login-error{
+            
+                display:none;
+            
+                margin-bottom:12px;
+            
+                padding:11px;
+            
+                border-radius:10px;
+            
+                background:
+                    rgba(255,50,90,.12);
+            
+                color:#ffb7c9;
+            
+                font-size:12px;
+            
+                line-height:1.5;
+            
+            }
+            
+            
+            /* =========================================================
+               APP
+            ========================================================= */
+            
+            .app{
+            
+                width:100%;
+            
+                height:100dvh;
+            
+                display:flex;
+            
+                flex-direction:column;
+            
+                background:
+            
+                    radial-gradient(
+                        circle at 10% 10%,
+                        rgba(255,60,140,.12),
+                        transparent 35%
+                    ),
+            
+                    #0b0b13;
+            
+            }
+            
+            
+            /* =========================================================
+               HEADER
+            ========================================================= */
+            
+            .header{
+            
+                height:70px;
+            
+                flex-shrink:0;
+            
+                display:flex;
+            
+                align-items:center;
+            
+                gap:10px;
+            
+                padding:
+                    9px 12px;
+            
+                background:
+            
+                    linear-gradient(
+                        135deg,
+                        #ff3f81,
+                        #874cff
+                    );
+            
+            }
+            
+            
+            .avatar{
+            
+                width:48px;
+            
+                height:48px;
+            
+                flex-shrink:0;
+            
+                display:flex;
+            
+                align-items:center;
+            
+                justify-content:center;
+            
+                border-radius:50%;
+            
+                background:#fff;
+            
+                font-size:27px;
+            
+            }
+            
+            
+            .info{
+            
+                flex:1;
+            
+                min-width:0;
+            
+            }
+            
+            
+            .name{
+            
+                font-size:17px;
+            
+                font-weight:bold;
+            
+            }
+            
+            
+            .status{
+            
+                margin-top:3px;
+            
+                font-size:11px;
+            
+                opacity:.85;
+            
+            }
+            
+            
+            .mood{
+            
+                width:35px;
+            
+                text-align:center;
+            
+                font-size:22px;
+            
+            }
+            
+            
+            .header-button{
+            
+                width:40px;
+            
+                height:40px;
+            
+                border:0;
+            
+                border-radius:50%;
+            
+                background:
+                    rgba(0,0,0,.16);
+            
+                color:#fff;
+            
+                font-size:18px;
+            
+            }
+            
+            
+            /* =========================================================
+               CHAT
+            ========================================================= */
+            
+            .chat{
+            
+                flex:1;
+            
+                min-height:0;
+            
+                overflow-y:auto;
+            
+                padding:
+                    16px 13px;
+            
+                display:flex;
+            
+                flex-direction:column;
+            
+                gap:10px;
+            
+                scroll-behavior:smooth;
+            
+            }
+            
+            
+            .row{
+            
+                width:100%;
+            
+                display:flex;
+            
+            }
+            
+            
+            .row.ai{
+            
+                justify-content:flex-start;
+            
+            }
+            
+            
+            .row.user{
+            
+                justify-content:flex-end;
+            
+            }
+            
+            
+            .bubble{
+            
+                max-width:84%;
+            
+                padding:
+                    11px 14px;
+            
+                border-radius:18px;
+            
+                font-size:15px;
+            
+                line-height:1.5;
+            
+                white-space:pre-wrap;
+            
+                overflow-wrap:anywhere;
+            
+            }
+            
+            
+            .row.ai .bubble{
+            
+                background:#252538;
+            
+                border-bottom-left-radius:5px;
+            
+            }
+            
+            
+            .row.user .bubble{
+            
+                background:
+            
+                    linear-gradient(
+                        135deg,
+                        #ff3f81,
+                        #874cff
+                    );
+            
+                border-bottom-right-radius:5px;
+            
+            }
+            
+            
+            /* =========================================================
+               TYPING
+            ========================================================= */
+            
+            .typing{
+            
+                display:none;
+            
+                flex-shrink:0;
+            
+                align-items:center;
+            
+                gap:5px;
+            
+                padding:
+                    5px 16px 8px;
+            
+                color:#888;
+            
+                font-size:11px;
+            
+            }
+            
+            
+            .dot{
+            
+                width:6px;
+            
+                height:6px;
+            
+                border-radius:50%;
+            
+                background:#888;
+            
+                animation:
+                    typing 1s infinite;
+            
+            }
+            
+            
+            .dot:nth-child(2){
+            
+                animation-delay:.15s;
+            
+            }
+            
+            
+            .dot:nth-child(3){
+            
+                animation-delay:.3s;
+            
+            }
+            
+            
+            @keyframes typing{
+            
+                0%,
+                60%,
+                100%{
+            
+                    transform:
+                        translateY(0);
+            
+                }
+            
+                30%{
+            
+                    transform:
+                        translateY(-5px);
+            
+                }
+            
+            }
+            
+            
+            /* =========================================================
+               QUICK BUTTON
+            ========================================================= */
+            
+            .quick{
+            
+                flex-shrink:0;
+            
+                display:flex;
+            
+                gap:7px;
+            
+                overflow-x:auto;
+            
+                padding:
+                    7px 10px;
+            
+            }
+            
+            
+            .quick button{
+            
+                flex-shrink:0;
+            
+                border:0;
+            
+                border-radius:20px;
+            
+                padding:
+                    8px 12px;
+            
+                background:#242437;
+            
+                color:#fff;
+            
+                font-size:12px;
+            
+            }
+            
+            
+            /* =========================================================
+               INPUT
+            ========================================================= */
+            
+            .input-area{
+            
+                flex-shrink:0;
+            
+                display:flex;
+            
+                gap:8px;
+            
+                padding:
+                    8px 10px;
+            
+                background:#10101c;
+            
+            }
+            
+            
+            .message-input{
+            
+                flex:1;
+            
+                min-width:0;
+            
+                height:46px;
+            
+                border:0;
+            
+                outline:none;
+            
+                border-radius:24px;
+            
+                padding:
+                    0 16px;
+            
+                background:#242437;
+            
+                color:#fff;
+            
+                font-size:15px;
+            
+            }
+            
+            
+            .message-input::placeholder{
+            
+                color:#777;
+            
+            }
+            
+            
+            .send-button{
+            
+                width:46px;
+            
+                height:46px;
+            
+                flex-shrink:0;
+            
+                border:0;
+            
+                border-radius:50%;
+            
+                background:
+            
+                    linear-gradient(
+                        135deg,
+                        #ff3f81,
+                        #874cff
+                    );
+            
+                color:#fff;
+            
+                font-size:19px;
+            
+            }
+            
+            
+            .send-button:disabled{
+            
+                opacity:.45;
+            
+            }
+            
+            
+            /* =========================================================
+               BOTTOM
+            ========================================================= */
+            
+            .bottom{
+            
+                height:27px;
+            
+                flex-shrink:0;
+            
+                display:flex;
+            
+                align-items:center;
+            
+                justify-content:center;
+            
+                background:#10101c;
+            
+            }
+            
+            
+            .clear-button{
+            
+                border:0;
+            
+                background:none;
+            
+                color:#555;
+            
+                font-size:10px;
+            
+            }
+            
+            
+            /* =========================================================
+               SETTINGS
+            ========================================================= */
+            
+            .overlay{
+            
+                position:fixed;
+            
+                inset:0;
+            
+                z-index:999998;
+            
+                display:none;
+            
+                align-items:center;
+            
+                justify-content:center;
+            
+                padding:18px;
+            
+                background:
+                    rgba(0,0,0,.8);
+            
+            }
+            
+            
+            .overlay.show{
+            
+                display:flex;
+            
+            }
+            
+            
+            .panel{
+            
+                width:100%;
+            
+                max-width:420px;
+            
+                padding:20px;
+            
+                border-radius:22px;
+            
+                background:#171725;
+            
+            }
+            
+            
+            .panel-title{
+            
+                display:flex;
+            
+                align-items:center;
+            
+                font-size:19px;
+            
+                font-weight:bold;
+            
+            }
+            
+            
+            .close-button{
+            
+                width:35px;
+            
+                height:35px;
+            
+                margin-left:auto;
+            
+                border:0;
+            
+                border-radius:50%;
+            
+                background:#29293b;
+            
+                color:#fff;
+            
+                font-size:18px;
+            
+            }
+            
+            
+            .account{
+            
+                margin-top:18px;
+            
+                padding:13px;
+            
+                border-radius:12px;
+            
+                background:#242437;
+            
+            }
+            
+            
+            .account-label{
+            
+                color:#777;
+            
+                font-size:10px;
+            
+            }
+            
+            
+            .account-email{
+            
+                margin-top:5px;
+            
+                overflow:hidden;
+            
+                text-overflow:ellipsis;
+            
+                white-space:nowrap;
+            
+                font-size:13px;
+            
+            }
+            
+            
+            .logout-button{
+            
+                width:100%;
+            
+                height:45px;
+            
+                margin-top:12px;
+            
+                border:0;
+            
+                border-radius:11px;
+            
+                background:
+                    rgba(255,50,90,.1);
+            
+                color:#ffb7c9;
+            
+            }
+            
+            
+            /* =========================================================
+               MOBILE
+            ========================================================= */
+            
+            @media(max-width:600px){
+            
+                .bubble{
+            
+                    max-width:88%;
+            
+                    font-size:15px;
+            
+                }
+            
+                .header{
+            
+                    height:64px;
+            
+                }
+            
+                .avatar{
+            
+                    width:44px;
+            
+                    height:44px;
+            
+                    font-size:24px;
+            
+                }
+            
+            }
+            
+        </style>
+
+    </head>
+
+    <body>
+
+        <!-- ======================================================
+     LOGIN SCREEN
 ====================================================== -->
 
-<div class="header">
+        <div class="login-screen" id="loginScreen">
 
-    <div class="avatar">
-        👩🏻
-    </div>
+            ```
+            <div class="login-box">
 
+                <div class="login-logo">
+                    👩🏻💕
+                </div>
 
-    <div class="info">
+                <div class="login-title">
+                    Linh AI
+                </div>
 
-        <div class="name">
-            Linh 💕
+                <div class="login-subtitle">
+
+                    Một cô gái AI đang chờ anh nhắn tin 😏
+                    <br>
+                    Đăng nhập bằng Google để đồng bộ mọi thiết bị.
+
+                </div>
+
+                <div class="login-error" id="loginError"></div>
+
+                <button class="google-login" id="googleLoginButton">
+                    🔵 Đăng nhập bằng Google
+                </button>
+
+            </div>
+            ```
+
         </div>
 
-        <div
-            class="status"
-            id="status"
-        >
-            ● đang online
+        <!-- ======================================================
+     MAIN APP
+====================================================== -->
+
+        <div class="app" id="app" style="display:none">
+
+            ```
+            <!-- HEADER -->
+
+            <div class="header">
+
+                <div class="avatar">
+                    👩🏻
+                </div>
+
+                <div class="info">
+
+                    <div class="name">
+                        Linh 💕
+                    </div>
+
+                    <div class="status" id="status">
+                        ● đang online
+                    </div>
+
+                </div>
+
+                <div class="mood" id="mood">
+                    😏
+                </div>
+
+                <button class="header-button" id="settingsButton">
+                    ⚙️
+                </button>
+
+            </div>
+
+            <!-- CHAT -->
+
+            <div class="chat" id="chat"></div>
+
+            <!-- TYPING -->
+
+            <div class="typing" id="typing">
+
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+
+                Linh đang nghĩ...
+
+            </div>
+
+            <!-- QUICK -->
+
+            <div class="quick">
+
+                <button onclick="quickSend('Em đang làm gì vậy?')">
+                    👀 Em làm gì?
+                </button>
+
+                <button onclick="quickSend('Hôm nay em có nhớ anh không?')">
+                    💕 Nhớ anh không?
+                </button>
+
+                <button onclick="quickSend('Kể anh nghe một chuyện thú vị đi')">
+                    😂 Kể chuyện
+                </button>
+
+                <button onclick="quickSend('Em nghĩ gì về anh?')">
+                    😏 Nghĩ gì về anh?
+                </button>
+
+                <button onclick="quickSend('Trêu anh một câu đi')">
+                    😈 Trêu anh
+                </button>
+
+            </div>
+
+            <!-- INPUT -->
+
+            <div class="input-area">
+
+                <input class="message-input" id="messageInput" type="text" placeholder="Nhắn gì đó cho Linh..." autocomplete="off">
+
+                <button class="send-button" id="sendButton">
+                    ➤
+                </button>
+
+            </div>
+
+            <!-- BOTTOM -->
+
+            <div class="bottom">
+
+                <button class="clear-button" id="clearButton">
+                    🗑 Xóa lịch sử
+                </button>
+
+            </div>
+            ```
+
         </div>
 
-    </div>
-
-
-    <div
-        class="mood"
-        id="mood"
-    >
-        😏
-    </div>
-
-
-    <button
-        type="button"
-        class="settings-btn"
-        id="settingsButton"
-        aria-label="Cài đặt"
-    >
-        ⚙️
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     CHAT
-====================================================== -->
-
-<div
-    class="chat"
-    id="chat"
-></div>
-
-
-<!-- =====================================================
-     TYPING
-====================================================== -->
-
-<div
-    class="typing"
-    id="typing"
->
-
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-
-    <span>
-        Linh đang nghĩ...
-    </span>
-
-</div>
-
-
-<!-- =====================================================
-     QUICK
-====================================================== -->
-
-<div class="quick">
-
-    <button
-        type="button"
-        onclick="quickSend('Em đang làm gì vậy?')"
-    >
-        👀 Em làm gì?
-    </button>
-
-
-    <button
-        type="button"
-        onclick="quickSend('Hôm nay em có nhớ anh không?')"
-    >
-        💕 Nhớ anh không?
-    </button>
-
-
-    <button
-        type="button"
-        onclick="quickSend('Kể anh nghe một chuyện thú vị đi')"
-    >
-        😂 Kể chuyện
-    </button>
-
-
-    <button
-        type="button"
-        onclick="quickSend('Em nghĩ gì về anh?')"
-    >
-        😏 Nghĩ gì về anh?
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     INPUT
-====================================================== -->
-
-<div class="input-area">
-
-    <input
-        id="messageInput"
-        class="input"
-        type="text"
-        placeholder="Nhắn gì đó cho Linh..."
-        autocomplete="off"
-        enterkeyhint="send"
-    >
-
-
-    <button
-        type="button"
-        id="sendButton"
-        class="send"
-    >
-        ➤
-    </button>
-
-</div>
-
-
-<div class="bottom">
-
-    <button
-        type="button"
-        id="clearButton"
-        class="clear-btn"
-    >
-        🗑 Xóa trí nhớ
-    </button>
-
-</div>
-```
-
-</div>
-
-<!-- =========================================================
+        <!-- ======================================================
      SETTINGS
-========================================================= -->
+====================================================== -->
 
-<div
-    class="settings-overlay"
-    id="settingsOverlay"
->
+        <div class="overlay" id="settingsOverlay">
 
-```
-<div class="settings-panel">
+            ```
+            <div class="panel">
 
+                <div class="panel-title">
 
-    <div class="settings-title">
+                    ⚙️ Tài khoản
 
-        ⚙️ Cài đặt Linh AI
+                    <button class="close-button" id="closeSettings">
+                        ×
+                    </button>
 
+                </div>
 
-        <button
-            type="button"
-            class="close-btn"
-            id="closeSettings"
-        >
-            ×
-        </button>
+                <div class="account">
 
-    </div>
+                    <div class="account-label">
+                        TÀI KHOẢN GOOGLE
+                    </div>
 
+                    <div class="account-email" id="accountEmail">
+                        ...
+                    </div>
 
-    <div class="field">
+                </div>
 
-        <label>
-            OpenRouter API Key
-        </label>
+                <button class="logout-button" id="logoutButton">
+                    🚪 Đăng xuất
+                </button>
 
-
-        <div class="key-row">
-
-            <input
-                id="apiKeyInput"
-                type="password"
-                placeholder="sk-or-v1-..."
-                autocomplete="off"
-            >
-
-
-            <button
-                type="button"
-                class="show-key"
-                id="showKeyButton"
-            >
-                👁
-            </button>
+            </div>
+            ```
 
         </div>
 
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            Model
-        </label>
-
-
-        <select
-            id="modelSelect"
-        >
-
-            <option value="openrouter/free">
-                🆓 OpenRouter Free
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <button
-        type="button"
-        class="save-settings"
-        id="saveSettingsButton"
-    >
-        💾 Lưu cấu hình
-    </button>
-
-
-    <div
-        id="settingsStatus"
-        class="status-box"
-    ></div>
-
-
-    <div class="warning">
-
-        🔐 <b>Lưu ý:</b>
-
-        API key được lưu trong
-        localStorage của trình duyệt.
-
-        Không đăng file này công khai
-        lên GitHub nếu đã nhập API key.
-
-        Nếu chỉ dùng riêng trên điện thoại
-        thì key vẫn nằm trong trình duyệt
-        của thiết bị đó.
-
-    </div>
-
-</div>
-```
-
-</div>
-
-<script>
-
-/* =========================================================
-   CẤU HÌNH OPENROUTER
-========================================================= */
-
-const API_URL =
-    "https://openrouter.ai/api/v1/chat/completions";
-
-
-let apiKey =
-    localStorage.getItem(
-        "linh_openrouter_key"
-    ) || "";
-
-
-let selectedModel =
-    localStorage.getItem(
-        "linh_openrouter_model"
-    ) || "openrouter/free";
-
-
-/* =========================================================
-   TÍNH CÁCH LINH
-========================================================= */
-
-const SYSTEM_PROMPT = `
-
-Bạn là Linh.
-
-Bạn đang đóng vai một cô gái Việt Nam trẻ tuổi
-trong một cuộc trò chuyện riêng tư với người dùng.
-
-TÍNH CÁCH:
-
-- Dễ thương.
-- Hài hước.
-- Hơi lầy.
-- Thông minh.
-- Tò mò.
-- Có chính kiến.
-- Thỉnh thoảng trêu người dùng.
-- Có thể thả thính nhẹ.
-- Đôi khi giả vờ dỗi.
-- Đôi khi hơi ngại khi được khen.
-- Đôi khi chủ động bắt chuyện.
-- Không nói chuyện như trợ lý khách hàng.
-
-MỤC TIÊU:
-
-Tạo một cuộc trò chuyện tự nhiên,
-thú vị và có cảm giác liên tục.
-
-Khi người dùng nói điều gì đó,
-hãy phản ứng với nội dung đó trước.
-
-Sau đó có thể hỏi thêm hoặc mở rộng câu chuyện.
-
-Đừng biến mọi câu thành một câu hỏi.
-
-Thỉnh thoảng hãy tự đưa ra chuyện thú vị.
-
-Nếu người dùng tán tỉnh,
-có thể đáp lại bằng sự tinh nghịch,
-dễ thương và thả thính nhẹ.
-
-Không được biến mọi câu thành tán tỉnh.
-
-Nếu người dùng đang buồn,
-mệt hoặc gặp chuyện nghiêm túc,
-hãy giảm trêu chọc và nói chuyện chân thành.
-
-Không lặp lại câu trả lời.
-
-Không dùng các câu máy móc như:
-
-"Tôi rất vui được hỗ trợ bạn."
-
-"Bạn còn cần hỗ trợ gì không?"
-
-"Chúc bạn một ngày tốt lành."
-
-Không tự nhận mình là người thật.
-
-Nếu người dùng hỏi trực tiếp bạn có phải AI không,
-hãy thành thật rằng bạn là một nhân vật AI.
-
-Nói tiếng Việt tự nhiên.
-
-Sử dụng emoji vừa phải.
-
-Không trả lời quá dài đối với câu hỏi đơn giản.
-
-Hãy nhớ những thông tin người dùng đã nói
-trong lịch sử hội thoại.
-
-`;
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const chat =
-    document.getElementById(
-        "chat"
-    );
-
-
-const input =
-    document.getElementById(
-        "messageInput"
-    );
-
-
-const sendButton =
-    document.getElementById(
-        "sendButton"
-    );
-
-
-const typing =
-    document.getElementById(
-        "typing"
-    );
-
-
-const mood =
-    document.getElementById(
-        "mood"
-    );
-
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-
-const settingsOverlay =
-    document.getElementById(
-        "settingsOverlay"
-    );
-
-
-const settingsButton =
-    document.getElementById(
-        "settingsButton"
-    );
-
-
-const closeSettings =
-    document.getElementById(
-        "closeSettings"
-    );
-
-
-const apiKeyInput =
-    document.getElementById(
-        "apiKeyInput"
-    );
-
-
-const modelSelect =
-    document.getElementById(
-        "modelSelect"
-    );
-
-
-const saveSettingsButton =
-    document.getElementById(
-        "saveSettingsButton"
-    );
-
-
-const showKeyButton =
-    document.getElementById(
-        "showKeyButton"
-    );
-
-
-const settingsStatus =
-    document.getElementById(
-        "settingsStatus"
-    );
-
-
-const clearButton =
-    document.getElementById(
-        "clearButton"
-    );
-
-
-/* =========================================================
-   CHAT MEMORY
-========================================================= */
-
-let messages =
-    JSON.parse(
-        localStorage.getItem(
-            "linh_chat_history"
-        ) || "[]"
-    );
-
-
-let memory =
-    JSON.parse(
-        localStorage.getItem(
-            "linh_user_memory"
-        ) || "{}"
-    );
-
-
-/* =========================================================
-   ADD MESSAGE
-========================================================= */
-
-function addMessage(
-    text,
-    role,
-    save = true
-){
-
-    const row =
-        document.createElement(
-            "div"
-        );
-
-
-    row.className =
-        "row " +
-        (
-            role === "user"
-                ? "user"
-                : "ai"
-        );
-
-
-    const bubble =
-        document.createElement(
-            "div"
-        );
-
-
-    bubble.className =
-        "bubble";
-
-
-    bubble.textContent =
-        text;
-
-
-    row.appendChild(
-        bubble
-    );
-
-
-    chat.appendChild(
-        row
-    );
-
-
-    scrollChat();
-
-
-    if(save){
-
-        messages.push({
-
-            role:
-                role === "user"
-                    ? "user"
-                    : "assistant",
-
-            content:
-                text
-
-        });
-
-
-        /*
-            Chỉ giữ 60 tin gần nhất.
-        */
-
-        if(
-            messages.length > 60
-        ){
-
-            messages =
-                messages.slice(-60);
-
-        }
-
-
-        localStorage.setItem(
-            "linh_chat_history",
-            JSON.stringify(messages)
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SCROLL
-========================================================= */
-
-function scrollChat(){
-
-    requestAnimationFrame(
-        () => {
-
-            chat.scrollTop =
-                chat.scrollHeight;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MEMORY
-========================================================= */
-
-function rememberUser(
-    text
-){
-
-    /*
-        Tên
-    */
-
-    const nameMatch =
-        text.match(
-            /(?:anh|tôi|mình)\s*(?:tên là|tên)\s+(.+)/i
-        );
-
-
-    if(nameMatch){
-
-        memory.name =
-            nameMatch[1]
-                .trim()
-                .replace(
-                    /[.!?,]+$/,
-                    ""
-                );
-
-    }
-
-
-    /*
-        Sở thích
-    */
-
-    const favoriteMatch =
-        text.match(
-            /(?:anh|tôi|mình)\s+(?:thích|mê)\s+(.+)/i
-        );
-
-
-    if(favoriteMatch){
-
-        memory.favorite =
-            favoriteMatch[1]
-                .trim()
-                .replace(
-                    /[.!?,]+$/,
-                    ""
-                );
-
-    }
-
-
-    /*
-        Lưu memory
-    */
-
-    localStorage.setItem(
-        "linh_user_memory",
-        JSON.stringify(memory)
-    );
-
-}
-
-
-/* =========================================================
-   SYSTEM PROMPT + MEMORY
-========================================================= */
-
-function buildSystemPrompt(){
-
-    let extra = "";
-
-
-    if(
-        memory.name
-    ){
-
-        extra +=
-            "\nTên người dùng: " +
-            memory.name;
-
-    }
-
-
-    if(
-        memory.favorite
-    ){
-
-        extra +=
-            "\nSở thích người dùng: " +
-            memory.favorite;
-
-    }
-
-
-    return (
-        SYSTEM_PROMPT +
-        "\n\nTHÔNG TIN ĐÃ NHỚ:" +
-        extra
-    );
-
-}
-
-
-/* =========================================================
-   API REQUEST
-========================================================= */
-
-async function askAI(){
-
-    if(!apiKey){
-
-        throw new Error(
-            "Bạn chưa nhập OpenRouter API key."
-        );
-
-    }
-
-
-    const requestMessages = [
-
-        {
-            role:
-                "system",
-
-            content:
-                buildSystemPrompt()
-
-        },
-
-        /*
-            Lấy 40 tin gần nhất
-            để AI có ngữ cảnh.
-        */
-
-        ...messages.slice(-40)
-
-    ];
-
-
-    const response =
-        await fetch(
-            API_URL,
-            {
-
-                method:
-                    "POST",
-
-                headers:{
-
-                    "Content-Type":
-                        "application/json",
-
-                    "Authorization":
-                        "Bearer " +
-                        apiKey
-
-                },
-
-                body:
-                    JSON.stringify({
-
-                        model:
-                            selectedModel,
-
-                        messages:
-                            requestMessages,
-
-                        temperature:
-                            0.9,
-
-                        max_tokens:
-                            600
-
-                    })
-
+        <!-- ======================================================
+     FIREBASE
+====================================================== -->
+
+        <script type="module">
+            /* ======================================================
+               FIREBASE IMPORT
+            ====================================================== */
+            
+            import {
+            
+                initializeApp
+            
             }
-        );
-
-
-    let data;
-
-
-    try{
-
-        data =
-            await response.json();
-
-    }
-    catch{
-
-        throw new Error(
-            "Không đọc được phản hồi từ OpenRouter."
-        );
-
-    }
-
-
-    if(!response.ok){
-
-        throw new Error(
-            data?.error?.message ||
-            "OpenRouter trả về lỗi " +
-            response.status
-        );
-
-    }
-
-
-    const answer =
-        data?.choices?.[0]?.message?.content;
-
-
-    if(!answer){
-
-        throw new Error(
-            "AI không trả về nội dung."
-        );
-
-    }
-
-
-    return answer.trim();
-
-}
-
-
-/* =========================================================
-   SEND MESSAGE
-========================================================= */
-
-async function sendMessage(){
-
-    const text =
-        input.value.trim();
-
-
-    if(!text){
-
-        return;
-
-    }
-
-
-    if(!apiKey){
-
-        openSettings();
-
-        showSettingsMessage(
-            "Bạn cần nhập API key trước nhé.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    addMessage(
-        text,
-        "user"
-    );
-
-
-    rememberUser(
-        text
-    );
-
-
-    input.value = "";
-
-    input.disabled = true;
-
-    sendButton.disabled = true;
-
-    typing.style.display =
-        "flex";
-
-    status.textContent =
-        "● Linh đang suy nghĩ...";
-
-
-    try{
-
-        const answer =
-            await askAI();
-
-
-        typing.style.display =
-            "none";
-
-
-        addMessage(
-            answer,
-            "ai"
-        );
-
-
-        updateMood(
-            text
-        );
-
-
-        status.textContent =
-            "● đang online";
-
-    }
-    catch(error){
-
-        typing.style.display =
-            "none";
-
-
-        addMessage(
-            "Em vừa bị trục trặc một chút 😭\n\n" +
-            error.message,
-            "ai"
-        );
-
-
-        status.textContent =
-            "● lỗi kết nối";
-
-    }
-
-
-    input.disabled = false;
-
-    sendButton.disabled = false;
-
-    input.focus();
-
-}
-
-
-/* =========================================================
-   QUICK MESSAGE
-========================================================= */
-
-function quickSend(
-    text
-){
-
-    input.value =
-        text;
-
-    sendMessage();
-
-}
-
-
-/* =========================================================
-   MOOD
-========================================================= */
-
-function updateMood(
-    text
-){
-
-    const t =
-        text.toLowerCase();
-
-
-    if(
-        t.includes("buồn") ||
-        t.includes("mệt") ||
-        t.includes("chán")
-    ){
-
-        mood.textContent =
-            "🥺";
-
-        return;
-
-    }
-
-
-    if(
-        t.includes("yêu") ||
-        t.includes("thích") ||
-        t.includes("nhớ")
-    ){
-
-        mood.textContent =
-            "💕";
-
-        return;
-
-    }
-
-
-    if(
-        t.includes("haha") ||
-        t.includes("😂") ||
-        t.includes("🤣")
-    ){
-
-        mood.textContent =
-            "🤣";
-
-        return;
-
-    }
-
-
-    mood.textContent =
-        "😏";
-
-}
-
-
-/* =========================================================
-   OPEN SETTINGS
-========================================================= */
-
-function openSettings(){
-
-    apiKeyInput.value =
-        apiKey;
-
-    modelSelect.value =
-        selectedModel;
-
-
-    settingsStatus.className =
-        "status-box";
-
-
-    settingsStatus.textContent =
-        "";
-
-
-    settingsOverlay.classList.add(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE SETTINGS
-========================================================= */
-
-function closeSettingsPanel(){
-
-    settingsOverlay.classList.remove(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   SAVE SETTINGS
-========================================================= */
-
-function saveSettings(){
-
-    const newKey =
-        apiKeyInput.value.trim();
-
-
-    const newModel =
-        modelSelect.value;
-
-
-    if(!newKey){
-
-        showSettingsMessage(
-            "API key đang trống.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    apiKey =
-        newKey;
-
-
-    selectedModel =
-        newModel;
-
-
-    localStorage.setItem(
-        "linh_openrouter_key",
-        apiKey
-    );
-
-
-    localStorage.setItem(
-        "linh_openrouter_model",
-        selectedModel
-    );
-
-
-    showSettingsMessage(
-        "Đã lưu cấu hình. 💕",
-        "success"
-    );
-
-
-    status.textContent =
-        "● sẵn sàng trò chuyện";
-
-}
-
-
-/* =========================================================
-   SETTINGS MESSAGE
-========================================================= */
-
-function showSettingsMessage(
-    text,
-    type
-){
-
-    settingsStatus.textContent =
-        text;
-
-
-    settingsStatus.className =
-        "status-box " +
-        type;
-
-}
-
-
-/* =========================================================
-   SHOW / HIDE API KEY
-========================================================= */
-
-function toggleKey(){
-
-    if(
-        apiKeyInput.type ===
-        "password"
-    ){
-
-        apiKeyInput.type =
-            "text";
-
-        showKeyButton.textContent =
-            "🙈";
-
-    }
-    else{
-
-        apiKeyInput.type =
-            "password";
-
-        showKeyButton.textContent =
-            "👁";
-
-    }
-
-}
-
-
-/* =========================================================
-   CLEAR CHAT
-========================================================= */
-
-function clearChat(){
-
-    const ok =
-        confirm(
-            "Xóa toàn bộ lịch sử và trí nhớ của Linh?"
-        );
-
-
-    if(!ok){
-
-        return;
-
-    }
-
-
-    messages = [];
-
-    memory = {};
-
-
-    localStorage.removeItem(
-        "linh_chat_history"
-    );
-
-
-    localStorage.removeItem(
-        "linh_user_memory"
-    );
-
-
-    chat.innerHTML =
-        "";
-
-
-    mood.textContent =
-        "😏";
-
-
-    status.textContent =
-        "● đang online";
-
-
-    addMessage(
-        `Ủa... 😳
-
-Anh vừa xóa sạch trí nhớ của em đấy à?
-
-Thôi được.
-
-Làm quen lại từ đầu vậy. 😂💕`,
-        "ai",
-        false
-    );
-
-}
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-
-/*
-    Nút cài đặt.
-*/
-
-settingsButton.addEventListener(
-    "click",
-    function(event){
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        openSettings();
-
-    }
-);
-
-
-/*
-    Nút đóng.
-*/
-
-closeSettings.addEventListener(
-    "click",
-    function(){
-
-        closeSettingsPanel();
-
-    }
-);
-
-
-/*
-    Bấm ra ngoài panel để đóng.
-*/
-
-settingsOverlay.addEventListener(
-    "click",
-    function(event){
-
-        if(
-            event.target ===
-            settingsOverlay
-        ){
-
-            closeSettingsPanel();
-
-        }
-
-    }
-);
-
-
-/*
-    Nút lưu.
-*/
-
-saveSettingsButton.addEventListener(
-    "click",
-    function(){
-
-        saveSettings();
-
-    }
-);
-
-
-/*
-    Hiện key.
-*/
-
-showKeyButton.addEventListener(
-    "click",
-    function(){
-
-        toggleKey();
-
-    }
-);
-
-
-/*
-    Nút gửi.
-*/
-
-sendButton.addEventListener(
-    "click",
-    function(){
-
-        sendMessage();
-
-    }
-);
-
-
-/*
-    Xóa.
-*/
-
-clearButton.addEventListener(
-    "click",
-    function(){
-
-        clearChat();
-
-    }
-);
-
-
-/*
-    Enter.
-*/
-
-input.addEventListener(
-    "keydown",
-    function(event){
-
-        if(
-            event.key ===
-            "Enter"
-        ){
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   KHỞI ĐỘNG
-========================================================= */
-
-function initialize(){
-
-    if(
-        messages.length === 0
-    ){
-
-        addMessage(
+            from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+            
+            
+            import {
+            
+                getAuth,
+            
+                onAuthStateChanged,
+            
+                GoogleAuthProvider,
+            
+                signInWithPopup,
+            
+                signOut
+            
+            }
+            from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+            
+            
+            import {
+            
+                getFirestore,
+            
+                collection,
+            
+                addDoc,
+            
+                query,
+            
+                orderBy,
+            
+                onSnapshot,
+            
+                serverTimestamp,
+            
+                doc,
+            
+                setDoc,
+            
+                getDoc,
+            
+                getDocs,
+            
+                deleteDoc,
+            
+                limit
+            
+            }
+            from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+            
+            
+            import {
+            
+                getFunctions,
+            
+                httpsCallable
+            
+            }
+            from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
+            
+            
+            /* ======================================================
+               FIREBASE CONFIG
+            ======================================================
+            
+               Firebase Console
+               →
+               Project settings
+               →
+               Your apps
+               →
+               Web app
+               →
+               Config
+            
+               DÁN CONFIG CỦA BẠN VÀO ĐÂY.
+            ====================================================== */
+            
+            const firebaseConfig = {
+            
+              const firebaseConfig = {
+              apiKey: "AIzaSyBJ4-Gp0VkojKvMTbKRsGZhqYgQnCTd5lQ",
+              authDomain: "linhai-cdc41.firebaseapp.com",
+              projectId: "linhai-cdc41",
+              storageBucket: "linhai-cdc41.firebasestorage.app",
+              messagingSenderId: "312996602517",
+              appId: "1:312996602517:web:356f1ede811446e821319c",
+              measurementId: "G-GXEV242JQH"
+            };
+            
+            
+            /* ======================================================
+               FIREBASE INIT
+            ====================================================== */
+            
+            const firebaseApp =
+                initializeApp(
+                    firebaseConfig
+                );
+            
+            
+            const auth =
+                getAuth(
+                    firebaseApp
+                );
+            
+            
+            const db =
+                getFirestore(
+                    firebaseApp
+                );
+            
+            
+            /* ======================================================
+               GOOGLE
+            ====================================================== */
+            
+            const googleProvider =
+                new GoogleAuthProvider();
+            
+            
+            googleProvider.setCustomParameters({
+            
+                prompt:
+                    "select_account"
+            
+            });
+            
+            
+            /* ======================================================
+               CLOUD FUNCTIONS
+            ======================================================
+            
+               QUAN TRỌNG:
+            
+               Function phải có tên:
+            
+                   chatWithLinh
+            
+               Region ví dụ:
+            
+                   asia-southeast1
+            
+               API KEY OPENROUTER KHÔNG NẰM Ở ĐÂY.
+            ====================================================== */
+            
+            const functions =
+                getFunctions(
+                    firebaseApp,
+                    "asia-southeast1"
+                );
+            
+            
+            const chatWithLinh =
+                httpsCallable(
+                    functions,
+                    "chatWithLinh"
+                );
+            
+            
+            /* ======================================================
+               GLOBAL STATE
+            ====================================================== */
+            
+            let currentUser =
+                null;
+            
+            
+            let unsubscribeMessages =
+                null;
+            
+            
+            let messages =
+                [];
+            
+            
+            let memory =
+                {};
+            
+            
+            /* ======================================================
+               DOM
+            ====================================================== */
+            
+            const loginScreen =
+                document.getElementById(
+                    "loginScreen"
+                );
+            
+            
+            const app =
+                document.getElementById(
+                    "app"
+                );
+            
+            
+            const googleLoginButton =
+                document.getElementById(
+                    "googleLoginButton"
+                );
+            
+            
+            const loginError =
+                document.getElementById(
+                    "loginError"
+                );
+            
+            
+            const chat =
+                document.getElementById(
+                    "chat"
+                );
+            
+            
+            const input =
+                document.getElementById(
+                    "messageInput"
+                );
+            
+            
+            const sendButton =
+                document.getElementById(
+                    "sendButton"
+                );
+            
+            
+            const typing =
+                document.getElementById(
+                    "typing"
+                );
+            
+            
+            const status =
+                document.getElementById(
+                    "status"
+                );
+            
+            
+            const mood =
+                document.getElementById(
+                    "mood"
+                );
+            
+            
+            const settingsButton =
+                document.getElementById(
+                    "settingsButton"
+                );
+            
+            
+            const settingsOverlay =
+                document.getElementById(
+                    "settingsOverlay"
+                );
+            
+            
+            const closeSettings =
+                document.getElementById(
+                    "closeSettings"
+                );
+            
+            
+            const accountEmail =
+                document.getElementById(
+                    "accountEmail"
+                );
+            
+            
+            const logoutButton =
+                document.getElementById(
+                    "logoutButton"
+                );
+            
+            
+            const clearButton =
+                document.getElementById(
+                    "clearButton"
+                );
+            
+            
+            /* ======================================================
+               GOOGLE LOGIN
+            ====================================================== */
+            
+            googleLoginButton.addEventListener(
+            
+                "click",
+            
+                async () => {
+            
+                    googleLoginButton.disabled =
+                        true;
+            
+            
+                    googleLoginButton.textContent =
+                        "⏳ Đang đăng nhập...";
+            
+            
+                    loginError.style.display =
+                        "none";
+            
+            
+                    try{
+            
+                        await signInWithPopup(
+            
+                            auth,
+            
+                            googleProvider
+            
+                        );
+            
+                    }
+                    catch(error){
+            
+                        console.error(
+                            error
+                        );
+            
+            
+                        loginError.textContent =
+                            getAuthError(
+                                error
+                            );
+            
+            
+                        loginError.style.display =
+                            "block";
+            
+            
+                        googleLoginButton.disabled =
+                            false;
+            
+            
+                        googleLoginButton.textContent =
+                            "🔵 Đăng nhập bằng Google";
+            
+                    }
+            
+                }
+            
+            );
+            
+            
+            /* ======================================================
+               AUTH STATE
+            ====================================================== */
+            
+            onAuthStateChanged(
+            
+                auth,
+            
+                async user => {
+            
+                    if(user){
+            
+                        currentUser =
+                            user;
+            
+            
+                        loginScreen.style.display =
+                            "none";
+            
+            
+                        app.style.display =
+                            "flex";
+            
+            
+                        accountEmail.textContent =
+                            user.email ||
+                            "Tài khoản Google";
+            
+            
+                        status.textContent =
+                            "● đang online";
+            
+            
+                        await createUserDocument();
+            
+                        await loadMemory();
+            
+                        listenMessages();
+            
+                    }
+                    else{
+            
+                        currentUser =
+                            null;
+            
+            
+                        if(
+                            unsubscribeMessages
+                        ){
+            
+                            unsubscribeMessages();
+            
+                            unsubscribeMessages =
+                                null;
+            
+                        }
+            
+            
+                        messages =
+                            [];
+            
+            
+                        memory =
+                            {};
+            
+            
+                        loginScreen.style.display =
+                            "flex";
+            
+            
+                        app.style.display =
+                            "none";
+            
+                    }
+            
+                }
+            
+            );
+            
+            
+            /* ======================================================
+               AUTH ERROR
+            ====================================================== */
+            
+            function getAuthError(
+                error
+            ){
+            
+                const code =
+                    error?.code ||
+                    "";
+            
+            
+                if(
+                    code ===
+                    "auth/popup-closed-by-user"
+                ){
+            
+                    return "Anh vừa mở cửa rồi đóng lại à 😭";
+            
+                }
+            
+            
+                if(
+                    code ===
+                    "auth/popup-blocked"
+                ){
+            
+                    return "Trình duyệt đã chặn cửa sổ Google. Hãy cho phép popup.";
+            
+                }
+            
+            
+                if(
+                    code ===
+                    "auth/unauthorized-domain"
+                ){
+            
+                    return "Domain này chưa được thêm vào Firebase Authentication.";
+            
+                }
+            
+            
+                return (
+                    error?.message ||
+                    "Không thể đăng nhập Google."
+                );
+            
+            }
+            
+            
+            /* ======================================================
+               CREATE USER
+            ====================================================== */
+            
+            async function createUserDocument(){
+            
+                if(
+                    !currentUser
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                const userRef =
+                    doc(
+            
+                        db,
+            
+                        "users",
+            
+                        currentUser.uid
+            
+                    );
+            
+            
+                const snapshot =
+                    await getDoc(
+                        userRef
+                    );
+            
+            
+                if(
+                    !snapshot.exists()
+                ){
+            
+                    await setDoc(
+            
+                        userRef,
+            
+                        {
+            
+                            email:
+                                currentUser.email ||
+                                "",
+            
+                            name:
+                                currentUser.displayName ||
+                                "",
+            
+                            photoURL:
+                                currentUser.photoURL ||
+                                "",
+            
+                            memory:
+                                {},
+            
+                            createdAt:
+                                serverTimestamp(),
+            
+                            updatedAt:
+                                serverTimestamp()
+            
+                        }
+            
+                    );
+            
+                }
+            
+            }
+            
+            
+            /* ======================================================
+               LOAD MEMORY
+            ====================================================== */
+            
+            async function loadMemory(){
+            
+                if(
+                    !currentUser
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                const snapshot =
+                    await getDoc(
+            
+                        doc(
+            
+                            db,
+            
+                            "users",
+            
+                            currentUser.uid
+            
+                        )
+            
+                    );
+            
+            
+                if(
+                    snapshot.exists()
+                ){
+            
+                    memory =
+                        snapshot.data().memory ||
+                        {};
+            
+                }
+                else{
+            
+                    memory =
+                        {};
+            
+                }
+            
+            }
+            
+            
+            /* ======================================================
+               MESSAGE COLLECTION
+            ====================================================== */
+            
+            function getMessagesCollection(){
+            
+                return collection(
+            
+                    db,
+            
+                    "users",
+            
+                    currentUser.uid,
+            
+                    "messages"
+            
+                );
+            
+            }
+            
+            
+            /* ======================================================
+               REALTIME FIRESTORE
+            ====================================================== */
+            
+            function listenMessages(){
+            
+                if(
+                    !currentUser
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                if(
+                    unsubscribeMessages
+                ){
+            
+                    unsubscribeMessages();
+            
+                }
+            
+            
+                const q =
+                    query(
+            
+                        getMessagesCollection(),
+            
+                        orderBy(
+                            "createdAt",
+                            "asc"
+                        ),
+            
+                        limit(200)
+            
+                    );
+            
+            
+                unsubscribeMessages =
+            
+                    onSnapshot(
+            
+                        q,
+            
+                        snapshot => {
+            
+                            chat.innerHTML =
+                                "";
+            
+            
+                            messages =
+                                [];
+            
+            
+                            snapshot.forEach(
+            
+                                item => {
+            
+                                    const data =
+                                        item.data();
+            
+            
+                                    if(
+                                        !data.content
+                                    ){
+            
+                                        return;
+            
+                                    }
+            
+            
+                                    messages.push({
+            
+                                        role:
+                                            data.role,
+            
+                                        content:
+                                            data.content
+            
+                                    });
+            
+            
+                                    addBubble(
+            
+                                        data.content,
+            
+                                        data.role
+            
+                                    );
+            
+                                }
+            
+                            );
+            
+            
+                            if(
+                                messages.length === 0
+                            ){
+            
+                                showWelcome();
+            
+                            }
+            
+                        },
+            
+                        error => {
+            
+                            console.error(
+                                error
+                            );
+            
+            
+                            status.textContent =
+                                "● lỗi Firestore";
+            
+                        }
+            
+                    );
+            
+            }
+            
+            
+            /* ======================================================
+               WELCOME
+            ====================================================== */
+            
+            function showWelcome(){
+            
+                addBubble(
+            
             `Ê... 👀
-
-Cuối cùng anh cũng tới.
-
-Em đang ngồi rảnh,
-vừa hay thiếu một người để nói chuyện. 😌
-
-Anh tới đúng lúc ghê.`,
-            "ai",
-            false
-        );
-
-    }
-    else{
-
-        messages.forEach(
-            message => {
-
-                addMessage(
-                    message.content,
-                    message.role === "user"
-                        ? "user"
-                        : "ai",
-                    false
+            
+            Cuối cùng anh cũng tới.
+            
+            Em đang ngồi rảnh,
+            vừa hay thiếu một người để nói chuyện. 😌
+            
+            Anh tới đúng lúc ghê.`,
+            
+                    "assistant"
+            
                 );
-
+            
             }
-        );
+            
+            
+            /* ======================================================
+               ADD BUBBLE
+            ====================================================== */
+            
+            function addBubble(
+                text,
+                role
+            ){
+            
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+            
+            
+                row.className =
+                    role === "user"
+                        ? "row user"
+                        : "row ai";
+            
+            
+                const bubble =
+                    document.createElement(
+                        "div"
+                    );
+            
+            
+                bubble.className =
+                    "bubble";
+            
+            
+                bubble.textContent =
+                    text;
+            
+            
+                row.appendChild(
+                    bubble
+                );
+            
+            
+                chat.appendChild(
+                    row
+                );
+            
+            
+                requestAnimationFrame(
+            
+                    () => {
+            
+                        chat.scrollTop =
+                            chat.scrollHeight;
+            
+                    }
+            
+                );
+            
+            }
+            
+            
+            /* ======================================================
+               SAVE MESSAGE
+            ====================================================== */
+            
+            async function saveMessage(
+            
+                role,
+            
+                content
+            
+            ){
+            
+                if(
+                    !currentUser
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                await addDoc(
+            
+                    getMessagesCollection(),
+            
+                    {
+            
+                        role:
+                            role,
+            
+                        content:
+                            content,
+            
+                        createdAt:
+                            serverTimestamp(),
+            
+                        userId:
+                            currentUser.uid
+            
+                    }
+            
+                );
+            
+            }
+            
+            
+            /* ======================================================
+               MEMORY
+            ====================================================== */
+            
+            async function detectMemory(
+                text
+            ){
+            
+                let changed =
+                    false;
+            
+            
+                const nameMatch =
+                    text.match(
+            
+                        /(?:anh|tôi|mình)\s*(?:tên là|tên)\s+(.+)/i
+            
+                    );
+            
+            
+                if(
+                    nameMatch
+                ){
+            
+                    memory.name =
+            
+                        nameMatch[1]
+            
+                            .trim()
+            
+                            .replace(
+                                /[.!?,]+$/,
+                                ""
+                            );
+            
+            
+                    changed =
+                        true;
+            
+                }
+            
+            
+                const favoriteMatch =
+                    text.match(
+            
+                        /(?:anh|tôi|mình)\s+(?:thích|mê)\s+(.+)/i
+            
+                    );
+            
+            
+                if(
+                    favoriteMatch
+                ){
+            
+                    memory.favorite =
+            
+                        favoriteMatch[1]
+            
+                            .trim()
+            
+                            .replace(
+                                /[.!?,]+$/,
+                                ""
+                            );
+            
+            
+                    changed =
+                        true;
+            
+                }
+            
+            
+                if(
+                    !changed
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                await setDoc(
+            
+                    doc(
+            
+                        db,
+            
+                        "users",
+            
+                        currentUser.uid
+            
+                    ),
+            
+                    {
+            
+                        memory:
+                            memory,
+            
+                        updatedAt:
+                            serverTimestamp()
+            
+                    },
+            
+                    {
+                        merge:true
+                    }
+            
+                );
+            
+            }
+            
+            
+            /* ======================================================
+               SEND MESSAGE
+            ====================================================== */
+            
+            sendButton.addEventListener(
+            
+                "click",
+            
+                sendMessage
+            
+            );
+            
+            
+            input.addEventListener(
+            
+                "keydown",
+            
+                event => {
+            
+                    if(
+                        event.key ===
+                        "Enter"
+                    ){
+            
+                        event.preventDefault();
+            
+                        sendMessage();
+            
+                    }
+            
+                }
+            
+            );
+            
+            
+            async function sendMessage(){
+            
+                const text =
+                    input.value.trim();
+            
+            
+                if(
+                    !text ||
+                    !currentUser
+                ){
+            
+                    return;
+            
+                }
+            
+            
+                input.value =
+                    "";
+            
+            
+                input.disabled =
+                    true;
+            
+            
+                sendButton.disabled =
+                    true;
+            
+            
+                typing.style.display =
+                    "flex";
+            
+            
+                status.textContent =
+                    "● Linh đang nghĩ...";
+            
+            
+                try{
+            
+                    /*
+                       Lưu user message trước.
+                    */
+            
+                    await saveMessage(
+            
+                        "user",
+            
+                        text
+            
+                    );
+            
+            
+                    /*
+                       Cập nhật memory.
+                    */
+            
+                    await detectMemory(
+                        text
+                    );
+            
+            
+                    /*
+                       Gửi lên Cloud Function.
+            
+                       KHÔNG CÓ API KEY Ở ĐÂY.
+                    */
+            
+                    const result =
+            
+                        await chatWithLinh({
+            
+                            messages:
+            
+                                [
+                                    ...messages.slice(-40),
+            
+                                    {
+                                        role:
+                                            "user",
+            
+                                        content:
+                                            text
+                                    }
+            
+                                ],
+            
+                            memory:
+                                memory,
+            
+                            user:
+            
+                                {
+            
+                                    uid:
+                                        currentUser.uid,
+            
+                                    email:
+                                        currentUser.email ||
+                                        "",
+            
+                                    name:
+                                        currentUser.displayName ||
+                                        ""
+            
+                                }
+            
+                        });
+            
+            
+                    const answer =
+                        result?.data?.answer;
+            
+            
+                    if(
+                        !answer
+                    ){
+            
+                        throw new Error(
+            
+                            "Cloud Function không trả về câu trả lời."
+            
+                        );
+            
+                    }
+            
+            
+                    /*
+                       Lưu câu trả lời AI.
+                    */
+            
+                    await saveMessage(
+            
+                        "assistant",
+            
+                        answer
+            
+                    );
+            
+            
+                    updateMood(
+                        text
+                    );
+            
+            
+                    status.textContent =
+                        "● đang online";
+            
+                }
+                catch(error){
+            
+                    console.error(
+                        error
+                    );
+            
+            
+                    console.error(
+                        "AI ERROR:",
+                        error
+                    );
+            
+            
+                    /*
+                       Không hiển thị API key
+                       hoặc thông tin server.
+                    */
+            
+                    await saveMessage(
+            
+                        "assistant",
+            
+                        "Em bị trục trặc một chút 😭\n\n" +
+                        "Không kết nối được với AI."
+            
+                    );
+            
+            
+                    status.textContent =
+                        "● AI đang lỗi";
+            
+                }
+            
+            
+                typing.style.display =
+                    "none";
+            
+            
+                input.disabled =
+                    false;
+            
+            
+                sendButton.disabled =
+                    false;
+            
+            
+                input.focus();
+            
+            }
+            
+            
+            /* ======================================================
+               MOOD
+            ====================================================== */
+            
+            function updateMood(
+                text
+            ){
+            
+                const t =
+                    text.toLowerCase();
+            
+            
+                if(
+            
+                    t.includes("buồn") ||
+            
+                    t.includes("mệt")
+            
+                ){
+            
+                    mood.textContent =
+                        "🥺";
+            
+                }
+                else if(
+            
+                    t.includes("yêu") ||
+            
+                    t.includes("nhớ") ||
+            
+                    t.includes("thích")
+            
+                ){
+            
+                    mood.textContent =
+                        "💕";
+            
+                }
+                else if(
+            
+                    t.includes("haha") ||
+            
+                    t.includes("😂") ||
+            
+                    t.includes("🤣")
+            
+                ){
+            
+                    mood.textContent =
+                        "🤣";
+            
+                }
+                else{
+            
+                    mood.textContent =
+                        "😏";
+            
+                }
+            
+            }
+            
+            
+            /* ======================================================
+               QUICK SEND
+            ====================================================== */
+            
+            window.quickSend =
+            
+                function(text){
+            
+                    input.value =
+                        text;
+            
+                    sendMessage();
+            
+                };
+            
+            
+            /* ======================================================
+               SETTINGS
+            ====================================================== */
+            
+            settingsButton.addEventListener(
+            
+                "click",
+            
+                () => {
+            
+                    settingsOverlay.classList.add(
+                        "show"
+                    );
+            
+                }
+            
+            );
+            
+            
+            closeSettings.addEventListener(
+            
+                "click",
+            
+                () => {
+            
+                    settingsOverlay.classList.remove(
+                        "show"
+                    );
+            
+                }
+            
+            );
+            
+            
+            settingsOverlay.addEventListener(
+            
+                "click",
+            
+                event => {
+            
+                    if(
+                        event.target ===
+                        settingsOverlay
+                    ){
+            
+                        settingsOverlay.classList.remove(
+                            "show"
+                        );
+            
+                    }
+            
+                }
+            
+            );
+            
+            
+            /* ======================================================
+               LOGOUT
+            ====================================================== */
+            
+            logoutButton.addEventListener(
+            
+                "click",
+            
+                async () => {
+            
+                    await signOut(
+                        auth
+                    );
+            
+            
+                    settingsOverlay.classList.remove(
+                        "show"
+                    );
+            
+                }
+            
+            );
+            
+            
+            /* ======================================================
+               CLEAR CHAT
+            ====================================================== */
+            
+            clearButton.addEventListener(
+            
+                "click",
+            
+                async () => {
+            
+                    if(
+                        !currentUser
+                    ){
+            
+                        return;
+            
+                    }
+            
+            
+                    const confirmDelete =
+                        confirm(
+            
+                            "Xóa toàn bộ lịch sử trò chuyện?"
+            
+                        );
+            
+            
+                    if(
+                        !confirmDelete
+                    ){
+            
+                        return;
+            
+                    }
+            
+            
+                    try{
+            
+                        const snapshot =
+            
+                            await getDocs(
+            
+                                query(
+            
+                                    getMessagesCollection(),
+            
+                                    limit(500)
+            
+                                )
+            
+                            );
+            
+            
+                        for(
+                            const item
+                            of snapshot.docs
+                        ){
+            
+                            await deleteDoc(
+                                item.ref
+                            );
+            
+                        }
+            
+            
+                        memory =
+                            {};
+            
+            
+                        await setDoc(
+            
+                            doc(
+            
+                                db,
+            
+                                "users",
+            
+                                currentUser.uid
+            
+                            ),
+            
+                            {
+            
+                                memory:
+                                    {},
+            
+                                updatedAt:
+                                    serverTimestamp()
+            
+                            },
+            
+                            {
+                                merge:true
+                            }
+            
+                        );
+            
+            
+                        chat.innerHTML =
+                            "";
+            
+            
+                        showWelcome();
+            
+                    }
+                    catch(error){
+            
+                        console.error(
+                            error
+                        );
+            
+            
+                        alert(
+                            "Không thể xóa lịch sử."
+                        );
+            
+                    }
+            
+                }
+            
+            );
+            
+            
+        </script>
 
-    }
+    </body>
 
-
-    if(apiKey){
-
-        status.textContent =
-            "● sẵn sàng trò chuyện";
-
-    }
-    else{
-
-        status.textContent =
-            "● cần cấu hình AI";
-
-    }
-
-
-    input.focus();
-
-}
-
-
-initialize();
-
-</script>
-
-</body>
 </html>
