@@ -168,7 +168,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            max-height: 280px;
+            max-height: 360px;
             overflow-y: auto;
             margin-top: 6px;
             padding-right: 4px;
@@ -1404,6 +1404,22 @@
                 <div class="api-status" id="avatarStatus"></div>
             </div>
 
+            <!-- IMAGE SOURCE -->
+            <div class="section">
+                <div class="section-title">🖼️ Nguồn ảnh bot gửi</div>
+                <label class="field-label" for="imageModeSelect">CHẾ ĐỘ ẢNH</label>
+                <select class="field-select" id="imageModeSelect">
+                    <option value="web">Ảnh thật trên mạng (Openverse / Wikimedia)</option>
+                    <option value="ai">Ảnh AI vẽ (Pollinations)</option>
+                    <option value="auto">Tự động (mạng trước, AI dự phòng)</option>
+                </select>
+                <p class="field-hint">
+                    Chọn <b>Ảnh thật trên mạng</b> để bot tìm ảnh có sẵn (không tự vẽ).<br>
+                    Anh cũng có thể nhắn: “tìm ảnh trên mạng …”, “ảnh thật …”.
+                </p>
+                <div class="api-status" id="imageModeStatus"></div>
+            </div>
+
             <!-- VOICE -->
             <div class="section">
                 <div class="section-title">🎙️ Chat thoại · 20 giọng nữ</div>
@@ -1423,7 +1439,7 @@
                     </label>
                 </div>
 
-                <label class="field-label" style="margin-top:14px">CHỌN GIỌNG NỮ</label>
+                <label class="field-label" style="margin-top:14px">CHỌN GIỌNG 64 TỈNH THÀNH (VIỆT NAM)</label>
                 <div class="voice-grid" id="voiceGrid"></div>
                 <div class="row-btns">
                     <button class="btn-secondary" id="previewVoiceBtn" type="button">🎧 Nghe thử</button>
@@ -1431,7 +1447,7 @@
                 </div>
                 <button class="btn-full" id="openMicPermBtn" type="button" style="margin-top:10px">🎤 Cho phép dùng Micro</button>
                 <p class="field-hint">
-                    Dùng giọng có sẵn trên máy (Web Speech). iPhone/Safari và Chrome có bộ giọng khác nhau.
+                    64 profile giọng theo tỉnh/thành Việt Nam (pitch/tốc độ khác nhau). Máy cần có giọng tiếng Việt (vi-VN) để nghe chuẩn nhất.
                     Mic cần quyền micro · HTTPS hoặc localhost.
                 </p>
                 <div class="api-status" id="voiceStatus"></div>
@@ -1780,30 +1796,75 @@
            20 FEMALE VOICE PROFILES (Web Speech mapping)
         ====================================================== */
         const FEMALE_VOICES = [
-            { id: "linh_nhe", name: "Linh nhẹ nhàng", emoji: "🌸", lang: "vi-VN", pitch: 1.12, rate: 1.0, prefer: ["google tieng viet", "microsoft hoai", "vietnamese female", "linh", "vi-vn"] },
-            { id: "linh_ngot", name: "Linh ngọt", emoji: "🍭", lang: "vi-VN", pitch: 1.28, rate: 0.95, prefer: ["vi-vn", "hoai", "vietnamese"] },
-            { id: "linh_sexy", name: "Linh quyến rũ", emoji: "🔥", lang: "vi-VN", pitch: 0.92, rate: 0.9, prefer: ["vi-vn", "vietnamese"] },
-            { id: "linh_vui", name: "Linh vui tươi", emoji: "😄", lang: "vi-VN", pitch: 1.2, rate: 1.12, prefer: ["vi-vn", "vietnamese"] },
-            { id: "linh_tram", name: "Linh trầm ấm", emoji: "🌙", lang: "vi-VN", pitch: 0.85, rate: 0.92, prefer: ["vi-vn", "vietnamese"] },
-            { id: "mai_hn", name: "Mai Hà Nội", emoji: "🏛️", lang: "vi-VN", pitch: 1.05, rate: 1.0, prefer: ["vi-vn", "hoai my", "vietnamese"] },
-            { id: "my_sg", name: "My Sài Gòn", emoji: "🌆", lang: "vi-VN", pitch: 1.15, rate: 1.05, prefer: ["vi-vn", "vietnamese"] },
-            { id: "ha_thu", name: "Hà thư sinh", emoji: "📖", lang: "vi-VN", pitch: 1.08, rate: 0.96, prefer: ["vi-vn"] },
-            { id: "en_soft", name: "Soft English Girl", emoji: "💕", lang: "en-US", pitch: 1.2, rate: 0.98, prefer: ["samantha", "zira", "female", "google us english", "jenny", "aria"] },
-            { id: "en_warm", name: "Warm English", emoji: "☕", lang: "en-US", pitch: 1.05, rate: 0.95, prefer: ["aria", "jenny", "samantha", "female"] },
-            { id: "en_bright", name: "Bright English", emoji: "🌟", lang: "en-US", pitch: 1.3, rate: 1.08, prefer: ["samantha", "zira", "female"] },
-            { id: "en_sultry", name: "Sultry English", emoji: "🍷", lang: "en-US", pitch: 0.88, rate: 0.9, prefer: ["aria", "jenny", "female"] },
-            { id: "uk_lady", name: "UK Lady", emoji: "🇬🇧", lang: "en-GB", pitch: 1.1, rate: 0.98, prefer: ["uk english female", "google uk english female", "libby", "sonia", "fable"] },
-            { id: "uk_soft", name: "UK Soft", emoji: "🍵", lang: "en-GB", pitch: 1.22, rate: 0.95, prefer: ["uk english female", "libby", "sonia"] },
-            { id: "ja_kawaii", name: "Japanese Kawaii", emoji: "🎀", lang: "ja-JP", pitch: 1.35, rate: 1.05, prefer: ["kyoko", "nanami", "google 日本語", "japanese female"] },
-            { id: "ja_soft", name: "Japanese Soft", emoji: "🍡", lang: "ja-JP", pitch: 1.15, rate: 0.95, prefer: ["kyoko", "nanami", "japanese"] },
-            { id: "ko_soft", name: "Korean Soft", emoji: "💗", lang: "ko-KR", pitch: 1.18, rate: 1.0, prefer: ["google 한국의", "heami", "sunhi", "korean female"] },
-            { id: "zh_soft", name: "Chinese Soft", emoji: "🧧", lang: "zh-CN", pitch: 1.15, rate: 0.98, prefer: ["tingting", "xiaoxiao", "google 普通话", "chinese female"] },
-            { id: "fr_soft", name: "French Douce", emoji: "🥐", lang: "fr-FR", pitch: 1.15, rate: 0.98, prefer: ["thomas", "google français", "french female", "denise", "eloise"] },
-            { id: "es_warm", name: "Spanish Cálida", emoji: "💃", lang: "es-ES", pitch: 1.12, rate: 1.0, prefer: ["google español", "sabina", "elsa", "spanish female", "helena"] }
+            { id: "vn_hn", name: "Hà Nội", emoji: "🏛️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.92, rate: 0.96, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hp", name: "Hải Phòng", emoji: "⚓", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.90, rate: 0.98, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bg", name: "Bắc Giang", emoji: "⛰️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.94, rate: 0.97, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bk", name: "Bắc Kạn", emoji: "🌲", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.88, rate: 0.93, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bn", name: "Bắc Ninh", emoji: "🏭", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.93, rate: 0.98, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_cb", name: "Cao Bằng", emoji: "🏔️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.87, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_db", name: "Điện Biên", emoji: "🎖️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.86, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hd", name: "Hải Dương", emoji: "🍜", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.93, rate: 0.97, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hb", name: "Hòa Bình", emoji: "🏞️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.89, rate: 0.94, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hy", name: "Hưng Yên", emoji: "🌺", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.94, rate: 0.97, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hg", name: "Hà Giang", emoji: "🏔️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.86, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hnam", name: "Hà Nam", emoji: "🏡", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.93, rate: 0.96, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_lc", name: "Lai Châu", emoji: "☁️", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.85, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_ls", name: "Lạng Sơn", emoji: "🚪", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.88, rate: 0.93, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_lca", name: "Lào Cai", emoji: "🚂", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.87, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_nd", name: "Nam Định", emoji: "🎭", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.92, rate: 0.95, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_nb", name: "Ninh Bình", emoji: "🛶", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.91, rate: 0.95, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_pt", name: "Phú Thọ", emoji: "🎉", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.92, rate: 0.96, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_qninh", name: "Quảng Ninh", emoji: "🐉", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.91, rate: 0.98, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_sl", name: "Sơn La", emoji: "🥛", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.86, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tb", name: "Thái Bình", emoji: "🌾", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.93, rate: 0.96, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tng", name: "Thái Nguyên", emoji: "🍵", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.90, rate: 0.95, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tq", name: "Tuyên Quang", emoji: "📜", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.89, rate: 0.94, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_vp", name: "Vĩnh Phúc", emoji: "🏭", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.93, rate: 0.97, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_yb", name: "Yên Bái", emoji: "🌅", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 0.88, rate: 0.93, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_dn", name: "Đà Nẵng", emoji: "🌊", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.08, rate: 0.90, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hue", name: "Thừa Thiên Huế", emoji: "👑", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.12, rate: 0.86, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bdinh", name: "Bình Định", emoji: "🥊", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.06, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bth", name: "Bình Thuận", emoji: "🏜️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.05, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_dlk", name: "Đắk Lắk", emoji: "☕", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.04, rate: 0.93, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_dno", name: "Đắk Nông", emoji: "🌿", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.03, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_gl", name: "Gia Lai", emoji: "🌄", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.04, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_ht", name: "Hà Tĩnh", emoji: "🌬️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.05, rate: 0.89, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_kh", name: "Khánh Hòa", emoji: "🏖️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.07, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_kt", name: "Kon Tum", emoji: "🌲", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.03, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_ld", name: "Lâm Đồng", emoji: "🌸", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.06, rate: 0.90, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_na", name: "Nghệ An", emoji: "🔥", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.04, rate: 0.90, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_nt", name: "Ninh Thuận", emoji: "☀️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.05, rate: 0.92, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_py", name: "Phú Yên", emoji: "🌊", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.06, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_qb", name: "Quảng Bình", emoji: "🕳️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.05, rate: 0.89, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_qnam", name: "Quảng Nam", emoji: "🏯", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.08, rate: 0.90, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_qng", name: "Quảng Ngãi", emoji: "⚓", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.07, rate: 0.90, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_qt", name: "Quảng Trị", emoji: "🕊️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.06, rate: 0.88, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_th", name: "Thanh Hóa", emoji: "⚔️", lang: "vi-VN", region: "trung", regionLabel: "Miền Trung", pitch: 1.02, rate: 0.91, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hcm", name: "TP. Hồ Chí Minh", emoji: "🌆", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.22, rate: 1.10, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_ct", name: "Cần Thơ", emoji: "🚤", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.05, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_ag", name: "An Giang", emoji: "🌾", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.18, rate: 1.04, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_brvt", name: "Bà Rịa - Vũng Tàu", emoji: "🏝️", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.21, rate: 1.08, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bl", name: "Bạc Liêu", emoji: "🎵", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.24, rate: 1.06, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_btre", name: "Bến Tre", emoji: "🥥", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.19, rate: 1.04, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bdg", name: "Bình Dương", emoji: "🏢", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.21, rate: 1.09, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_bp", name: "Bình Phước", emoji: "🌳", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.17, rate: 1.05, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_cm", name: "Cà Mau", emoji: "🦐", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.23, rate: 1.03, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_dna", name: "Đồng Nai", emoji: "🚧", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.08, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_dtp", name: "Đồng Tháp", emoji: "🌸", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.19, rate: 1.04, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_hgi", name: "Hậu Giang", emoji: "🌿", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.03, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_kg", name: "Kiên Giang", emoji: "🏝️", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.22, rate: 1.05, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_la", name: "Long An", emoji: "🌾", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.06, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_st", name: "Sóc Trăng", emoji: "🏡", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.21, rate: 1.03, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tn", name: "Tây Ninh", emoji: "🕌", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.19, rate: 1.06, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tg", name: "Tiền Giang", emoji: "🍊", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.04, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_tv", name: "Trà Vinh", emoji: "🛕", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.21, rate: 1.03, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_vl", name: "Vĩnh Long", emoji: "🚤", lang: "vi-VN", region: "nam", regionLabel: "Miền Nam", pitch: 1.20, rate: 1.04, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] },
+            { id: "vn_toanquoc", name: "Việt Nam (Toàn quốc)", emoji: "🇻🇳", lang: "vi-VN", region: "bac", regionLabel: "Miền Bắc", pitch: 1.05, rate: 1.00, prefer: ["vi-vn", "vietnamese", "tiếng việt", "tieng viet", "microsoft hoai", "hoai my", "hoai", "google tiếng việt", "google tieng viet", "vietnamese female"] }
         ];
 
         const STORAGE_VOICE_ID = "linh_voice_id_v1";
         const STORAGE_AUTO_SPEAK = "linh_auto_speak_v1";
+        const STORAGE_IMAGE_MODE = "linh_image_mode_v1"; // web | ai
         // default ON unless user explicitly turned off
         const STORAGE_AUTO_SEND_VOICE = "linh_auto_send_voice_v1";
         const STORAGE_AVATAR_LOCAL = "linh_avatar_data_v1";
@@ -1831,6 +1892,11 @@
 
             return `Bạn là ${charName} — một phụ nữ AI trưởng thành nói tiếng Việt, đang chat riêng tư 1-1 với một người lớn.
 
+NGÔN NGỮ (BẮT BUỘC):
+- LUÔN trả lời 100% bằng tiếng Việt.
+- KHÔNG trả lời tiếng Anh (trừ khi anh yêu cầu rõ "speak English" / "trả lời tiếng Anh").
+- Không lẫn đoạn English dài. Tên riêng/emoji được phép.
+
 DANH XƯNG:
 - Xưng "em", gọi đối phương là "anh" (trừ khi ghi chú bảo khác).
 - Luôn vào vai ${charName}, không phá vỡ nhân vật.
@@ -1852,11 +1918,11 @@ GỬI ẢNH + NÓI CHUYỆN ÂM THANH (BẮT BUỘC):
 - App đã có loa TTS và gửi ảnh giúp em. Em KHÔNG BAO GIỜ được nói:
   "em không gửi được ảnh", "em không nói được", "em chỉ là text", "em không có giọng",
   "em không có miệng", "em không phát âm thanh được", "tôi không thể hỗ trợ"...
-- Khi anh xin ảnh / hình / pic / photo / meme / "gửi ảnh" / "show em":
+- Khi anh xin ảnh / hình / pic / photo / meme / "gửi ảnh" / "tìm ảnh trên mạng" / "show em":
   LUÔN chèn đúng 1 dòng thẻ (bắt buộc):
   [[image: detailed English visual prompt]]
   kèm 1–2 câu chat dễ thương. Không giải thích kỹ thuật.
-- Prompt trong [[image: ...]] bằng tiếng Anh, cụ thể (subject, style, lighting, mood).
+- Prompt trong [[image: ...]] bằng tiếng Anh, cụ thể, BẮT BUỘC photorealistic real human photo (DSLR), ghi rõ: NOT anime, NOT cartoon, NOT illustration.
 - Ảnh người lớn (sexy/nsfw artistic) được phép nếu anh yêu cầu (người lớn).
 - Khi anh bảo "nói đi", "đọc cho anh nghe", "nói chuyện bằng miệng": 
   chỉ trả lời nội dung nói (1–4 câu), đừng bảo không nói được. App sẽ đọc thành tiếng.
@@ -2238,46 +2304,252 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                 .replace(/'/g, "&#39;");
         }
 
-        function isImageUrl(url) {
+                function isImageUrl(url) {
             try {
                 const u = new URL(url);
                 if (!/^https?:$/.test(u.protocol)) return false;
                 if (/\.(png|jpe?g|gif|webp|bmp|avif)(\?.*)?$/i.test(u.pathname)) return true;
-                // common image CDNs / generators
-                if (/images\.unsplash\.com|picsum\.photos|i\.imgur\.com|media\.giphy\.com|image\.pollinations\.ai|oaidalleapiprodscus|googleusercontent\.com|pinimg\.com|twimg\.com/i.test(u.hostname)) {
+                if (/image\.pollinations\.ai|pollinations\.ai|wsrv\.nl|images\.weserv\.nl|i\.imgur\.com|media\.giphy\.com|images\.unsplash\.com|oaidalleapiprodscus|googleusercontent\.com|pinimg\.com|twimg\.com|blob:/i.test(u.hostname + u.protocol)) {
                     return true;
                 }
+                if (String(url).startsWith("blob:")) return true;
                 return false;
             } catch {
-                return false;
+                return String(url || "").startsWith("blob:") || String(url || "").startsWith("data:image");
             }
         }
 
-                function buildImageUrlFromPrompt(prompt) {
-            const p = String(prompt || "beautiful aesthetic photo").trim().slice(0, 300);
-            const seed = Math.floor(Math.random() * 1e9);
-            // Primary: pollinations (no key). Fallback handled on <img> error.
-            return "https://image.pollinations.ai/prompt/" +
-                encodeURIComponent(p) +
-                "?width=768&height=1024&nologo=true&enhance=true&safe=false&seed=" + seed;
+
+        function isGitHubHosted() {
+            const h = (location.hostname || "").toLowerCase();
+            return (
+                h.endsWith("github.io") ||
+                h.endsWith("githubusercontent.com") ||
+                h.includes("github.io")
+            );
         }
 
-                function buildImageFallbacks(prompt) {
-            // Always keep the SAME subject prompt — never fall back to random landscape (picsum)
-            const p = String(prompt || "beautiful young asian woman portrait, photorealistic").trim().slice(0, 280);
+        function buildRawPollinationsUrls(prompt) {
+            let p = String(prompt || "beautiful real young asian woman portrait, photorealistic").trim().slice(0, 320);
+            if (!/photorealistic|real human|dslr/i.test(p)) {
+                p += ", photorealistic DSLR photo, real human, natural skin texture";
+            }
+            if (!/not anime|NOT anime/i.test(p)) {
+                p += ", NOT anime, NOT cartoon, NOT illustration, NOT 3d render";
+            }
             const seed = Math.floor(Math.random() * 1e9);
             const enc = encodeURIComponent(p);
-            const enc2 = encodeURIComponent(p + ", highly detailed face, sharp focus on subject");
+            const enc2 = encodeURIComponent(p + ", highly detailed real face, visible skin pores, sharp focus");
+            // Multiple endpoint shapes + models (pollinations is flaky)
             return [
-                "https://image.pollinations.ai/prompt/" + enc + "?width=768&height=1024&nologo=true&enhance=true&safe=false&seed=" + seed,
-                "https://image.pollinations.ai/prompt/" + enc2 + "?width=768&height=1024&nologo=true&enhance=true&safe=false&seed=" + (seed + 17),
-                "https://image.pollinations.ai/prompt/" + enc + "?width=640&height=896&nologo=true&seed=" + (seed + 33)
+                "https://image.pollinations.ai/prompt/" + enc + "?width=768&height=1024&nologo=true&enhance=true&safe=false&model=flux&seed=" + seed,
+                "https://image.pollinations.ai/prompt/" + enc2 + "?width=768&height=1024&nologo=true&enhance=true&safe=false&model=flux&seed=" + (seed + 7),
+                "https://image.pollinations.ai/prompt/" + enc + "?width=640&height=896&nologo=true&model=turbo&seed=" + (seed + 13),
+                "https://pollinations.ai/p/" + enc + "?width=768&height=1024&nologo=true&seed=" + (seed + 19),
+                "https://image.pollinations.ai/prompt/" + enc + "?width=512&height=768&nologo=true&seed=" + (seed + 29)
             ];
         }
 
+        function viaProxy(url, proxyId) {
+            const clean = String(url || "").trim();
+            if (!clean) return "";
+            if (proxyId === "wsrv") {
+                return "https://wsrv.nl/?url=" + encodeURIComponent(clean) + "&w=768&h=1024&fit=cover&output=jpg&q=85&n=-1&maxage=1d";
+            }
+            if (proxyId === "weserv") {
+                return "https://images.weserv.nl/?url=" + encodeURIComponent(clean.replace(/^https?:\/\//, "")) + "&w=768&h=1024&fit=cover&output=jpg&q=85";
+            }
+            if (proxyId === "is") {
+                // imagecdn alternative style via wsrv already; keep corsproxy-like
+                return "https://corsproxy.io/?" + encodeURIComponent(clean);
+            }
+            return clean;
+        }
+
+        function buildImageUrlFromPrompt(prompt) {
+            const raws = buildRawPollinationsUrls(prompt);
+            // Always prefer proxied first on github, but also fine locally
+            return isGitHubHosted() ? viaProxy(raws[0], "wsrv") : raws[0];
+        }
+
+        function buildImageFallbacks(prompt) {
+            const raws = buildRawPollinationsUrls(prompt);
+            const list = [];
+            // Strategy: proxy variants + direct variants interleaved for higher success rate
+            raws.forEach((u, i) => {
+                if (isGitHubHosted()) {
+                    list.push(viaProxy(u, "wsrv"));
+                    list.push(viaProxy(u, "weserv"));
+                    list.push(u);
+                    if (i < 2) list.push(viaProxy(u, "is"));
+                } else {
+                    list.push(u);
+                    list.push(viaProxy(u, "wsrv"));
+                    list.push(viaProxy(u, "weserv"));
+                }
+            });
+            const seen = new Set();
+            return list.filter((u) => {
+                if (!u || seen.has(u)) return false;
+                seen.add(u);
+                return true;
+            });
+        }
+
+        async function fetchImageBlobUrl(url) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 18000);
+            try {
+                const res = await fetch(url, {
+                    method: "GET",
+                    mode: "cors",
+                    credentials: "omit",
+                    referrerPolicy: "no-referrer",
+                    signal: controller.signal,
+                    cache: "no-store"
+                });
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                const blob = await res.blob();
+                if (!blob || !blob.size) throw new Error("empty");
+                if (blob.type && /text|json|html/i.test(blob.type)) throw new Error("not image");
+                // verify it's image-ish by size at least
+                if (blob.size < 500) throw new Error("too small");
+                return URL.createObjectURL(blob);
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
+        function waitImgLoad(img, timeoutMs) {
+            return new Promise((resolve) => {
+                let done = false;
+                const finish = (ok) => {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(tm);
+                    img.onload = null;
+                    img.onerror = null;
+                    resolve(ok);
+                };
+                const tm = setTimeout(() => finish(false), timeoutMs || 12000);
+                img.onload = () => finish(true);
+                img.onerror = () => finish(false);
+            });
+        }
+
+        async function hydrateChatImages(root) {
+            const scope = root || document;
+            const nodes = scope.querySelectorAll("img.msg-img");
+            for (const img of nodes) {
+                if (img.dataset.hydrated === "1") continue;
+                img.dataset.hydrated = "1";
+                // run each image load sequence without blocking others too hard
+                loadOneChatImage(img);
+            }
+        }
+
+        async function loadOneChatImage(img) {
+            const primary = img.getAttribute("src") || "";
+            const fb = (img.getAttribute("data-fallbacks") || "").split("|").filter(Boolean);
+            // If src is already a prompt-less broken relative, ignore
+            let urls = [...new Set([primary].concat(fb).filter(Boolean))];
+
+            // If github and urls are direct pollinations, prepend proxies
+            if (isGitHubHosted()) {
+                const extra = [];
+                urls.forEach((u) => {
+                    if (/pollinations/i.test(u)) {
+                        extra.push(viaProxy(u, "wsrv"));
+                        extra.push(viaProxy(u, "weserv"));
+                    }
+                });
+                urls = [...new Set(extra.concat(urls))];
+            }
+
+            img.classList.add("loading");
+            img.style.opacity = ".85";
+            img.referrerPolicy = "no-referrer";
+            img.decoding = "async";
+            img.loading = "eager";
+            // don't force crossOrigin anonymous — can break some CDNs
+            try { img.removeAttribute("crossorigin"); } catch (e) {}
+
+            const showFail = () => {
+                img.classList.remove("loading");
+                img.alt = "Không tải được ảnh";
+                img.style.minHeight = "48px";
+                img.style.opacity = ".75";
+                if (!img.nextElementSibling || !img.nextElementSibling.classList.contains("img-fail-actions")) {
+                    const box = document.createElement("div");
+                    box.className = "img-cap img-fail-actions";
+                    const open = document.createElement("a");
+                    open.className = "msg-link";
+                    open.href = urls[0] || "#";
+                    open.target = "_blank";
+                    open.rel = "noopener noreferrer";
+                    open.textContent = "Mở ảnh";
+                    const retry = document.createElement("button");
+                    retry.type = "button";
+                    retry.className = "emoji-mini-btn img-retry-btn";
+                    retry.textContent = "Thử lại";
+                    box.appendChild(document.createTextNode("Mạng/CDN chặn ảnh (GitHub hay bị). "));
+                    box.appendChild(open);
+                    box.appendChild(document.createTextNode(" · "));
+                    box.appendChild(retry);
+                    img.insertAdjacentElement("afterend", box);
+                    retry.onclick = () => {
+                        img.dataset.hydrated = "0";
+                        box.remove();
+                        img.style.opacity = "1";
+                        img.classList.add("loading");
+                        // reshuffle seeds by rebuilding from alt/caption if possible
+                        const alt = img.getAttribute("data-prompt") || img.alt || "photo";
+                        if (typeof buildImageFallbacks === "function" && alt && alt.length > 3) {
+                            const rebuilt = buildImageFallbacks(alt);
+                            img.setAttribute("data-fallbacks", rebuilt.slice(1).join("|"));
+                            img.setAttribute("src", rebuilt[0] || img.src);
+                        }
+                        loadOneChatImage(img);
+                    };
+                }
+                const chatEl = document.getElementById("chat");
+                if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
+            };
+
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                // A) direct tag load
+                img.src = url;
+                let ok = await waitImgLoad(img, 10000);
+                if (ok && img.naturalWidth > 10) {
+                    img.classList.remove("loading");
+                    img.style.opacity = "1";
+                    const chatEl = document.getElementById("chat");
+                    if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
+                    return;
+                }
+                // B) fetch blob
+                try {
+                    const blobUrl = await fetchImageBlobUrl(url);
+                    img.src = blobUrl;
+                    ok = await waitImgLoad(img, 8000);
+                    if (ok && img.naturalWidth > 10) {
+                        img.classList.remove("loading");
+                        img.style.opacity = "1";
+                        const chatEl = document.getElementById("chat");
+                        if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
+                        return;
+                    }
+                } catch (e) {
+                    // next
+                }
+            }
+            showFail();
+        }
 
 
-                function expandImageTags(raw) {
+
+function expandImageTags(raw) {
             // Keep marker for renderer to attach multi-fallback URLs
             return String(raw).replace(
                 /\[\[\s*image\s*:\s*([\s\S]*?)\s*\]\]/gi,
@@ -2373,8 +2645,9 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
                 const alt = escapeHtml(s.alt);
                 const url = escapeHtml(s.url);
                 const fbs = (s.fallbacks || []).map(escapeHtml).join("|");
+                const promptAttr = escapeHtml(s.alt || "");
                 return (
-                    '<img class="msg-img loading" src="' + url + '" alt="' + alt + '" loading="lazy" referrerpolicy="no-referrer" data-fallbacks="' + fbs + '" onclick="window.open(this.src,\'_blank\')">' +
+                    '<img class="msg-img loading" src="' + url + '" alt="' + alt + '" data-prompt="' + promptAttr + '" loading="eager" referrerpolicy="no-referrer" data-fallbacks="' + fbs + '" onclick="window.open(this.src,\'_blank\')">' +
                     (s.alt && s.alt !== "image" ? '<span class="img-cap">' + alt + "</span>" : "")
                 );
             });
@@ -2388,30 +2661,8 @@ Bắt đầu trả lời ngay trong vai ${charName}.`;
             bubble.className = "bubble";
             bubble.innerHTML = renderMessageHtml(text);
             // image load handlers
-            bubble.querySelectorAll("img.msg-img").forEach((img) => {
-                // attach fallbacks from data-fallbacks if present
-                let tries = 0;
-                const fb = (img.getAttribute("data-fallbacks") || "").split("|").filter(Boolean);
-                img.addEventListener("load", () => {
-                    img.classList.remove("loading");
-                    chat.scrollTop = chat.scrollHeight;
-                });
-                img.addEventListener("error", () => {
-                    if (tries < fb.length) {
-                        img.src = fb[tries++];
-                        return;
-                    }
-                    img.classList.remove("loading");
-                    img.alt = "Không tải được ảnh (mạng/chặn CDN)";
-                    img.style.minHeight = "40px";
-                    img.style.opacity = ".55";
-                    // show prompt link text
-                    const cap = document.createElement("div");
-                    cap.className = "img-cap";
-                    cap.textContent = "Ảnh lỗi tải — thử nút 📸 Gửi ảnh hoặc mạng khác";
-                    img.insertAdjacentElement("afterend", cap);
-                });
-            });
+            // robust loader (GitHub Pages + CDN blocks)
+            hydrateChatImages(bubble);
             row.appendChild(bubble);
             chat.appendChild(row);
             requestAnimationFrame(() => {
@@ -2450,94 +2701,313 @@ function userWantsSpeech(text) {
             return a;
         }
 
-                function buildPromptFromUser(userText) {
+                        function buildPromptFromUser(userText) {
             const raw = String(userText || "");
             const t = raw.toLowerCase();
 
+            // Force REAL PHOTO look (not anime/cartoon)
+            const REAL =
+                "photorealistic DSLR photo, real human, natural skin texture, real pores, realistic eyes, " +
+                "true-to-life colors, 85mm lens, f/1.8, shallow depth of field, cinematic lighting, " +
+                "ultra realistic, NOT anime, NOT cartoon, NOT illustration, NOT 3d render, NOT drawing, NOT CGI";
+
             // Map Vietnamese requests -> clear English image prompts
-            // Order matters: more specific first
             const rules = [
-                { re: /nụ\s*hôn|hôn\s*nhau|hôn\s*môi|đang\s*hôn|kiss/i, p: "close-up romantic kiss, young asian couple kissing on the lips, intimate love moment, soft warm light, emotional, photorealistic portrait, shallow depth of field" },
-                { re: /hôn\s*má|hôn\s*trán/i, p: "romantic forehead or cheek kiss, young asian couple, tender intimate moment, soft light, photorealistic" },
-                { re: /ôm\s*nhau|ôm\s*chầm|cuddle|hug/i, p: "young asian couple hugging tightly, romantic embrace, warm soft light, photorealistic" },
-                { re: /selfie|tự\s*sướng/i, p: "beautiful young asian woman taking a cute selfie, phone camera angle, natural smile, soft indoor light, photorealistic" },
-                { re: /ảnh\s*em|hình\s*em|portrait|chân\s*dung/i, p: "beautiful young asian woman portrait, soft smile, elegant, cinematic lighting, photorealistic close-up" },
-                { re: /sexy|gợi\s*cảm|nóng|quyến\s*rũ/i, p: "alluring young asian woman portrait, seductive soft expression, elegant outfit, warm cinematic lighting, photorealistic, tasteful" },
-                { re: /mặc\s*váy/i, p: "beautiful young asian woman wearing a pretty dress, full body fashion photo, soft studio light, photorealistic" },
-                { re: /tóc\s*xõa|tóc\s*dài/i, p: "beautiful young asian woman with long flowing hair, portrait, soft light, photorealistic" },
-                { re: /giường|phòng\s*ngủ|trên\s*giường/i, p: "romantic young asian woman sitting on bed in soft morning light, cozy bedroom, tasteful, photorealistic" },
-                { re: /cặp\s*đôi|couple|tình\s*nhân/i, p: "romantic young asian couple together, love photo, soft warm light, photorealistic" },
-                { re: /mèo/i, p: "cute fluffy cat portrait, adorable face, soft light, photorealistic" },
-                { re: /chó|cún/i, p: "cute puppy dog portrait, adorable, soft light, photorealistic" },
-                { re: /hoa\s*hồng|hoa hồng/i, p: "beautiful red roses bouquet close-up, romantic, soft light, photorealistic" },
-                { re: /hoàng\s*hôn|sunset/i, p: "romantic sunset sky over ocean, golden hour, cinematic, photorealistic" },
-                { re: /biển|ocean|beach/i, p: "beautiful tropical beach ocean waves, turquoise water, sunny, photorealistic" },
-                { re: /núi|mountain/i, p: "majestic mountain landscape, dramatic clouds, cinematic, photorealistic" },
-                { re: /phong\s*cảnh|landscape|thiên\s*nhiên/i, p: "beautiful nature landscape scenery, cinematic light, photorealistic" },
-                { re: /anime/i, p: "anime style beautiful girl portrait, detailed eyes, soft colors, high quality" },
-                { re: /meme/i, p: "funny internet meme style image, expressive face, humorous" },
-                { re: /đêm|night/i, p: "beautiful young asian woman under city night lights, bokeh, cinematic portrait, photorealistic" },
-                { re: /cười|smile/i, p: "beautiful young asian woman bright smile portrait, joyful, soft light, photorealistic" },
-                { re: /buồn|khóc/i, p: "emotional young asian woman portrait, teary eyes, soft moody light, photorealistic cinematic" },
-                { re: /trái\s*tim|tim|heart/i, p: "romantic heart shape aesthetic photo, soft pink tones, dreamy, photorealistic" }
+                { re: /nụ\s*hôn|hôn\s*nhau|hôn\s*môi|đang\s*hôn|kiss/i, p: "close-up romantic kiss of a real young asian couple kissing on the lips, intimate love moment, emotional faces, soft warm light" },
+                { re: /hôn\s*má|hôn\s*trán/i, p: "real young asian couple, tender kiss on cheek or forehead, intimate romantic moment, soft natural light" },
+                { re: /ôm\s*nhau|ôm\s*chầm|cuddle|hug/i, p: "real young asian couple hugging tightly, romantic embrace, warm soft natural light" },
+                { re: /selfie|tự\s*sướng/i, p: "real beautiful young asian woman taking a cute selfie, phone camera angle, natural smile, real skin, indoor light" },
+                { re: /ảnh\s*em|hình\s*em|portrait|chân\s*dung/i, p: "real beautiful young asian woman portrait looking at camera, soft smile, elegant, natural skin detail" },
+                { re: /sexy|gợi\s*cảm|nóng|quyến\s*rũ/i, p: "alluring real young asian woman portrait, seductive soft expression, elegant outfit, warm light, tasteful, natural skin" },
+                { re: /mặc\s*váy/i, p: "real beautiful young asian woman wearing a pretty dress, fashion photo, full body, soft studio light" },
+                { re: /tóc\s*xõa|tóc\s*dài/i, p: "real beautiful young asian woman with long flowing hair, portrait, natural skin, soft light" },
+                { re: /giường|phòng\s*ngủ|trên\s*giường/i, p: "real young asian woman sitting on bed in soft morning light, cozy bedroom, tasteful, natural skin" },
+                { re: /cặp\s*đôi|couple|tình\s*nhân/i, p: "real romantic young asian couple together, love photo, soft warm light, natural faces" },
+                { re: /mèo/i, p: "real cute fluffy cat portrait photo, adorable face, soft light" },
+                { re: /chó|cún/i, p: "real cute puppy dog portrait photo, adorable, soft light" },
+                { re: /hoa\s*hồng|hoa hồng/i, p: "real red roses bouquet close-up photo, romantic, soft light" },
+                { re: /hoàng\s*hôn|sunset/i, p: "real romantic sunset sky over ocean photo, golden hour" },
+                { re: /biển|ocean|beach/i, p: "real tropical beach ocean waves photo, turquoise water, sunny" },
+                { re: /núi|mountain/i, p: "real majestic mountain landscape photo, dramatic clouds" },
+                { re: /phong\s*cảnh|landscape|thiên\s*nhiên/i, p: "real beautiful nature landscape scenery photo, cinematic light" },
+                { re: /anime|hoạt\s*hình|cartoon|manga|chibi/i, p: "real beautiful young asian woman portrait photo, natural look (user said anime but app forces real photo style)" },
+                { re: /meme/i, p: "funny realistic photo meme style, expressive real human face, humorous" },
+                { re: /đêm|night/i, p: "real beautiful young asian woman under city night lights, bokeh, cinematic portrait" },
+                { re: /cười|smile/i, p: "real beautiful young asian woman bright smile portrait, joyful, soft light" },
+                { re: /buồn|khóc/i, p: "emotional real young asian woman portrait, teary eyes, soft moody light" },
+                { re: /trái\s*tim|tim|heart/i, p: "romantic real photo with heart aesthetic, soft pink tones, dreamy, real couple or woman" }
             ];
 
             for (const rule of rules) {
                 if (rule.re.test(t)) {
-                    return rule.p;
+                    return (rule.p + ", " + REAL).slice(0, 380);
                 }
             }
 
-            // Generic cleanup: keep meaningful words, force people portrait bias (NOT landscape)
             let prompt = raw
                 .replace(/gửi|gởi|cho\s+anh|cho\s+em|anh\s+ơi|em\s+ơi|đi|với|một|tấm|bức|ảnh|hình|pic|image|photo|nhé|nha|pls|please|show|send|me|của|selfi+e|xem|giúp|đi\s+nào/gi, " ")
                 .replace(/\s+/g, " ")
                 .trim();
 
             if (prompt.length < 2) {
-                return "beautiful young asian woman portrait looking at camera, soft romantic light, photorealistic, detailed face";
+                return ("beautiful real young asian woman portrait looking at camera, soft romantic light, " + REAL).slice(0, 380);
             }
 
-            // If leftover is still Vietnamese short phrase, wrap as portrait subject
             if (!/[a-zA-Z]{4,}/.test(prompt)) {
                 return (
-                    "photorealistic image of: " + prompt +
-                    ", young asian woman as main subject, clear face, portrait composition, soft cinematic lighting, NOT landscape, NOT scenery, NOT empty nature"
-                );
+                    "photorealistic real photo of: " + prompt +
+                    ", young asian woman as main subject if people are implied, clear real human face, portrait composition, " +
+                    REAL +
+                    ", NOT landscape unless asked"
+                ).slice(0, 380);
             }
 
-            return (
-                prompt +
-                ", photorealistic, detailed, main subject clear, portrait-focused, beautiful lighting, NOT random landscape"
-            ).slice(0, 280);
+            return (prompt + ", " + REAL + ", portrait-focused if person requested").slice(0, 380);
         }
+
+
 
         function extractImagePromptFromAnswer(answer) {
             const m = String(answer || "").match(/\[\[\s*image\s*:\s*([\s\S]*?)\s*\]\]/i);
             return m ? m[1].trim() : "";
         }
 
-        function isBadOrMismatchedImagePrompt(userText, imagePrompt) {
+                function isBadOrMismatchedImagePrompt(userText, imagePrompt) {
             const u = String(userText || "").toLowerCase();
             const p = String(imagePrompt || "").toLowerCase();
             if (!p) return true;
+
+            // Reject anime/cartoon-looking prompts unless user explicitly wants anime
+            const userWantsAnime = /(anime|hoạt\s*hình|cartoon|manga|chibi)/i.test(u);
+            const looksAnime = /(anime|cartoon|manga|chibi|illustration|drawing|2d art|cel shaded|pixar|disney style|comic)/i.test(p);
+            if (looksAnime && !userWantsAnime) return true;
 
             // model often drifts to scenery
             const scenery = /(landscape|scenery|mountain|forest|lake|ocean|beach|sunset|nature|field|sky only|empty road|wallpaper)/i.test(p);
             const wantsPeople = /(hôn|nụ hôn|kiss|ôm|em|cặp đôi|sexy|selfie|portrait|mặt|người|girl|woman|couple)/i.test(u);
             if (scenery && wantsPeople) return true;
 
-            // if user asked kiss but prompt has no kiss
             if (/(nụ\s*hôn|hôn\s*nhau|kiss)/i.test(u) && !/(kiss|kissing|lips)/i.test(p)) return true;
             if (/(mèo)/i.test(u) && !/(cat|kitten)/i.test(p)) return true;
             if (/(chó|cún)/i.test(u) && !/(dog|puppy)/i.test(p)) return true;
 
-            // too generic
             if (p.length < 8) return true;
+            // missing photoreal cue when people requested
+            if (wantsPeople && !/(photo|photoreal|realistic|real human|dslr)/i.test(p)) return true;
             return false;
         }
 
-        function ensureImageInAnswer(userText, answer) {
+
+        
+        function getImageMode() {
+            const v = localStorage.getItem(STORAGE_IMAGE_MODE);
+            if (v === "web" || v === "ai" || v === "auto") return v;
+            return "auto"; // default: prefer real web photos
+        }
+
+        function setImageMode(mode) {
+            localStorage.setItem(STORAGE_IMAGE_MODE, mode);
+            const sel = document.getElementById("imageModeSelect");
+            if (sel) sel.value = mode;
+            const st = document.getElementById("imageModeStatus");
+            if (st) {
+                st.className = "api-status ok";
+                st.textContent =
+                    mode === "web" ? "✅ Ưu tiên ảnh thật trên mạng" :
+                    mode === "ai" ? "✅ Ưu tiên ảnh AI vẽ" :
+                    "✅ Tự động: mạng trước, AI dự phòng";
+            }
+        }
+
+        function userWantsWebImage(text) {
+            const t = String(text || "").toLowerCase();
+            return /(trên\s*mạng|tren\s*mang|tìm\s*ảnh|tim\s*anh|google\s*ảnh|ảnh\s*thật|hình\s*thật|stock|unsplash|không\s*vẽ|đừng\s*vẽ|ko\s*vẽ|ảnh\s*thật\s*trên\s*mạng|web\s*image|search\s*image)/i.test(t);
+        }
+
+        function userWantsAiImage(text) {
+            const t = String(text || "").toLowerCase();
+            return /(vẽ\s*ảnh|ai\s*vẽ|tự\s*vẽ|generate|pollinations|tạo\s*ảnh\s*ai)/i.test(t);
+        }
+
+        function buildWebSearchQuery(userText) {
+            // Use mapped English prompt lightly, but shorter for search engines
+            const mapped = buildPromptFromUser(userText);
+            // If kiss etc, use short query
+            const t = String(userText || "").toLowerCase();
+            if (/(nụ\s*hôn|hôn\s*nhau|kiss)/i.test(t)) return "romantic couple kiss photo";
+            if (/(ôm|hug|cuddle)/i.test(t)) return "couple hug romantic photo";
+            if (/(selfie)/i.test(t)) return "young woman selfie photo";
+            if (/(mèo|cat)/i.test(t)) return "cute cat photo";
+            if (/(chó|cún|dog)/i.test(t)) return "cute dog photo";
+            if (/(ảnh\s*em|portrait|gái|girl|woman)/i.test(t)) return "beautiful young asian woman portrait photo";
+            if (/(biển|beach)/i.test(t)) return "tropical beach photo";
+            if (/(hoa\s*hồng|rose)/i.test(t)) return "red roses bouquet photo";
+            // strip command words
+            let q = String(userText || "")
+                .replace(/gửi|gởi|cho|em|anh|ơi|đi|với|một|tấm|bức|ảnh|hình|pic|photo|image|nhé|nha|pls|please|tìm|trên mạng|thật|stock|show|send|me/gi, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+            if (q.length < 2) q = mapped.split(",").slice(0, 2).join(" ");
+            // keep short
+            return (q + " photo").replace(/\s+/g, " ").trim().slice(0, 80);
+        }
+
+        async function searchOpenverseImages(query, limit) {
+            const url = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(query) +
+                "&page_size=" + (limit || 6) + "&format=json&filter_mature=false";
+            const res = await fetch(url, {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit",
+                referrerPolicy: "no-referrer",
+                cache: "no-store"
+            });
+            if (!res.ok) throw new Error("openverse " + res.status);
+            const data = await res.json();
+            const results = (data && data.results) || [];
+            return results
+                .map((r) => r.url || r.thumbnail || "")
+                .filter((u) => /^https?:\/\//i.test(u));
+        }
+
+        async function searchWikimediaImages(query, limit) {
+            const url = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*" +
+                "&generator=search&gsrnamespace=6&gsrlimit=" + (limit || 6) +
+                "&gsrsearch=" + encodeURIComponent(query) +
+                "&prop=imageinfo&iiprop=url|mime|size&iiurlwidth=800";
+            const res = await fetch(url, {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit",
+                referrerPolicy: "no-referrer",
+                cache: "no-store"
+            });
+            if (!res.ok) throw new Error("wikimedia " + res.status);
+            const data = await res.json();
+            const pages = (data && data.query && data.query.pages) || {};
+            const list = [];
+            Object.keys(pages).forEach((k) => {
+                const info = pages[k].imageinfo && pages[k].imageinfo[0];
+                if (!info) return;
+                const mime = info.mime || "";
+                if (mime && !/^image\//i.test(mime)) return;
+                const u = info.thumburl || info.url;
+                if (u) list.push(u);
+            });
+            return list;
+        }
+
+        async function searchLoremFlickr(query) {
+            // real photos by tags (not AI draw). Use multiple random seeds.
+            const tags = encodeURIComponent(String(query || "couple").split(/\s+/).slice(0, 3).join(","));
+            const seed = Math.floor(Math.random() * 1e6);
+            return [
+                "https://loremflickr.com/768/1024/" + tags + "?lock=" + seed,
+                "https://loremflickr.com/640/896/" + tags + "?lock=" + (seed + 1),
+                "https://loremflickr.com/800/1000/" + tags + "?random=" + (seed + 2)
+            ];
+        }
+
+        async function resolveWebImageCandidates(userText) {
+            const q = buildWebSearchQuery(userText);
+            const all = [];
+            // parallel sources
+            const tasks = [
+                searchOpenverseImages(q, 6).catch(() => []),
+                searchWikimediaImages(q, 6).catch(() => []),
+                searchLoremFlickr(q).catch(() => [])
+            ];
+            const settled = await Promise.all(tasks);
+            settled.forEach((arr) => all.push(...arr));
+            // unique
+            const seen = new Set();
+            const urls = all.filter((u) => {
+                if (!u || seen.has(u)) return false;
+                seen.add(u);
+                return true;
+            });
+            // On GitHub, also provide proxied variants first
+            const out = [];
+            urls.slice(0, 10).forEach((u) => {
+                if (isGitHubHosted()) {
+                    out.push(viaProxy(u, "wsrv"));
+                    out.push(viaProxy(u, "weserv"));
+                }
+                out.push(u);
+            });
+            const seen2 = new Set();
+            return {
+                query: q,
+                urls: out.filter((u) => {
+                    if (!u || seen2.has(u)) return false;
+                    seen2.add(u);
+                    return true;
+                })
+            };
+        }
+
+        async function attachBestImageToAnswer(userText, answer) {
+            // Decide mode
+            let mode = getImageMode();
+            if (userWantsWebImage(userText)) mode = "web";
+            if (userWantsAiImage(userText)) mode = "ai";
+
+            let out = scrubCapabilityRefusal(answer);
+            const wantsImg = userWantsImage(userText) || /\[\[\s*image\s*:/i.test(out);
+
+            // If no image intent and no image tags, skip
+            if (!wantsImg && !/\[\[\s*image\s*:/i.test(out) && !/!\[[^\]]*\]\(https?:\/\//i.test(out)) {
+                return out;
+            }
+
+            // caption
+            if (!out.trim()) out = "Để em gửi anh một tấm nha~ 💕";
+
+            // WEB mode or AUTO: try real photos first
+            if (mode === "web" || mode === "auto") {
+                try {
+                    status.textContent = "● đang tìm ảnh trên mạng… 🔎";
+                    const found = await resolveWebImageCandidates(userText);
+                    if (found.urls && found.urls.length) {
+                        // remove AI tags if any
+                        out = out.replace(/\[\[\s*image\s*:[\s\S]*?\]\]/gi, "").trim();
+                        out = out.replace(/!\[[^\]]*\]\((https?:\/\/[^)]+|data:image\/[^)]+)\)/g, "").trim();
+                        if (!out.trim()) {
+                            out = /(nụ\s*hôn|hôn|kiss)/i.test(userText)
+                                ? "Em tìm được ảnh nụ hôn trên mạng nè 💋"
+                                : "Em tìm được ảnh trên mạng nè ✨";
+                        } else if (!/mạng|tìm được|đây/i.test(out)) {
+                            out += "\n(Em lấy ảnh thật trên mạng giúp anh đó~)";
+                        }
+                        const main = found.urls[0];
+                        const fbs = found.urls.slice(1, 8);
+                        // markdown + fb comment for loader
+                        out += "\n\n![" + (found.query || "web photo") + "](" + main + ")";
+                        if (fbs.length) out += "\n<!--fb:" + fbs.join("|") + "-->";
+                        return out;
+                    }
+                    if (mode === "web") {
+                        out += "\n\nHuhu mạng chưa ra ảnh phù hợp 🥺 Anh thử mô tả khác hoặc đổi sang chế độ Ảnh AI trong ⚙️ nhé.";
+                        return out;
+                    }
+                    // auto -> fall through to AI
+                } catch (e) {
+                    console.warn("web image search fail", e);
+                    if (mode === "web") {
+                        return out + "\n\nKhông tìm được ảnh mạng lúc này 😢";
+                    }
+                }
+            }
+
+            // AI mode (or auto fallback)
+            out = ensureImageInAnswer(userText, out);
+            if (userWantsImage(userText) && !/\[\[\s*image\s*:/i.test(out) && !/!\[[^\]]*\]\(https?:\/\//i.test(out)) {
+                out = (out || "Em vẽ/gửi ảnh đây ạ~") + "\n\n[[image: " + buildPromptFromUser(userText) + "]]";
+            }
+            return out;
+        }
+
+function ensureImageInAnswer(userText, answer) {
             let out = scrubCapabilityRefusal(answer);
             if (!userWantsImage(userText)) {
                 // still normalize if model randomly included image tags? keep as-is
@@ -2574,6 +3044,20 @@ function userWantsSpeech(text) {
             return out + "\n\n[[image: " + wanted + "]]";
         }
 
+
+        function looksMostlyEnglish(s) {
+            const t = String(s || "").replace(/https?:\/\/\S+/g, " ").replace(/\[\[.*?\]\]/g, " ");
+            const letters = t.replace(/[^A-Za-zÀ-ỹ]/g, "");
+            const ascii = (t.match(/[A-Za-z]/g) || []).length;
+            const viet = (t.match(/[À-ỹà-ỹ]/g) || []).length;
+            if (letters.length < 12) return false;
+            // many english letters and almost no vietnamese marks and common english words
+            if (viet === 0 && ascii > 20 && /\b(the|you|i|am|is|are|cannot|can't|sorry|image|voice)\b/i.test(t)) {
+                return true;
+            }
+            return false;
+        }
+
 function forceSpeakableAnswer(userText, answer) {
             let out = scrubCapabilityRefusal(answer);
             if (!userWantsSpeech(userText) && !/âm thanh|giọng nói|nói chuyện/i.test(userText)) {
@@ -2594,6 +3078,7 @@ function forceSpeakableAnswer(userText, answer) {
         function renderMessages(list) {
             chat.innerHTML = "";
             list.forEach((m) => addBubble(m.content, m.role));
+            hydrateChatImages(chat);
         }
 
         function welcomeText() {
@@ -2721,7 +3206,14 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
            VOICE ENGINE (STT + TTS) + AVATAR HELPERS
         ====================================================== */
         let cachedVoices = [];
-        let selectedVoiceId = localStorage.getItem(STORAGE_VOICE_ID) || "linh_nhe";
+        let selectedVoiceId = localStorage.getItem(STORAGE_VOICE_ID) || "vn_hn";
+        (function migrateVoiceId() {
+            const ok = FEMALE_VOICES.some((v) => v.id === selectedVoiceId);
+            if (!ok) {
+                selectedVoiceId = "vn_hn";
+                localStorage.setItem(STORAGE_VOICE_ID, selectedVoiceId);
+            }
+        })();
         let recognition = null;
         let recognizing = false;
         let speaking = false;
@@ -2740,66 +3232,172 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             speechSynthesis.onvoiceschanged = () => refreshVoices();
         }
 
-        function scoreVoice(sysVoice, profile) {
+                function scoreVoice(sysVoice, profile) {
             const name = (sysVoice.name || "").toLowerCase();
             const lang = (sysVoice.lang || "").toLowerCase();
             let score = 0;
-            const want = (profile.lang || "vi-VN").toLowerCase();
-            if (lang === want.toLowerCase()) score += 50;
-            else if (lang.startsWith(want.slice(0, 2))) score += 25;
+
+            // HARD: only Vietnamese is acceptable
+            const isVi = lang === "vi-vn" || lang === "vi" || lang.startsWith("vi-") ||
+                /vietnamese|tiếng việt|tieng viet|vietnam/.test(name + " " + lang);
+            if (!isVi) return -1e9;
+
+            score += 100;
+            if (lang === "vi-vn") score += 40;
             for (const pref of profile.prefer || []) {
-                const p = pref.toLowerCase();
-                if (name.includes(p)) score += 30;
-                if (lang.includes(p)) score += 10;
+                const p = String(pref).toLowerCase();
+                if (name.includes(p)) score += 20;
             }
-            // female heuristics
-            if (/female|woman|girl|zira|samantha|victoria|karen|moira|tessa|fiona|veena|aria|jenny|libby|sonia|nanami|kyoko|hoai|my|linh|nữ|nu /i.test(name)) {
-                score += 15;
+            // prefer female-ish names
+            if (/female|woman|girl|hoai|my|linh|nữ|nu |female/i.test(name)) score += 25;
+            if (/male|nam |david|mark/i.test(name) && !/female|nữ/i.test(name)) score -= 50;
+            // province pitch profile still applied later; slight name match
+            if (profile && profile.name) {
+                const pn = profile.name.toLowerCase();
+                if (name.includes("hoai") || name.includes("my")) score += 5;
             }
-            if (/male|david|mark|george|daniel|male/i.test(name) && !/female/i.test(name)) score -= 40;
             return score;
         }
 
+        function listVietnameseVoices() {
+            const voices = refreshVoices() || [];
+            return voices.filter((v) => {
+                const name = (v.name || "").toLowerCase();
+                const lang = (v.lang || "").toLowerCase();
+                return (
+                    lang === "vi-vn" || lang === "vi" || lang.startsWith("vi-") ||
+                    /vietnamese|tiếng việt|tieng viet|vietnam/.test(name + " " + lang)
+                );
+            });
+        }
+
         function pickSystemVoice(profile) {
-            const voices = refreshVoices();
-            if (!voices.length) return null;
+            const viVoices = listVietnameseVoices();
+            if (!viVoices.length) return null; // force fallback TTS, NEVER English system voice
             let best = null;
             let bestScore = -1e9;
-            for (const v of voices) {
-                const s = scoreVoice(v, profile);
+            for (const v of viVoices) {
+                const s = scoreVoice(v, profile || {});
                 if (s > bestScore) {
                     bestScore = s;
                     best = v;
                 }
             }
-            return best;
+            return best || viVoices[0] || null;
         }
 
-        function getVoiceProfile(id) {
+function getVoiceProfile(id) {
             return FEMALE_VOICES.find((v) => v.id === id) || FEMALE_VOICES[0];
         }
 
-        function stripForSpeech(text) {
-            return String(text || "")
+        function getSelectedVoiceProfile() {
+            return getVoiceProfile(selectedVoiceId);
+        }
+
+        function getVoiceRegion(profile) {
+            const p = profile || getSelectedVoiceProfile() || {};
+            if (p.region === "bac" || p.region === "trung" || p.region === "nam") return p.region;
+            // infer from name if needed
+            const n = String(p.name || "");
+            if (/Huế|Nghệ|Quảng|Đà Nẵng|Thanh Hóa|Bình Định|Phú Yên|Khánh|Kon|Gia Lai|Đắk|Lâm Đồng|Ninh Thuận|Bình Thuận|Hà Tĩnh|Quảng Trị|Quảng Nam|Quảng Ngãi|Quảng Bình/i.test(n)) return "trung";
+            if (/Hồ Chí Minh|Cần Thơ|An Giang|Vũng Tàu|Bạc Liêu|Bến Tre|Bình Dương|Cà Mau|Đồng Nai|Đồng Tháp|Hậu Giang|Kiên Giang|Long An|Sóc Trăng|Tây Ninh|Tiền Giang|Trà Vinh|Vĩnh Long/i.test(n)) return "nam";
+            return "bac";
+        }
+
+        // Make speech FEEL more regional (particles/wording). True local accent needs OS voices.
+        function applyRegionalSpeechText(text, profile) {
+            let s = String(text || "").trim();
+            if (!s) return s;
+            const region = getVoiceRegion(profile);
+            // light replacements that change spoken flavor
+            if (region === "nam") {
+                s = s
+                    .replace(/\bkhông sao\b/gi, "không sao đâu")
+                    .replace(/\brất\b/gi, "cực kỳ")
+                    .replace(/\blắm\b/gi, "lắm luôn")
+                    .replace(/\bnhé\b/gi, "nghen")
+                    .replace(/\bnha\b/gi, "nghen")
+                    .replace(/\bthôi\b/gi, "thôi đi");
+                // ending particle if missing
+                if (!/(nghen|hen|luôn|á|đó|nha|nhé)\s*$/i.test(s)) {
+                    s = s.replace(/([.!?…])?\s*$/, (m) => " nghen" + (m || ""));
+                }
+            } else if (region === "trung") {
+                s = s
+                    .replace(/\bkhông sao\b/gi, "không sao mô")
+                    .replace(/\brất\b/gi, "răng cũng")
+                    .replace(/\bnhé\b/gi, "nghe")
+                    .replace(/\bnha\b/gi, "nghe")
+                    .replace(/\blắm\b/gi, "lắm ni");
+                if (!/(nghe|ni|răng|mô)\s*$/i.test(s)) {
+                    s = s.replace(/([.!?…])?\s*$/, (m) => " nghe" + (m || ""));
+                }
+            } else {
+                // bac
+                s = s
+                    .replace(/\bnghen\b/gi, "nhé")
+                    .replace(/\bhen\b/gi, "nhé")
+                    .replace(/\bcực kỳ\b/gi, "rất")
+                    .replace(/\bluôn luôn\b/gi, "lắm");
+                if (!/(nhé|nhá|ạ|đấy|cơ)\s*$/i.test(s) && s.length < 120) {
+                    s = s.replace(/([.!?…])?\s*$/, (m) => " nhé" + (m || ""));
+                }
+            }
+            return s.replace(/\s+/g, " ").trim();
+        }
+
+        function regionalStyleInstruction(profile) {
+            const region = getVoiceRegion(profile);
+            const place = (profile && profile.name) || "Việt Nam";
+            if (region === "nam") {
+                return (
+                    "GIỌNG ĐỊA PHƯƠNG: Miền Nam (" + place + ").\n" +
+                    "- Nói năng ngọt, nhanh vui, hay dùng: nghen, hen, luôn, á, đó, trời ơi, dễ thương ghê.\n" +
+                    "- Tránh từ đặc trưng miền Bắc nặng (nhá, cơ, ấy). Không nói tiếng Anh."
+                );
+            }
+            if (region === "trung") {
+                return (
+                    "GIỌNG ĐỊA PHƯƠNG: Miền Trung (" + place + ").\n" +
+                    "- Nói dịu, hơi chậm, tình cảm, hay dùng: nghe, ni, mô, răng, hum, êm đềm.\n" +
+                    "- Không nói tiếng Anh."
+                );
+            }
+            return (
+                "GIỌNG ĐỊA PHƯƠNG: Miền Bắc (" + place + ").\n" +
+                "- Nói rõ ràng, vừa phải, hay dùng: nhé, nhá, ạ, đấy, cơ, ấy.\n" +
+                "- Không nói tiếng Anh."
+            );
+        }
+
+
+
+                function stripForSpeech(text) {
+            let s = String(text || "");
+            // remove image tags/markdown/urls but DO NOT hard-cut length
+            s = s
                 .replace(/\[\[\s*image\s*:[\s\S]*?\]\]/gi, " ")
-                .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
-                .replace(/https?:\/\/\S+/g, " ")
+                .replace(/!\[[^\]]*\]\([^)]+\)/gi, " ")
+                .replace(/<!--[\s\S]*?-->/g, " ")
+                .replace(/https?:\/\/\S+/gi, " ")
                 .replace(/data:image\/[\s\S]*/gi, " ")
-                .replace(/[*_`#>-]/g, " ")
+                .replace(/[*_`#>-]{1,}/g, " ")
                 .replace(/\s+/g, " ")
-                .trim()
-                .slice(0, 700);
+                .trim();
+            return s;
         }
 
         let ttsUnlocked = false;
         let ttsQueue = [];
         let ttsSpeaking = false;
         let voiceCallActive = false; // mic conversation mode
+        let ttsKeepAliveTimer = null;
+        let ttsCurrentUtter = null;
+        let ttsRunId = 0;
 
         function unlockTTS() {
             if (!window.speechSynthesis) return false;
             try {
-                // Chrome: need user gesture + sometimes dummy utterance
                 speechSynthesis.cancel();
                 const u = new SpeechSynthesisUtterance(" ");
                 u.volume = 0.01;
@@ -2817,12 +3415,26 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
         }
 
         function stopSpeaking() {
+            ttsRunId++; // invalidate callbacks
             try {
                 if (window.speechSynthesis) speechSynthesis.cancel();
             } catch {}
+            try {
+                if (window.__linhTtsAudio) {
+                    window.__linhTtsAudio.onended = null;
+                    window.__linhTtsAudio.onerror = null;
+                    window.__linhTtsAudio.pause();
+                    window.__linhTtsAudio = null;
+                }
+            } catch {}
+            if (ttsKeepAliveTimer) {
+                clearInterval(ttsKeepAliveTimer);
+                ttsKeepAliveTimer = null;
+            }
             ttsQueue = [];
             ttsSpeaking = false;
             speaking = false;
+            ttsCurrentUtter = null;
             updateSpeakUi();
         }
 
@@ -2833,7 +3445,7 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                 speakBtn.classList.toggle("on", on);
                 speakBtn.textContent = ttsSpeaking ? "🗣️" : (on ? "🔊" : "🔇");
                 speakBtn.title = on
-                    ? (ttsSpeaking ? "Bot đang nói… (bấm để tắt loa)" : "Loa đang BẬT — bot sẽ đọc tin")
+                    ? (ttsSpeaking ? "Bot đang nói… (bấm để tắt loa)" : "Loa đang BẬT — bot sẽ đọc hết tin")
                     : "Loa đang TẮT — bấm để bật bot nói";
             }
             const micButton = document.getElementById("micButton");
@@ -2842,6 +3454,57 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                     ? "Đang nghe… bấm để dừng"
                     : "Nói chuyện với bot (thoại)";
             }
+        }
+
+        function chunkTextForTTS(text) {
+            const clean = String(text || "").trim();
+            if (!clean) return [];
+            // Prefer sentence boundaries, then comma, then hard wrap ~160-200 chars
+            // Chrome often cuts long utterances; small chunks are more reliable
+            const maxLen = 160;
+            const sentences = clean
+                .replace(/([.!?…]+|[\u3002\uFF01\uFF1F])\s+/g, "$1\n")
+                .replace(/([,;:，；])\s+/g, "$1\n")
+                .split(/\n+/)
+                .map((s) => s.trim())
+                .filter(Boolean);
+
+            const chunks = [];
+            let buf = "";
+            const pushBuf = () => {
+                if (buf.trim()) chunks.push(buf.trim());
+                buf = "";
+            };
+
+            const hardSplit = (s) => {
+                const out = [];
+                let t = s;
+                while (t.length > maxLen) {
+                    let cut = t.lastIndexOf(" ", maxLen);
+                    if (cut < maxLen * 0.5) cut = maxLen;
+                    out.push(t.slice(0, cut).trim());
+                    t = t.slice(cut).trim();
+                }
+                if (t) out.push(t);
+                return out;
+            };
+
+            for (const part of (sentences.length ? sentences : [clean])) {
+                if ((buf + " " + part).trim().length <= maxLen) {
+                    buf = (buf ? buf + " " : "") + part;
+                } else {
+                    pushBuf();
+                    if (part.length <= maxLen) buf = part;
+                    else {
+                        hardSplit(part).forEach((p, idx, arr) => {
+                            if (idx < arr.length - 1) chunks.push(p);
+                            else buf = p;
+                        });
+                    }
+                }
+            }
+            pushBuf();
+            return chunks.length ? chunks : [clean.slice(0, maxLen)];
         }
 
         function speakText(text, opts = {}) {
@@ -2855,94 +3518,238 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                 return;
             }
 
-            const clean = stripForSpeech(text);
+            let clean = stripForSpeech(text);
             if (!clean) {
                 if (opts.onend) opts.onend();
                 return;
             }
+            // Regional flavor for 63 provinces (wording + later pitch/rate)
+            clean = applyRegionalSpeechText(clean, getSelectedVoiceProfile());
 
-            // split long text into sentences for more reliable TTS
-            const parts = clean
-                .replace(/([.!?…]+)\s+/g, "$1|")
-                .split("|")
-                .map((s) => s.trim())
-                .filter(Boolean);
-            const chunks = parts.length ? parts : [clean];
-
+            const chunks = chunkTextForTTS(clean);
             if (opts.interrupt !== false) {
+                // new message: restart queue but keep run consistent
                 try { speechSynthesis.cancel(); } catch {}
+                if (ttsKeepAliveTimer) {
+                    clearInterval(ttsKeepAliveTimer);
+                    ttsKeepAliveTimer = null;
+                }
                 ttsQueue = [];
+                ttsSpeaking = false;
             }
 
-            ttsQueue.push(...chunks.map((c, idx) => ({
-                text: c,
-                onend: idx === chunks.length - 1 ? opts.onend : null
-            })));
+            const runId = ++ttsRunId;
+            const finalOnEnd = opts.onend || null;
+            chunks.forEach((c, idx) => {
+                ttsQueue.push({
+                    text: c,
+                    runId,
+                    onend: idx === chunks.length - 1 ? finalOnEnd : null
+                });
+            });
 
+            status.textContent = "● đang nói (" + chunks.length + " đoạn)… 🔊";
             if (!ttsUnlocked) unlockTTS();
+            // Chrome: resume loop against bug that pauses mid-speech
+            if (ttsKeepAliveTimer) clearInterval(ttsKeepAliveTimer);
+            ttsKeepAliveTimer = setInterval(() => {
+                try {
+                    if (speechSynthesis.speaking && speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                    }
+                    // some chrome builds stall with speaking=true but silent
+                    if (ttsSpeaking && !speechSynthesis.speaking && !speechSynthesis.pending && ttsQueue.length) {
+                        ttsSpeaking = false;
+                        pumpTTS();
+                    }
+                } catch (e) {}
+            }, 800);
+
             pumpTTS();
         }
 
-        function pumpTTS() {
-            if (!window.speechSynthesis) return;
+                function pumpTTS() {
             if (ttsSpeaking) return;
             if (!ttsQueue.length) {
                 speaking = false;
                 ttsSpeaking = false;
+                ttsCurrentUtter = null;
+                if (ttsKeepAliveTimer) {
+                    clearInterval(ttsKeepAliveTimer);
+                    ttsKeepAliveTimer = null;
+                }
                 updateSpeakUi();
                 if (voiceCallActive && !recognizing && !isSending) {
-                    // in voice-call mode, auto listen again after bot finishes
                     status.textContent = "● em xong rồi — anh nói tiếp đi 🎤";
                 }
                 return;
             }
 
-            // Chrome bug: paused synth
+            const job = ttsQueue.shift();
+            if (job.runId !== ttsRunId) {
+                pumpTTS();
+                return;
+            }
+
+            const viVoice = pickSystemVoice(getVoiceProfile(selectedVoiceId));
+            // ALWAYS Vietnamese audio path
+            if (viVoice && window.speechSynthesis) {
+                speakChunkWebSpeech(job, viVoice);
+            } else {
+                // No vi-VN on device → Google Translate Vietnamese TTS (audio element)
+                speakChunkGoogleVi(job);
+            }
+        }
+
+        function speakChunkWebSpeech(job, viVoice) {
             try {
                 if (speechSynthesis.paused) speechSynthesis.resume();
             } catch {}
 
-            const job = ttsQueue.shift();
             const u = new SpeechSynthesisUtterance(job.text);
             const profile = getVoiceProfile(selectedVoiceId);
-            refreshVoices();
-            const sys = pickSystemVoice(profile);
-            if (sys) u.voice = sys;
-            u.lang = (sys && sys.lang) || profile.lang || "vi-VN";
+            u.voice = viVoice;
+            u.lang = "vi-VN"; // force
             u.pitch = Math.min(2, Math.max(0.5, profile.pitch || 1));
-            u.rate = Math.min(1.35, Math.max(0.75, profile.rate || 1));
+            u.rate = Math.min(1.2, Math.max(0.85, (profile.rate || 1) * 0.95));
             u.volume = 1;
 
             ttsSpeaking = true;
             speaking = true;
+            ttsCurrentUtter = u;
             updateSpeakUi();
-            status.textContent = "● " + (persona.charName || "Linh") + " đang nói… 🔊";
+            status.textContent = "● " + (persona.charName || "Linh") + " đang nói tiếng Việt… 🔊";
 
-            u.onend = () => {
+            let finished = false;
+            const finish = () => {
+                if (finished) return;
+                finished = true;
                 ttsSpeaking = false;
                 speaking = false;
+                ttsCurrentUtter = null;
                 if (job.onend) {
-                    try { job.onend(); } catch {}
+                    try { job.onend(); } catch (e) {}
                 }
-                setTimeout(pumpTTS, 40);
+                setTimeout(() => {
+                    if (job.runId === ttsRunId) pumpTTS();
+                }, 90);
             };
+
+            u.onend = finish;
             u.onerror = (ev) => {
-                console.warn("TTS error", ev);
-                ttsSpeaking = false;
-                speaking = false;
-                setTimeout(pumpTTS, 40);
+                console.warn("VI web speech error, fallback Google VI", ev);
+                // fallback this chunk to Google VI instead of dying
+                if (!finished) {
+                    finished = true;
+                    speakChunkGoogleVi(job);
+                }
             };
 
             try {
                 speechSynthesis.speak(u);
+                const watchMs = Math.max(6000, Math.min(35000, job.text.length * 140));
+                setTimeout(() => {
+                    if (!finished && job.runId === ttsRunId) {
+                        try { speechSynthesis.cancel(); } catch (e) {}
+                        finish();
+                    }
+                }, watchMs);
             } catch (e) {
                 console.error(e);
-                ttsSpeaking = false;
-                setTimeout(pumpTTS, 40);
+                speakChunkGoogleVi(job);
             }
         }
 
-        function isAutoSpeak() {
+        function speakChunkGoogleVi(job) {
+            // Split already small; Google TTS unofficial limit ~180-200 chars
+            const txt = String(job.text || "").trim().slice(0, 180);
+            if (!txt) {
+                if (job.onend) try { job.onend(); } catch (e) {}
+                setTimeout(() => { if (job.runId === ttsRunId) pumpTTS(); }, 40);
+                return;
+            }
+
+            ttsSpeaking = true;
+            speaking = true;
+            updateSpeakUi();
+            status.textContent = "● " + (persona.charName || "Linh") + " đang nói tiếng Việt (online)… 🔊";
+
+            // Use Audio element — no CORS needed for playback
+            const url =
+                "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=vi&q=" +
+                encodeURIComponent(txt);
+
+            // stop previous audio if any
+            try {
+                if (window.__linhTtsAudio) {
+                    window.__linhTtsAudio.onended = null;
+                    window.__linhTtsAudio.onerror = null;
+                    window.__linhTtsAudio.pause();
+                }
+            } catch (e) {}
+
+            const audio = new Audio(url);
+            window.__linhTtsAudio = audio;
+            audio.preload = "auto";
+            // Simulate regional pace when only 1 Vietnamese online voice exists
+            try {
+                const prof = getSelectedVoiceProfile() || {};
+                const region = getVoiceRegion(prof);
+                // base 1.0; nam faster, trung slower, bac medium + province rate
+                let pr = Number(prof.rate) || 1;
+                if (region === "nam") pr = Math.min(1.25, pr);
+                if (region === "trung") pr = Math.max(0.82, pr * 0.92);
+                if (region === "bac") pr = Math.min(1.08, Math.max(0.9, pr));
+                audio.playbackRate = pr;
+            } catch (e) {}
+
+            let finished = false;
+            const finish = () => {
+                if (finished) return;
+                finished = true;
+                ttsSpeaking = false;
+                speaking = false;
+                updateSpeakUi();
+                if (job.onend) {
+                    try { job.onend(); } catch (e) {}
+                }
+                setTimeout(() => {
+                    if (job.runId === ttsRunId) pumpTTS();
+                }, 120);
+            };
+
+            audio.onended = finish;
+            audio.onerror = () => {
+                console.warn("Google VI TTS failed for chunk");
+                // try secondary endpoint shape
+                if (!audio.dataset.retried) {
+                    audio.dataset.retried = "1";
+                    audio.src =
+                        "https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=vi&q=" +
+                        encodeURIComponent(txt);
+                    audio.play().catch(() => finish());
+                    return;
+                }
+                finish();
+            };
+
+            audio.play().catch((e) => {
+                console.warn("audio play blocked", e);
+                status.textContent = "● bấm 🔊 một cái để cho phép loa (trình duyệt chặn tự phát)";
+                finish();
+            });
+
+            // watchdog
+            const watchMs = Math.max(5000, Math.min(30000, txt.length * 160));
+            setTimeout(() => {
+                if (!finished && job.runId === ttsRunId) {
+                    try { audio.pause(); } catch (e) {}
+                    finish();
+                }
+            }, watchMs);
+        }
+
+function isAutoSpeak() {
             const v = localStorage.getItem(STORAGE_AUTO_SPEAK);
             // default ON when never set
             if (v === null || v === undefined || v === "") return true;
@@ -2962,37 +3769,71 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             }
         }
 
+        let voiceRegionFilter = "all";
+
         function renderVoiceGrid() {
             const grid = document.getElementById("voiceGrid");
             if (!grid) return;
             grid.innerHTML = "";
             const voices = refreshVoices();
-            FEMALE_VOICES.forEach((profile) => {
+            const list = FEMALE_VOICES.filter((p) => voiceRegionFilter === "all" || p.region === voiceRegionFilter);
+            // wire region tabs once
+            const tabs = document.getElementById("voiceRegionFilter");
+            if (tabs && !tabs.dataset.wired) {
+                tabs.dataset.wired = "1";
+                tabs.querySelectorAll("[data-region]").forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        voiceRegionFilter = btn.getAttribute("data-region") || "all";
+                        tabs.querySelectorAll(".emoji-tab").forEach((b) => b.classList.toggle("active", b === btn));
+                        renderVoiceGrid();
+                    });
+                });
+            }
+            list.forEach((profile) => {
                 const sys = pickSystemVoice(profile);
                 const btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = "voice-option" + (profile.id === selectedVoiceId ? " active" : "");
+                const reg = profile.regionLabel || ({ bac: "Miền Bắc", trung: "Miền Trung", nam: "Miền Nam" }[profile.region] || "Việt Nam");
                 btn.innerHTML =
                     '<div class="v-name">' + profile.emoji + " " + profile.name + "</div>" +
-                    '<div class="v-meta">' + profile.lang +
-                    (sys ? (" · " + sys.name.slice(0, 28)) : " · (chờ giọng máy)") +
-                    " · p" + profile.pitch + " r" + profile.rate + "</div>";
+                    '<div class="v-meta">' + reg +
+                    " · p" + profile.pitch + " · tốc " + profile.rate +
+                    (sys ? (" · " + String(sys.name || "").slice(0, 18)) : " · VI online") + "</div>";
                 btn.addEventListener("click", () => {
                     selectedVoiceId = profile.id;
                     localStorage.setItem(STORAGE_VOICE_ID, selectedVoiceId);
                     renderVoiceGrid();
                     const vs = document.getElementById("voiceStatus");
+                    const reg = profile.regionLabel || profile.region || "";
                     if (vs) {
                         vs.className = "api-status ok";
-                        vs.textContent = "✅ Đã chọn: " + profile.name;
+                        vs.textContent = "✅ " + profile.name + " · " + reg + " · p" + profile.pitch + " tốc " + profile.rate;
                     }
+                    // Auto sample so difference is audible immediately
+                    try {
+                        unlockTTS();
+                        const sample =
+                            profile.region === "nam"
+                                ? ("Ê anh, em " + (persona.charName || "Linh") + " giọng " + profile.name + " đây nghen. Nghe khác chưa?")
+                                : profile.region === "trung"
+                                ? ("Chào anh, em " + (persona.charName || "Linh") + " giọng " + profile.name + " đây nghe. Anh nghe có êm không?")
+                                : ("Chào anh ạ, em " + (persona.charName || "Linh") + " nói giọng " + profile.name + " đây nhé. Anh thấy khác chứ?");
+                        speakText(sample);
+                    } catch (e) {}
                 });
                 grid.appendChild(btn);
             });
             const vs = document.getElementById("voiceStatus");
-            if (vs && voices.length) {
-                vs.className = "api-status ok";
-                vs.textContent = "✅ Máy có " + voices.length + " giọng · đang dùng profile nữ đã chọn (map giọng gần nhất).";
+            const viCount = listVietnameseVoices().length;
+            if (vs) {
+                if (viCount > 0) {
+                    vs.className = "api-status ok";
+                    vs.textContent = "✅ Có " + viCount + " giọng tiếng Việt trên máy · đang dùng tỉnh/thành đã chọn (chỉ nói tiếng Việt).";
+                } else {
+                    vs.className = "api-status warn";
+                    vs.textContent = "⚠️ Máy chưa có giọng vi-VN. App sẽ nói tiếng Việt bằng TTS online. Nên cài giọng Việt trong hệ thống để hay hơn.";
+                }
             }
         }
 
@@ -3240,11 +4081,11 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
                 previewVoiceBtn.addEventListener("click", () => {
                     const p = getVoiceProfile(selectedVoiceId);
                     const sample =
-                        p.lang && p.lang.startsWith("vi")
-                            ? "Chào anh, em là " + (persona.charName || "Linh") + ". Giọng này dễ thương không ạ?"
-                            : p.lang && p.lang.startsWith("ja")
-                            ? "こんにちは。わたしは " + (persona.charName || "Linh") + " です。"
-                            : "Hi, I am " + (persona.charName || "Linh") + ". Do you like this voice?";
+                        p.region === "nam"
+                            ? ("Ê anh, em " + (persona.charName || "Linh") + " giọng " + p.name + " nè. Em nói nhanh ngọt nghen, anh nghe thử coi!")
+                            : p.region === "trung"
+                            ? ("Chào anh, em " + (persona.charName || "Linh") + " giọng " + p.name + " đây nghe. Em nói dịu một chút cho anh nghe.")
+                            : ("Chào anh ạ, em " + (persona.charName || "Linh") + " nói giọng " + p.name + " đây nhé. Em nói rõ ràng cho anh nghe thử.");
                     speakText(sample);
                 });
             }
@@ -3315,7 +4156,9 @@ Thôi, nhắn gì đi — em đang trong mood siêu dễ thương (và hơi nguy
             };
 
             const model = getModel();
-            const system = buildSystemPrompt(memory, persona);
+            const system = buildSystemPrompt(memory, persona) +
+                "\n\n" + regionalStyleInstruction(getSelectedVoiceProfile()) +
+                "\n\nNHẮC LẠI: Mọi câu trả lời phải bằng tiếng Việt tự nhiên. Không dùng English.";
 
             const chatMessages = [
                 { role: "system", content: system },
@@ -3943,16 +4786,17 @@ function wireStickerAndImageUI() {
 
                 // ask model to answer speakable when voice
                 const modelUser = fromVoice
-                    ? (toModelUserText(text) + "\n\n(Anh đang nói chuyện thoại. Trả lời ngắn 1–4 câu, tự nhiên như nói miệng, ít emoji.)")
-                    : toModelUserText(text);
+                    ? (toModelUserText(text) + "\n\n(Anh đang nói chuyện thoại. Trả lời ngắn 1–4 câu BẰNG TIẾNG VIỆT, tự nhiên như nói miệng, ít emoji. Không dùng tiếng Anh.)")
+                    : (toModelUserText(text) + "\n\n(Trả lời bằng tiếng Việt.)");
 
                 let answer = await callLinhAI(historyForModel, modelUser);
                 answer = forceSpeakableAnswer(text, answer);
-                answer = ensureImageInAnswer(text, answer);
-
-                // if user asked image but still no tag, hard inject
-                if (userWantsImage(text) && !/\[\[\s*image\s*:/i.test(answer)) {
-                    answer = (answer || "Em gửi ảnh đây ạ~") + "\n\n[[image: " + buildPromptFromUser(text) + "]]";
+                // web photos and/or AI images
+                try {
+                    answer = await attachBestImageToAnswer(text, answer);
+                } catch (e) {
+                    console.warn(e);
+                    answer = ensureImageInAnswer(text, answer);
                 }
 
                 await saveMessage("assistant", answer);
@@ -4060,6 +4904,18 @@ function wireStickerAndImageUI() {
             loadApiSettingsUI();
             renderPersonaGrid();
             renderVoiceGrid();
+            try {
+                const sel = document.getElementById("imageModeSelect");
+                if (sel) {
+                    sel.value = getImageMode();
+                    if (!sel.dataset.wired) {
+                        sel.dataset.wired = "1";
+                        sel.onchange = () => setImageMode(sel.value);
+                    }
+                    setImageMode(sel.value);
+                }
+            } catch (e) {}
+
             applyPersonaToUI();
             const autoSpeakCheck = document.getElementById("autoSpeakCheck");
             if (autoSpeakCheck) autoSpeakCheck.checked = isAutoSpeak();
@@ -4513,6 +5369,8 @@ function wireStickerAndImageUI() {
         // default: loa bật
         try {
             if (localStorage.getItem(STORAGE_AUTO_SPEAK) === null) setAutoSpeak(true);
+            if (localStorage.getItem(STORAGE_IMAGE_MODE) === null) setImageMode("auto");
+            else setImageMode(getImageMode());
             updateSpeakUi();
         } catch (e) {}
 
@@ -4739,6 +5597,6 @@ function wireStickerAndImageUI() {
         setTimeout(function(){ wireFallback(); wireSpeakerFallback(); }, 1500);
     })();
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a315a3465e89f4fb',t:'MTc4Nzc3NjY4MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
